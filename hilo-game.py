@@ -1,3 +1,6 @@
+import sys
+
+
 def print_menu():
     '''Prints the main menu'''
     print("[1] Play")
@@ -25,7 +28,7 @@ while True:
               "A right answer doubles your bet, and a wrong "
               "answer forfeits your bet. Happy playing.\n")
     elif option == "3":
-        print("Thanks for playing!")
-        quit()
+        sys.exit("Thanks for playing!")
     else:
         print("Please try typing your choice again.\n")
+
