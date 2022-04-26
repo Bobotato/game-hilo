@@ -30,5 +30,5 @@ while True:
     elif option == "3":
         sys.exit("Thanks for playing!")
     else:
-        print("Please try typing your choice again.\n")
-
+        print("\nYour input was not recognised, please try again. "
+              "Try typing 1, 2 or 3.\n")
