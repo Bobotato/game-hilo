@@ -35,6 +35,9 @@ class Deck:
                 facedown_card = self.cards.pop()
                 print("The face-down card has been dealt.")
                 return facedown_card
+            else:
+                raise ValueError("Cards can only be dealt " 
+                                 "face 'up' or 'down'")
 
     def shuffle(self):
         shuffle(self.cards)
