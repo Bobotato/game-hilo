@@ -1,5 +1,4 @@
 import sys
-import card
 
 
 def print_menu():
