@@ -1,14 +1,12 @@
-from random import shuffle
-import card
-
+from card import Card, SUITS, VALUES
 
 class Deck:
     """Deck consisting of playing cards,
     use fill=True to create a 52 card deck on init"""
-    def __init__(self, fill=False):
-        if fill:
-            self.fill()
-        elif not fill:
+    def __init__(self, populate=False):
+        if populate:
+            self.populate()
+        elif not populate:
             self._cards = []
         else:
             raise ValueError("Please use True or False to choose"
@@ -22,13 +20,10 @@ class Deck:
     def cards(self, cards):
         self._cards = cards
 
-    def fill(self):
-        suits = card.suits
-        values = card.values
-        self.cards = [card.Card(value, suit) for suit in
+    def populate(self):
+        self.cards = [Card(value, suit) for suit in
                       SUITS for value in VALUES]
         return self.cards
 
     def __repr__(self):
         return (f"A deck of {self.cards}")
-
