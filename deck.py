@@ -31,7 +31,7 @@ class Deck:
         suits = card.suits
         values = card.values
         self.cards = [card.Card(value, suit) for suit in
-                      suits for value in values]
+                      SUITS for value in VALUES]
         return self.cards
 
     def deal(self, face):
