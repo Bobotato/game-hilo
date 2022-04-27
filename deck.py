@@ -3,7 +3,8 @@ import card
 
 
 class Deck:
-    """Deck consisting of playing cards, starts with 52 playing cards"""
+    """Deck consisting of playing cards,
+    use fill=True to create a 52 card deck on init"""
     def __init__(self, fill=False):
         if fill:
             self.fill()
