@@ -13,9 +13,6 @@ class Deck:
             raise ValueError("Please use True or False to choose"
                              "if the deck starts with 52 cards.")
 
-    def __repr__(self):
-        return f"Deck of {self.count()} cards"
-
     @property
     def cards(self):
         return self._cards
@@ -26,13 +23,6 @@ class Deck:
 
     def count(self):
         return len(self.cards)
-
-    def fill(self):
-        suits = card.suits
-        values = card.values
-        self.cards = [card.Card(value, suit) for suit in
-                      SUITS for value in VALUES]
-        return self.cards
 
     def deal(self, face):
         if self.count() == 0:
@@ -51,6 +41,16 @@ class Deck:
                 raise ValueError("Cards can only be dealt "
                                  "face 'up' or 'down'")
 
+    def fill(self):
+        suits = card.suits
+        values = card.values
+        self.cards = [card.Card(value, suit) for suit in
+                      SUITS for value in VALUES]
+        return self.cards
+
     def shuffle(self):
         shuffle(self.cards)
         return self.cards
+
+    def __repr__(self):
+        return f"Deck of {self.count()} cards"
