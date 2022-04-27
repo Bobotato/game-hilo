@@ -30,5 +30,5 @@ class Deck:
         return self.cards
 
     def __repr__(self):
-        return f"Deck of {self.count()} cards"
+        return (f"A deck of {self.cards}")
 
