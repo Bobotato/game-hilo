@@ -1,7 +1,7 @@
-values = ["A", "2", "3", "4", "5", "6", "7",
+VALUES = ["A", "2", "3", "4", "5", "6", "7",
           "8", "9", "10", "J", "Q", "K"]
 
-suits = ["D", "H", "C", "S"]
+SUITS = ["D", "C", "H", "S"]
 
 
 class Card:
@@ -14,19 +14,8 @@ class Card:
         return (f"{self.value} of {self.suit}")
 
     @property
-    def value(self, value):
-        return self._value
-
-    @property
     def suit(self, suit):
         return self._suit
-
-    @value.setter
-    def value(self, value):
-        if value not in values:
-            raise ValueError("Value must be a part of the 13 values "
-                             "in a standard deck of cards. (A, 2, 3..)")
-        self._value = value
 
     @suit.setter
     def suit(self, suit):
@@ -35,3 +24,17 @@ class Card:
                              "(H for Hearts, D for Diamonds...)")
         self._suit = suit
 
+    @property
+    def value(self, value):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if value not in values:
+            raise ValueError("Value must be a part of the 13 values "
+                             "in a standard deck of cards. (A, 2, 3..)")
+        self._value = value
+
+
+    def __repr__(self):
+        return (f"{self.value} of {self.suit}") 
