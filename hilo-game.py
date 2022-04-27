@@ -1,6 +1,7 @@
 import sys
 
 
+def print_menu():
     '''Prints the main menu'''
     print("[1] Play")
     print("[2] Ruleset")
