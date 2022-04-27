@@ -19,7 +19,7 @@ class Card:
 
     @suit.setter
     def suit(self, suit):
-        if suit not in suits:
+        if suit not in SUITS:
             raise ValueError("Suit must be a part of the 4 French suits."
                              "(H for Hearts, D for Diamonds...)")
         self._suit = suit
@@ -30,7 +30,7 @@ class Card:
 
     @value.setter
     def value(self, value):
-        if value not in values:
+        if value not in VALUES:
             raise ValueError("Value must be a part of the 13 values "
                              "in a standard deck of cards. (A, 2, 3..)")
         self._value = value
