@@ -1,31 +1,43 @@
 from random import shuffle
-
-
-suits = ["H", "D", "C", "S"]
-
-values = ["A", "2", "3", "4", "5", "6", "7",
-          "8", "9", "10", "J", "Q", "K"]
+import card
 
 
 class Deck:
     """Deck consisting of playing cards, starts with 52 playing cards"""
-    def __init__(self):
-        self.cards = [Card(value, suit) for suit in suits for value in values]
+    def __init__(self, fill=False):
+        if fill:
+            self.fill()
+        elif not fill:
+            self._cards = []
+        else:
+            raise ValueError("Please use True or False to choose"
+                             "if the deck starts with 52 cards.")
 
     def __repr__(self):
         return f"Deck of {self.count()} cards"
 
+    @property
+    def cards(self):
+        return self._cards
+
+    @cards.setter
+    def cards(self, cards):
+        self._cards = cards
+
     def count(self):
         return len(self.cards)
 
-    def restore(self):
-        self.cards = [Card(value, suit) for suit in suits for value in values]
+    def fill(self):
+        suits = card.suits
+        values = card.values
+        self.cards = [card.Card(value, suit) for suit in
+                      suits for value in values]
         return self.cards
 
     def deal(self, face):
         if self.count() == 0:
             raise ValueError("The deck's empty, no cards can "
-                             "be dealt until restored.")
+                             "be dealt until refilled.")
         else:
             if face == "up":
                 faceup_card = self.cards.pop()
@@ -36,7 +48,7 @@ class Deck:
                 print("The face-down card has been dealt.")
                 return facedown_card
             else:
-                raise ValueError("Cards can only be dealt " 
+                raise ValueError("Cards can only be dealt "
                                  "face 'up' or 'down'")
 
     def shuffle(self):
