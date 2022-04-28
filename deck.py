@@ -33,4 +33,4 @@ class Deck:
                  SUITS for value in VALUES])
 
     def __repr__(self):
-        return (f"A deck of {self.cards}")
+        return str(self.cards)
