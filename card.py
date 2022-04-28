@@ -13,7 +13,7 @@ class Card:
         self.suit = suit
 
     @property
-    def suit(self, suit):
+    def suit(self):
         return self._suit
 
     @suit.setter
@@ -24,7 +24,7 @@ class Card:
         self._suit = suit
 
     @property
-    def value(self, value):
+    def value(self):
         return self._value
 
     @value.setter
