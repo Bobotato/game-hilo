@@ -21,10 +21,8 @@ class Deck:
     @cards.setter
     def cards(self, cards):
         for card in cards:
-            if isinstance(card, Card):
-                continue
-            else:
-                raise ValueError("You have tried to insert "
+            if not isinstance(card, Card):
+                raise ValueError("You have tried to insert"
                                  "an invalid card.")
         self._cards = cards
 
@@ -34,3 +32,4 @@ class Deck:
 
     def __repr__(self):
         return str(self.cards)
+
