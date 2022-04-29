@@ -13,12 +13,6 @@ class Player:
             raise ValueError("Player can't have negative money.")
         self._money = money
 
-    def bet(self, bet):
-        if self.money < bet:
-            raise ValueError("Player can't bet more money than they have.")
-        self.money -= bet
-        return bet
-
     def __repr__(self):
         return f"A player with {self.money} credits."
 
