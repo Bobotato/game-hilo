@@ -16,6 +16,7 @@ class Player:
     def bet(self, bet):
         if self.wallet_bal > bet:
             raise ValueError("A player can't bet more than the wallet balance.")
+        self.wallet_bal -= bet
         return bet
 
     def __repr__(self):
