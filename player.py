@@ -9,9 +9,9 @@ class Player:
 
     @money.setter
     def money(self, money):
-        self._money = money
-        if self.money < 0:
+        if money < 0:
             raise ValueError("Player can't have negative money.")
+        self._money = money
 
     def bet(self, bet):
         if self.money < bet:
