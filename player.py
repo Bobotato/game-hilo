@@ -1,24 +1,24 @@
 class Player:
-    '''A class to represent a player and his wallet'''
-    def __init__(self, wallet_bal=100):
-        self.wallet_bal = wallet_bal
+    '''A class to represent a player and their money'''
+    def __init__(self, money=100):
+        self.money = money
 
     @property
-    def wallet_bal(self):
-        return self._wallet_bal
+    def money(self):
+        return self._money
 
-    @wallet_bal.setter
-    def wallet_bal(self, wallet_bal):
-        self._wallet_bal = wallet_bal
-        if self.wallet_bal < 0:
-            raise ValueError("Player can't have negative wallet balance.")
+    @money.setter
+    def money(self, money):
+        self._money = money
+        if self.money < 0:
+            raise ValueError("Player can't have negative money.")
 
     def bet(self, bet):
-        if self.wallet_bal < bet:
-            raise ValueError("Player can't bet more than the wallet balance.")
-        self.wallet_bal -= bet
+        if self.money < bet:
+            raise ValueError("Player can't bet more money than they have.")
+        self.money -= bet
         return bet
 
     def __repr__(self):
-        return f"A player with {self.wallet_bal} credits."
+        return f"A player with {self.money} credits."
 
