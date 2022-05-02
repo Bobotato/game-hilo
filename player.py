@@ -7,7 +7,7 @@ class Player:
     def credits(self):
         return self._credits
 
-    @money.setter
+    @credits.setter
     def credits(self, credits):
         if credits < 0:
             raise ValueError("Player can't have negative credits.")
