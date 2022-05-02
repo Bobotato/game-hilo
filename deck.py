@@ -22,8 +22,8 @@ class Deck:
         self._cards = cards
 
     def populate(self):
-        return ([Card(value, suit) for suit in
-                 SUITS for value in VALUES])
+        self.cards = ([Card(value, suit) for suit in
+                      SUITS for value in VALUES])
 
     def __repr__(self):
         return str(self.cards)
