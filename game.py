@@ -1,6 +1,14 @@
+from deck import Deck
+from player import Player
+
+
 class Game:
     """This class includes all the methods required for the game of Hilo"""
-    def draw(self, deck):
+    def __init__(self):
+        d = Deck(populate = True)
+        p = Player()
+
+    def draw(self):
         return deck.cards.pop()
 
     def take_bet(self, player, bet):
@@ -12,7 +20,7 @@ class Game:
 
     def award_bet(self, player, bet):
         player.credits += (bet*2)
-        
+
     def check_guess(self, guess, faceup, facedown):
         if guess == "higher":
             if faceup > facedown:
