@@ -28,3 +28,5 @@ class Game:
             return self.faceup > self.facedown
         elif guess == "lower":
             return self.faceup < self.facedown
+        else:
+            raise ValueError("Guess must be either 'higher' or 'lower'.")
