@@ -7,6 +7,8 @@ class Game:
     def __init__(self):
         self.d = Deck(populate = True)
         self.p = Player()
+        self.faceup = None
+        self.facedown = None
 
     def draw(self):
         return self.d.cards.pop()
@@ -21,15 +23,8 @@ class Game:
     def award_bet(self, bet):
         self.p.credits += (bet*2)
 
-    def check_guess(self, guess, faceup, facedown):
+    def check_guess(self, guess):
         if guess == "higher":
-            if faceup > facedown:
-                return True
-            else:
-                return False
+            return self.faceup > self.facedown
         elif guess == "lower":
-            if faceup < facedown:
-                return True
-            else:
-                return False
-
+            return self.faceup < self.facedown
