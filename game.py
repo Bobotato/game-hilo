@@ -5,7 +5,7 @@ from player import Player
 class Game:
     """This class includes all the methods required for the game of Hilo"""
     def __init__(self):
-        self.d = Deck(populate = True)
+        self.d = Deck(populate=True)
         self.p = Player()
         self.faceup = None
         self.facedown = None
@@ -21,7 +21,7 @@ class Game:
         self.p.credits -= bet
 
     def award_bet(self, bet):
-        self.p.credits += (bet*2)
+        self.p.credits += (bet * 2)
 
     def check_guess(self, guess):
         if guess == "higher":
@@ -30,3 +30,4 @@ class Game:
             return self.faceup < self.facedown
         else:
             raise ValueError("Guess must be either 'higher' or 'lower'.")
+
