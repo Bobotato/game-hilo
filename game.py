@@ -9,17 +9,17 @@ class Game:
         p = Player()
 
     def draw(self):
-        return deck.cards.pop()
+        return d.cards.pop()
 
-    def take_bet(self, player, bet):
+    def take_bet(self, bet):
         if bet <= 0:
             raise ValueError("Bets cannot be 0 or negative.")
-        elif bet > player.credits:
+        elif bet > p.credits:
             raise ValueError("Bets cannot exceed player's credits.")
-        player.credits -= bet
+        p.credits -= bet
 
-    def award_bet(self, player, bet):
-        player.credits += (bet*2)
+    def award_bet(self, bet):
+        p.credits += (bet*2)
 
     def check_guess(self, guess, faceup, facedown):
         if guess == "higher":
