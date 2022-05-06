@@ -1,7 +1,6 @@
 class Roundinfo:
     """This class holds the information for the current round"""
-    def ___init___(self, faceup, facedown, bet, prediction):
+    def ___init___(self, player, faceup):
+        self.player = player
         self.faceup = faceup
-        self.facedown = facedown
-        self.bet = bet
-        self.prediction = prediction
+
