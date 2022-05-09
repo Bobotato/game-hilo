@@ -1,7 +1,7 @@
 from card import Card
 
 
-class Roundresult:
+class RoundResult:
     """This class holds the result of the round"""
     def __init__(self, drawn_card, win):
         self.drawn_card = drawn_card
@@ -14,8 +14,7 @@ class Roundresult:
     @drawn_card.setter
     def drawn_card(self, drawn_card):
         if not isinstance(drawn_card, Card):
-            raise TypeError("drawn_card must be an "
-                            "instance of Card")
+            raise TypeError("drawn_card must be an instance of a Card")
         self._drawn_card = drawn_card
 
     @property
@@ -29,4 +28,5 @@ class Roundresult:
         self._win = win
 
     def __repr__(self):
-        return ("Drawn card = " + str(self.drawn_card) + ", Won? = " + str(self.win))
+        return f"{self.drawn_card}, {self.win}"
+
