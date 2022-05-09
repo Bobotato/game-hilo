@@ -28,3 +28,5 @@ class Roundresult:
             raise TypeError("win must be a boolean")
         self._win = win
 
+    def __repr__(self):
+        return ("Drawn card = " + str(self.drawn_card) + ", Won? = " + str(self.win))
