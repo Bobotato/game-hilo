@@ -15,7 +15,7 @@ class Roundinfo:
     @current_card.setter
     def current_card(self, current_card):
         if not isinstance(current_card, Card):
-            raise ValueError("An invalid card was inserted "
+            raise TypeError("An invalid card was inserted "
                              "into the round info.")
         self._current_card = current_card
 
@@ -26,7 +26,7 @@ class Roundinfo:
     @player.setter
     def player(self, player):
         if not isinstance(player, Player):
-            raise ValueError("An invalid player was inserted "
+            raise TypeError("An invalid player was inserted "
                              "into the round info.")
         self._player = player
 
