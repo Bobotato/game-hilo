@@ -24,7 +24,7 @@ class Roundresult:
 
     @win.setter
     def win(self, win):
-        if not isinstance(bool):
+        if not isinstance(win, bool):
             raise TypeError("win must be a boolean")
         self._win = win
 
