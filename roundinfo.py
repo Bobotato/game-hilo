@@ -16,7 +16,7 @@ class Roundinfo:
     def current_card(self, current_card):
         if not isinstance(current_card, Card):
             raise TypeError("current_card must be an instance "
-                            "of Card class.")
+                            "of Card class")
         self._current_card = current_card
 
     @property
