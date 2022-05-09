@@ -15,8 +15,8 @@ class Roundinfo:
     @current_card.setter
     def current_card(self, current_card):
         if not isinstance(current_card, Card):
-            raise TypeError("An invalid card was inserted "
-                             "into the round info.")
+            raise TypeError("current_card must be an instance "
+                            "of Card class.")
         self._current_card = current_card
 
     @property
@@ -26,7 +26,7 @@ class Roundinfo:
     @player.setter
     def player(self, player):
         if not isinstance(player, Player):
-            raise TypeError("An invalid player was inserted "
-                             "into the round info.")
+            raise TypeError("player must be an instance "
+                            "of Player class")
         self._player = player
 
