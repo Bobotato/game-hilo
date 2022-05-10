@@ -13,8 +13,6 @@ class Game:
     def __init__(self):
         self.d = Deck(populate=True)
         self.p = Player()
-        self.faceup = None
-        self.facedown = None
 
     def award_bet(self, bet):
         """Awards double the bet to the player"""
