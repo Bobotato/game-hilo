@@ -2,7 +2,7 @@ from card import Card
 from player import Player
 
 
-class Roundinfo:
+class RoundInfo:
     """This class holds the information for the current round"""
     def __init__(self, player, current_card):
         self.player = player
