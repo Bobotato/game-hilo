@@ -1,5 +1,5 @@
-from deck import Deck
 from enum import Enum
+from deck import Deck
 from player import Player
 
 
@@ -20,22 +20,18 @@ class Game:
         """Awards double the bet to the player"""
         self.p.credits += (bet * 2)
 
-    def check_prediction(self, prediction):
+    def check_prediction(self, current_card, drawn_card, prediction):
         """Checks the player's prediction and returns True/False"""
         if prediction == Predictions.HIGHER:
-            return self.faceup > self.facedown
+            return current_card > drawn_card
         elif prediction == Predictions.LOWER:
-            return self.faceup < self.facedown
+            return current_card < drawn_card
         else:
             raise ValueError("Guess must be either 'higher' or 'lower'.")
 
     def draw_card(self):
         """Draws a card from the deck"""
         return self.d.cards.pop()
-
-    def swap_cards(self):
-        """Swaps the facedown card to be the faceup card for the next round"""
-        self.faceup = self.facedown
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
