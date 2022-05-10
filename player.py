@@ -20,8 +20,8 @@ class Player:
 
     @name.setter
     def name(self, name):
-        if len(name) == 0 or len(name) > 32:
-            raise ValueError("Player name must be between 1 to 32 chars.")
+        if not name:
+            raise ValueError("Player name cannot be blank.")
         self._name = name
 
     def __repr__(self):
