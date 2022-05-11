@@ -1,6 +1,9 @@
 from enum import Enum
 from deck import Deck
 from player import Player
+from random import Shuffle
+from roundinfo import RoundInfo
+from roundresult import RoundResult
 
 
 class Predictions(Enum):
@@ -30,6 +33,14 @@ class Game:
     def draw_card(self):
         """Draws a card from the deck"""
         return self.d.cards.pop()
+
+    def start_round(self, drawn_card):
+        """Starts the round by shuffling the deck and creating a RoundInfo class"""
+        shuffle(self.d.cards)
+        if drawn_card is None:
+            return RoundInfo(self.p, self.draw_card())
+        else:
+            return RoundInfo(self.p, drawn_card)
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
