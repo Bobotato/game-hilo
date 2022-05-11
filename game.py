@@ -1,7 +1,7 @@
 from enum import Enum
 from deck import Deck
 from player import Player
-from random import Shuffle
+from random import shuffle
 from roundinfo import RoundInfo
 from roundresult import RoundResult
 
