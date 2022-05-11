@@ -34,18 +34,19 @@ class Game:
         """Draws a card from the deck"""
         return self.d.cards.pop()
 
-    def end_round(self, bet, prediction)
+    def end_round(self, bet, prediction):
         """Takes bet, prediction from the user, draws a card, checks prediction
         and returns an instance of Roundresult with the result"""
         drawn_card = self.draw_card()
         if prediction == "1":
-            result = self.check_prediction(roundinfo.current_card, drawn_card, Predictions.HIGHER)
+            result = self.check_prediction(roundinfo.current_card,
+                                           drawn_card, Predictions.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(roundinfo.current_card, drawn_card, Predictions.LOWER)
-        if result = True:
+            result = self.check_prediction(roundinfo.current_card, 
+                                           drawn_card, Predictions.LOWER)
+        if result:
             self.award_bet(bet)
         return RoundResult(drawn_card, result)
-
 
     def start_round(self, drawn_card):
         """Starts round by shuffling deck and returning
