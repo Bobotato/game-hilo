@@ -48,14 +48,15 @@ class Game:
             self.award_bet(bet)
         return RoundResult(drawn_card, result)
 
-    def start_round(self, drawn_card):
+    def start_round(self):
         """Starts round by shuffling deck and returning
         an instance of Roundinfo"""
         shuffle(self.d.cards)
-        if drawn_card is None:
-            return RoundInfo(self.p, self.draw_card())
-        else:
-            return RoundInfo(self.p, drawn_card)
+        return RoundInfo(self.p, self.draw_card())
+    
+    def swap_cards(self):
+        """Sets the drawn_card to be current_card"""
+        roundinfo.current_card = roundresult.drawn_card
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
