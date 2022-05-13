@@ -53,12 +53,22 @@ class Game:
         if len(self.d.cards) == 0:
             return True
 
-    def check_prediction(self, current_card, drawn_card, prediction):
-        """Checks the player's prediction and returns True/False"""
+    def check_prediction(self, drawn_card, prediction):
+        """
+        Checks the player's prediction and returns True/False
+
+        :param drawn_card: The drawn card for the current round.
+        :type drawn_card: Card
+        :param prediction: The player's prediction for the current round.
+        :type prediction: str
+        :return: True/False based whether the player's prediction is correct.
+        :rtype: bool
+
+        """
         if prediction == Predictions.HIGHER:
-            return current_card > drawn_card
+            return drawn_card > self.current_card
         elif prediction == Predictions.LOWER:
-            return current_card < drawn_card
+            return drawn_card < self.current_card
         else:
             raise ValueError("Guess must be either 'higher' or 'lower'.")
 
@@ -97,7 +107,7 @@ class Game:
         """Starts round by shuffling deck, drawing current_card and returning
         an instance of Roundinfo"""
         shuffle(self.d.cards)
-        current_card = self.draw_card()
+        self.current_card = self.draw_card()
         return RoundInfo(self.p, self.current_card)
 
     def swap_cards(self, drawn_card):
