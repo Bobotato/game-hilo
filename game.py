@@ -67,18 +67,31 @@ class Game:
         return self.d.cards.pop()
 
     def end_round(self, bet, prediction):
-        """Takes bet, prediction from the user, draws a card, checks prediction
-        and returns an instance of Roundresult with the result"""
+        """
+        Takes bet, prediction from the user, draws a card, checks prediction
+        and returns an instance of Roundresult with the result and swaps the
+        current_card to the drawn_card.
+
+        :param bet: The player's bet for the current round.
+        :type drawn_card: int
+        :param prediction: The player's prediction for the current round.
+        :type prediction: str
+        :return: An instance of a RoundResult with drawn_card and the result
+                 of the prediction.
+        :rtype: RoundResult
+        """
         drawn_card = self.draw_card()
         if prediction == "1":
-            result = self.check_prediction(roundinfo.current_card,
+            result = self.check_prediction(self.current_card,
                                            drawn_card, Predictions.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(roundinfo.current_card,
+            result = self.check_prediction(self.current_card,
                                            drawn_card, Predictions.LOWER)
         if result:
             self.award_bet(bet)
-        return RoundResult(drawn_card, result)
+        roundresult = RoundResult(drawn_card, result)
+        self.swap_cards(drawn_card)
+        return roundresult
 
     def start_round(self):
         """Starts round by shuffling deck, drawing current_card and returning
@@ -87,9 +100,14 @@ class Game:
         current_card = self.draw_card()
         return RoundInfo(self.p, self.current_card)
 
-    def swap_cards(self):
-        """Sets the drawn_card to be current_card"""
-        roundinfo.current_card = roundresult.drawn_card
+    def swap_cards(self, drawn_card):
+        """
+        Sets a drawn card to be the current card.
+        
+        :param drawn_card: An instance of a Card.
+        :type drawn_card: Card
+        """
+        self.current_card = drawn_card
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
