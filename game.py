@@ -1,3 +1,4 @@
+from card import Card
 from enum import Enum
 from deck import Deck
 from player import Player
@@ -16,6 +17,17 @@ class Game:
     def __init__(self, name):
         self.d = Deck(populate=True)
         self.p = Player(name)
+        self.current_card = None
+
+    @property
+    def current_card(self):
+        return self.__current_card
+
+    @current_card.setter
+    def current_card(self, current_card):
+        if not isinstance(current_card, Card):
+            raise ValueError("current_card must be an instance of a Card.")
+        self.__current_card = current_card
 
     def award_bet(self, bet):
         """Awards double the bet to the player"""
@@ -49,10 +61,11 @@ class Game:
         return RoundResult(drawn_card, result)
 
     def start_round(self):
-        """Starts round by shuffling deck and returning
+        """Starts round by shuffling deck, drawing current_card and returning
         an instance of Roundinfo"""
         shuffle(self.d.cards)
-        return RoundInfo(self.p, self.draw_card())
+        current_card = self.draw_card()
+        return RoundInfo(self.p, self.current_card)
     
     def swap_cards(self):
         """Sets the drawn_card to be current_card"""
