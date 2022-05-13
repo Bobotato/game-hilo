@@ -43,6 +43,16 @@ class Game:
         if self.p.credits == 0:
             return True
 
+    def check_deck_empty(self):
+        """
+        Checks if len(self.d.cards) is 0, returns True if deck is empty.
+
+        :return: 'True' if length of self.d.cards is 0
+        :rtype: bool
+        """
+        if len(self.d.cards) == 0:
+            return True
+
     def check_prediction(self, current_card, drawn_card, prediction):
         """Checks the player's prediction and returns True/False"""
         if prediction == Predictions.HIGHER:
