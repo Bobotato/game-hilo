@@ -33,6 +33,16 @@ class Game:
         """Awards double the bet to the player"""
         self.p.credits += (bet * 2)
 
+    def check_bankrupt(self):
+        """
+        Checks if self.p.credits is 0, returns True if player is bankrupt.
+
+        :return: 'True' if self.p.credits is 0
+        :rtype: bool
+        """
+        if self.p.credits == 0:
+            return True
+
     def check_prediction(self, current_card, drawn_card, prediction):
         """Checks the player's prediction and returns True/False"""
         if prediction == Predictions.HIGHER:
@@ -54,7 +64,7 @@ class Game:
             result = self.check_prediction(roundinfo.current_card,
                                            drawn_card, Predictions.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(roundinfo.current_card, 
+            result = self.check_prediction(roundinfo.current_card,
                                            drawn_card, Predictions.LOWER)
         if result:
             self.award_bet(bet)
@@ -66,7 +76,7 @@ class Game:
         shuffle(self.d.cards)
         current_card = self.draw_card()
         return RoundInfo(self.p, self.current_card)
-    
+
     def swap_cards(self):
         """Sets the drawn_card to be current_card"""
         roundinfo.current_card = roundresult.drawn_card
