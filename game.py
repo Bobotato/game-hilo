@@ -17,7 +17,6 @@ class Game:
     def __init__(self, name):
         self.d = Deck(populate=True)
         self.p = Player(name)
-        self.current_card = None
 
     @property
     def current_card(self):
@@ -127,3 +126,12 @@ class Game:
             raise ValueError("Bets cannot exceed player's credits.")
         self.p.credits -= bet
 
+    def update_roundinfo(self):
+        """
+        Returns an instance of RoundInfo with the latest player and
+        current card
+        
+        :return: An instance of a RoundInfo
+        :rtype: RoundInfo
+        """
+        return RoundInfo(self.p, self.current_card)
