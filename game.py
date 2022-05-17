@@ -91,11 +91,9 @@ class Game:
         """
         drawn_card = self.draw_card()
         if prediction == "1":
-            result = self.check_prediction(self.current_card,
-                                           drawn_card, Predictions.HIGHER)
+            result = self.check_prediction(drawn_card, Predictions.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(self.current_card,
-                                           drawn_card, Predictions.LOWER)
+            result = self.check_prediction(drawn_card, Predictions.LOWER)
         if result:
             self.award_bet(bet)
         roundresult = RoundResult(drawn_card, result)
