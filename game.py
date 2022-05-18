@@ -18,9 +18,9 @@ class Game:
         self.deck = Deck(populate=True)
         self.player = Player(name)
 
-    def award_bet(self, bet):
+    def award_bet(self, bet, multiplier=2):
         """Awards double the bet to the player"""
-        self.p.credits += (bet * 2)
+        self.p.credits += (bet * multiplier)
 
     def check_prediction(self, drawn_card, prediction):
         """
