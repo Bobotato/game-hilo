@@ -1,5 +1,6 @@
 from enum import Enum
 from random import shuffle
+
 from card import Card
 from deck import Deck
 from player import Player
@@ -20,7 +21,7 @@ class Game:
 
     def award_bet(self, bet, multiplier=2):
         """Awards double the bet to the player"""
-        self.p.credits += (bet * multiplier)
+        self.player.credits += (bet * multiplier)
 
     def check_prediction(self, drawn_card, prediction):
         """
@@ -41,14 +42,13 @@ class Game:
         else:
             raise ValueError("Guess must be either 'higher' or 'lower'.")
 
-    def end_round(self, bet, prediction):
+    def compute_roundresult(self, bet, prediction):
         """
-        Takes bet, prediction from the user, draws a card, checks prediction
-        and returns an instance of Roundresult with the result and swaps the
-        current_card to the drawn_card.
+        Computes the result of a round with a given bet and prediction,
+        and returns an instance of Roundresult with the result.
 
         :param bet: The player's bet for the current round.
-        :type drawn_card: int
+        :type bet: int
         :param prediction: The player's prediction for the current round.
         :type prediction: str
         :return: An instance of a RoundResult with drawn_card and the result
@@ -69,9 +69,9 @@ class Game:
     def start_round(self):
         """Starts round by shuffling deck, drawing current_card and returning
         an instance of Roundinfo"""
-        shuffle(self.d.cards)
+        shuffle(self.deck.cards)
         self.current_card = self.draw_card()
-        return RoundInfo(self.p, self.current_card)
+        return RoundInfo(self.player, self.current_card)
 
     def swap_cards(self, drawn_card):
         """
@@ -86,9 +86,9 @@ class Game:
         """Takes the player's bet and removes it from their account"""
         if bet <= 0:
             raise ValueError("Bets cannot be 0 or negative.")
-        elif bet > self.p.credits:
+        elif bet > self.player.credits:
             raise ValueError("Bets cannot exceed player's credits.")
-        self.p.credits -= bet
+        self.player.credits -= bet
 
     def update_roundinfo(self):
         """
@@ -98,4 +98,4 @@ class Game:
         :return: An instance of a RoundInfo
         :rtype: RoundInfo
         """
-        return RoundInfo(self.p, self.current_card)
+        return RoundInfo(self.player, self.current_card)
