@@ -24,6 +24,10 @@ class Player:
             raise ValueError("Player name cannot be blank.")
         self._name = name
 
+    def is_bankrupt(self):
+        """Checks if player is bankrupt"""
+        return (self.credits == 0)
+
     def __repr__(self):
         return f"{self.name} with {self.credits} credits."
 
