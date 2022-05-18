@@ -1,13 +1,20 @@
+from random import shuffle
+
 from card import Card, SUITS, VALUES
 
 
 class Deck:
-    """Deck consisting of playing cards,
-    use populate=True to create a 52 card deck on init"""
-    def __init__(self, populate=False):
+    """
+    Deck consisting of playing cards,
+    use populate=True to create a 52 card deck,
+    or shuffle=True to shuffle the deck on init.
+    """
+    def __init__(self, populate=False, shuffle=False):
         self.cards = []
         if populate:
             self.populate()
+        if shuffle:
+            self.shuffle()
 
     @property
     def cards(self):
@@ -24,6 +31,10 @@ class Deck:
     def populate(self):
         self.cards = ([Card(value, suit) for suit in
                       SUITS for value in VALUES])
+
+    def shuffle(self):
+        """Shuffles the deck"""
+        shuffle(self.cards)
 
     def __repr__(self):
         return str(self.cards)
