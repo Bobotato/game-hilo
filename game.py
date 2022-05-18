@@ -1,4 +1,5 @@
 from enum import Enum
+from random import shuffle
 from card import Card
 from deck import Deck
 from player import Player
