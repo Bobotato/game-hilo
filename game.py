@@ -39,8 +39,7 @@ class Game:
         :return: 'True' if self.p.credits is 0
         :rtype: bool
         """
-        if self.p.credits == 0:
-            return True
+        return (self.p.credits == 0)
 
     def check_deck_empty(self):
         """
@@ -49,8 +48,7 @@ class Game:
         :return: 'True' if length of self.d.cards is 0
         :rtype: bool
         """
-        if len(self.d.cards) == 0:
-            return True
+        return (len(self.d.cards) == 0)
 
     def check_prediction(self, drawn_card, prediction):
         """
