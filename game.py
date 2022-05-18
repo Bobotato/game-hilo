@@ -90,12 +90,3 @@ class Game:
             raise ValueError("Bets cannot exceed player's credits.")
         self.player.credits -= bet
 
-    def update_roundinfo(self):
-        """
-        Returns an instance of RoundInfo with the latest player and
-        current card
-        
-        :return: An instance of a RoundInfo
-        :rtype: RoundInfo
-        """
-        return RoundInfo(self.player, self.current_card)
