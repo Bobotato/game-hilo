@@ -15,8 +15,8 @@ class Predictions(Enum):
 class Game:
     """This class includes all the methods required for the game of Hilo"""
     def __init__(self, name):
-        self.d = Deck(populate=True)
-        self.p = Player(name)
+        self.deck = Deck(populate=True)
+        self.player = Player(name)
 
     @property
     def current_card(self):
