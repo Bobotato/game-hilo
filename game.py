@@ -32,24 +32,6 @@ class Game:
         """Awards double the bet to the player"""
         self.p.credits += (bet * 2)
 
-    def check_bankrupt(self):
-        """
-        Checks if self.p.credits is 0, returns True if player is bankrupt.
-
-        :return: 'True' if self.p.credits is 0
-        :rtype: bool
-        """
-        return (self.p.credits == 0)
-
-    def check_deck_empty(self):
-        """
-        Checks if len(self.d.cards) is 0, returns True if deck is empty.
-
-        :return: 'True' if length of self.d.cards is 0
-        :rtype: bool
-        """
-        return (len(self.d.cards) == 0)
-
     def check_prediction(self, drawn_card, prediction):
         """
         Checks the player's prediction and returns True/False
