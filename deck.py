@@ -9,11 +9,11 @@ class Deck:
     use populate=True to create a 52 card deck,
     or shuffle=True to shuffle the deck on init.
     """
-    def __init__(self, populate=False, shuffle=False):
+    def __init__(self, populate=False, shuffle_deck=False):
         self.cards = []
         if populate:
             self.populate()
-        if shuffle:
+        if shuffle_deck:
             self.shuffle()
 
     @property
@@ -28,9 +28,13 @@ class Deck:
                                  "an invalid card.")
         self._cards = cards
 
+    def draw_card(self):
+        """Draws a card from the deck"""
+        return self.cards.pop()
+
     def is_empty(self):
         """Checks if deck is empty"""
-        return (len(self.cards) == 0)
+        return len(self.cards) == 0
 
     def populate(self):
         """Populates the deck with 52 cards"""
