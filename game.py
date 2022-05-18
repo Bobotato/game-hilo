@@ -41,10 +41,6 @@ class Game:
         else:
             raise ValueError("Guess must be either 'higher' or 'lower'.")
 
-    def draw_card(self):
-        """Draws a card from the deck"""
-        return self.d.cards.pop()
-
     def end_round(self, bet, prediction):
         """
         Takes bet, prediction from the user, draws a card, checks prediction
