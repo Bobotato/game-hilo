@@ -18,16 +18,6 @@ class Game:
         self.deck = Deck(populate=True)
         self.player = Player(name)
 
-    @property
-    def current_card(self):
-        return self.__current_card
-
-    @current_card.setter
-    def current_card(self, current_card):
-        if not isinstance(current_card, Card):
-            raise ValueError("current_card must be an instance of a Card.")
-        self.__current_card = current_card
-
     def award_bet(self, bet):
         """Awards double the bet to the player"""
         self.p.credits += (bet * 2)
