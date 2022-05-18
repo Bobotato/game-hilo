@@ -28,7 +28,12 @@ class Deck:
                                  "an invalid card.")
         self._cards = cards
 
+    def is_empty(self):
+        """Checks if deck is empty"""
+        return (len(self.cards) == 0)
+
     def populate(self):
+        """Populates the deck with 52 cards"""
         self.cards = ([Card(value, suit) for suit in
                       SUITS for value in VALUES])
 
