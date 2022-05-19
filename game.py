@@ -31,9 +31,9 @@ class Game:
         """
         self.player.credits += bet * multiplier
 
-    def check_prediction(self, drawn_card, prediction):
+    def is_win(self, drawn_card, prediction):
         """
-        Checks if the player's prediction is right.
+        Checks if the player won the round.
 
         :param drawn_card: The drawn card for the current round.
         :type drawn_card: Card
@@ -66,9 +66,9 @@ class Game:
         """
         drawn_card = self.draw_card()
         if prediction == "1":
-            result = self.check_prediction(drawn_card, Prediction.HIGHER)
+            result = self.is_win(drawn_card, Prediction.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(drawn_card, Prediction.LOWER)
+            result = self.is_win(drawn_card, Prediction.LOWER)
 
         if result:
             self.award_bet(bet)
