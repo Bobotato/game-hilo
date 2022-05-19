@@ -9,12 +9,13 @@ class Deck:
     use populate=True to create a 52 card deck,
     or shuffle=True to shuffle the deck on init.
     """
+
     def __init__(self, populate=False, shuffle_deck=False):
         self.cards = []
         if populate:
             self.populate()
         if shuffle_deck:
-            self.shuffle()
+            shuffle(self.cards)
 
     @property
     def cards(self):
@@ -24,8 +25,7 @@ class Deck:
     def cards(self, cards):
         for card in cards:
             if not isinstance(card, Card):
-                raise ValueError("You have tried to insert"
-                                 "an invalid card.")
+                raise ValueError("You have tried to insert" "an invalid card.")
         self._cards = cards
 
     def draw_card(self):
@@ -38,13 +38,7 @@ class Deck:
 
     def populate(self):
         """Populates the deck with 52 cards"""
-        self.cards = ([Card(value, suit) for suit in
-                      SUITS for value in VALUES])
-
-    def shuffle(self):
-        """Shuffles the deck"""
-        shuffle(self.cards)
+        self.cards = [Card(value, suit) for suit in SUITS for value in VALUES]
 
     def __repr__(self):
         return str(self.cards)
-
