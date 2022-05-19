@@ -20,7 +20,14 @@ class Game:
         self.player = Player(name)
 
     def award_bet(self, bet, multiplier=2):
-        """Awards double the bet to the player"""
+        """
+        Awards a bet to the player
+
+        :param bet: The player's bet for the current round.
+        :type bet: int
+        :param multiplier: The multiple to multiply the bet by.
+        :type multiplier: int
+        """
         self.player.credits += (bet * multiplier)
 
     def check_prediction(self, drawn_card, prediction):
