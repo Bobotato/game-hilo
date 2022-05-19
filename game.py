@@ -1,23 +1,21 @@
 from enum import Enum
-from random import shuffle
 
-from card import Card
 from deck import Deck
 from player import Player
 from roundinfo import RoundInfo
-from round_result import RoundResult
+from roundresult import RoundResult
 
 
 class Prediction(Enum):
     HIGHER = 1
-    LOWER = 0
+    LOWER = 2
 
 
 class Game:
     """This class includes all the methods required for the game of Hilo"""
 
     def __init__(self, name):
-        self.deck = Deck(populate=True)
+        self.deck = Deck(populate=True, shuffle_deck=True)
         self.player = Player(name)
 
     def award_bet(self, bet, multiplier=2):
@@ -53,7 +51,7 @@ class Game:
 
     def compute_round_result(self, bet, prediction):
         """
-        Computes the result of a round with a given bet and prediction,
+        Subtracts the player's bet, computes the result of a round with a given bet and prediction,
         and returns an instance of Roundresult with the result.
 
         :param bet: The player's bet for the current round.
@@ -64,33 +62,19 @@ class Game:
                  of the prediction.
         :rtype: RoundResult
         """
-        drawn_card = self.draw_card()
-        if prediction == "1":
-            result = self.is_win(drawn_card, Prediction.HIGHER)
-        elif prediction == "2":
-            result = self.is_win(drawn_card, Prediction.LOWER)
-
+        self.take_bet(bet)
+        drawn_card = self.deck.draw_card()
+        result = self.is_win(drawn_card, prediction)
         if result:
             self.award_bet(bet)
         round_result = RoundResult(drawn_card, result)
-        self.swap_cards(drawn_card)
         return round_result
 
     def start_round(self):
-        """Starts round by shuffling deck, drawing current_card and returning
+        """Starts round, drawing current_card and returning
         an instance of Roundinfo"""
-        shuffle(self.deck.cards)
-        self.current_card = self.draw_card()
+        self.current_card = self.deck.draw_card()
         return RoundInfo(self.player, self.current_card)
-
-    def swap_cards(self, drawn_card):
-        """
-        Sets a drawn card to be the current card.
-
-        :param drawn_card: An instance of a Card.
-        :type drawn_card: Card
-        """
-        self.current_card = drawn_card
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
