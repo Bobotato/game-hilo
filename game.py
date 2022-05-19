@@ -8,7 +8,7 @@ from roundinfo import RoundInfo
 from roundresult import RoundResult
 
 
-class Predictions(Enum):
+class Prediction(Enum):
     HIGHER = 1
     LOWER = 0
 
@@ -25,7 +25,7 @@ class Game:
 
     def check_prediction(self, drawn_card, prediction):
         """
-        Checks the player's prediction and returns True/False
+        Checks if the player's prediction is right.
 
         :param drawn_card: The drawn card for the current round.
         :type drawn_card: Card
@@ -35,12 +35,13 @@ class Game:
         :rtype: bool
 
         """
-        if prediction == Predictions.HIGHER:
-            return drawn_card > self.current_card
-        elif prediction == Predictions.LOWER:
-            return drawn_card < self.current_card
-        else:
-            raise ValueError("Guess must be either 'higher' or 'lower'.")
+        match prediction:
+            case Prediction.HIGHER:
+                return drawn_card > self.current_card
+            case Prediction.LOWER:
+                return drawn_card < self.current_card
+            case _:
+                raise TypeError("prediction must be an instance of a Prediction")
 
     def compute_roundresult(self, bet, prediction):
         """
@@ -57,9 +58,9 @@ class Game:
         """
         drawn_card = self.draw_card()
         if prediction == "1":
-            result = self.check_prediction(drawn_card, Predictions.HIGHER)
+            result = self.check_prediction(drawn_card, Prediction.HIGHER)
         elif prediction == "2":
-            result = self.check_prediction(drawn_card, Predictions.LOWER)
+            result = self.check_prediction(drawn_card, Prediction.LOWER)
         if result:
             self.award_bet(bet)
         roundresult = RoundResult(drawn_card, result)
