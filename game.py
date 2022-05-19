@@ -5,7 +5,7 @@ from card import Card
 from deck import Deck
 from player import Player
 from roundinfo import RoundInfo
-from roundresult import RoundResult
+from round_result import RoundResult
 
 
 class Prediction(Enum):
@@ -15,6 +15,7 @@ class Prediction(Enum):
 
 class Game:
     """This class includes all the methods required for the game of Hilo"""
+
     def __init__(self, name):
         self.deck = Deck(populate=True)
         self.player = Player(name)
@@ -28,7 +29,7 @@ class Game:
         :param multiplier: The multiple to multiply the bet by.
         :type multiplier: int
         """
-        self.player.credits += (bet * multiplier)
+        self.player.credits += bet * multiplier
 
     def check_prediction(self, drawn_card, prediction):
         """
@@ -50,7 +51,7 @@ class Game:
             case _:
                 raise TypeError("prediction must be an instance of a Prediction")
 
-    def compute_roundresult(self, bet, prediction):
+    def compute_round_result(self, bet, prediction):
         """
         Computes the result of a round with a given bet and prediction,
         and returns an instance of Roundresult with the result.
@@ -68,11 +69,12 @@ class Game:
             result = self.check_prediction(drawn_card, Prediction.HIGHER)
         elif prediction == "2":
             result = self.check_prediction(drawn_card, Prediction.LOWER)
+
         if result:
             self.award_bet(bet)
-        roundresult = RoundResult(drawn_card, result)
+        round_result = RoundResult(drawn_card, result)
         self.swap_cards(drawn_card)
-        return roundresult
+        return round_result
 
     def start_round(self):
         """Starts round by shuffling deck, drawing current_card and returning
@@ -84,7 +86,7 @@ class Game:
     def swap_cards(self, drawn_card):
         """
         Sets a drawn card to be the current card.
-        
+
         :param drawn_card: An instance of a Card.
         :type drawn_card: Card
         """
@@ -97,4 +99,3 @@ class Game:
         elif bet > self.player.credits:
             raise ValueError("Bets cannot exceed player's credits.")
         self.player.credits -= bet
-
