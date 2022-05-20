@@ -1,5 +1,6 @@
-from game import Game
 import sys
+
+from game import Game
 from game import Prediction
 
 
@@ -15,12 +16,13 @@ def get_name():
     Gets an input from a user to set their name.
     """
     while True:
-        name = str(input("What is your name?\n"))
+        print("What is your name?")
+        name = str(input("> "))
         if name:
-            print(f"Hello {name}.")
+            print(f"Hello {name}.\n")
             return name
         else:
-            print("You cannot have an empty name, try again.")
+            print("A man has no name, try again.\n")
 
 
 def get_bet():
@@ -33,8 +35,11 @@ def get_bet():
     """
     while True:
         try:
-            print(f"You have {game.player.credits} credits.")
-            bet = int(input("How much would you like to bet?\n"))
+            print(
+                f"\nYou have {game.player.credits} credits.\n"
+                "How much would you like to bet?\n"
+            )
+            bet = int(input("> "))
         except ValueError:
             print("Please only input integers.\n")
         else:
@@ -46,22 +51,30 @@ def get_bet():
                 return bet
 
 
-def is_continuing():
-    """
-    Gets an input from the player to choose if they want to play another
-    round.
-
-    :return: True/False based on the player's answer.
-    :rtype: bool
-    """
+def get_main_menu():
     while True:
-        continuing = input("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
-        if continuing == "1":
-            return True
-        elif continuing == "2":
-            return False
+        print("[1] Play\n" "[2] Ruleset\n" "[3] Exit\n")
+        print("Enter your option number:")
+        option = input("> ")
+        if option == "1":
+            start_game()
+            break
+        elif option == "2":
+            print(
+                "\nThe game uses a standard 52 card deck. "
+                "1 card is dealt face up, and another face down.\n"
+                "You need to guess if the face down card is of a "
+                "higher or lower value than the face up card.\n"
+                "A right answer doubles your bet, and a wrong "
+                "answer forfeits your bet. Happy playing.\n"
+            )
+        elif option == "3":
+            sys.exit("Thanks for playing!")
         else:
-            print("Please only input either 1 or 2.")
+            print(
+                "\nYour input was not recognised, please try again. "
+                "Try typing 1, 2 or 3.\n"
+            )
 
 
 def get_prediction():
@@ -70,10 +83,13 @@ def get_prediction():
     higher or lower.
     """
     while True:
-        print(f"The current card is {round_info.current_card}.")
-        prediction = input(
-            "Will the drawn card be higher or lower?\n" "[1] Higher\n" "[2] Lower\n"
+        print(
+            f"\nThe current card is {round_info.current_card}.\n"
+            "Will the drawn card be higher or lower?\n"
+            "[1] Higher\n"
+            "[2] Lower\n"
         )
+        prediction = input("> ")
         try:
             return Prediction(int(prediction))
         except ValueError:
@@ -86,15 +102,37 @@ def get_restart():
     the whole game with 100 credits. (Applies to gameover conditions)
     """
     while True:
-        restart = input(
-            "Would you like to try again with 100 credits?\n" "[1] Yes\n" "[2] No\n"
+        print(
+            "Would you like to try again with 100 credits?\n"
+            "[1] Yes\n"
+            "[2] No\n"
         )
+        restart = input("> ")
         if restart == "1":
             return True
         elif restart == "2":
             return False
         else:
             print("Please only input 1 to restart or 2 to quit.")
+
+
+def is_continuing():
+    """
+    Gets an input from the player to choose if they want to play another
+    round.
+
+    :return: True/False based on the player's answer.
+    :rtype: bool
+    """
+    while True:
+        print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
+        continuing = input("> ")
+        if continuing == "1":
+            return True
+        elif continuing == "2":
+            return False
+        else:
+            print("Please only input either 1 or 2.")
 
 
 def print_bankrupt():
@@ -111,27 +149,18 @@ def print_empty_deck():
     print("The deck has been emptied! Good job!")
 
 
-def print_menu():
-    """
-    Prints the main menu
-    """
-    print("[1] Play")
-    print("[2] Ruleset")
-    print("[3] Exit")
-
-
 def print_result():
     """
     Prints the result of the most recently played round.
     """
     if round_result.win:
         print(
-            f"The next card was {round_result.drawn_card}. You won!\n"
+            f"\nThe next card was {round_result.drawn_card}. You won!\n"
             f"You now have {game.player.credits} credits."
         )
     else:
         print(
-            f"The next card was {round_result.drawn_card}. You lost!\n"
+            f"\nThe next card was {round_result.drawn_card}. You lost!\n"
             f"You now have {game.player.credits} credits."
         )
 
@@ -147,61 +176,38 @@ def start_game():
     return Game(name)
 
 
-print("Welcome to Alex's Hi-lo game. " "It has been in development hell since 2020.")
+print(
+    "\nWelcome to Alex's Hi-lo game.\n"
+    "It has been in development hell since 2020.\n"
+)
 name = get_name()
-while True:
-    print_menu()
-    option = input("Enter your option number: \n")
-    if option == "1":
-        start_game()
-        break
-    elif option == "2":
-        print(
-            "\nThe game uses a standard 52 card deck. "
-            "1 card is dealt face up, and another face down.\n"
-            "You need to guess if the face down card is of a "
-            "higher or lower value than the face up card.\n"
-            "A right answer doubles your bet, and a wrong "
-            "answer forfeits your bet. Happy playing.\n"
-        )
-    elif option == "3":
-        sys.exit("Thanks for playing!")
-    else:
-        print(
-            "\nYour input was not recognised, please try again. "
-            "Try typing 1, 2 or 3.\n"
-        )
+get_main_menu()
 
 game = start_game()
-round_info = game.start_round()
 replay = True
 while replay:
+    round_info = game.start_round()
     prediction = get_prediction()
     bet = get_bet()
     round_result = game.compute_round_result(bet, prediction)
     print_result()
 
-    if game.player.is_bankrupt():
+    if round_result.player_bankrupt:
         print_bankrupt()
         if get_restart():
             game = start_game()
-            round_info = game.start_round()
             print("Your credits have been reset and the deck rebuilt!")
             continue
         else:
             end_game()
-
-    if game.deck.is_empty():
+    elif round_result.deck_empty:
         print_empty_deck()
         if get_restart():
             game = start_game()
-            round_info = game.start_round()
             print("Your credits have been reset and the deck rebuilt!")
             continue
         else:
             end_game()
 
-    if is_continuing():
-        round_info.current_card = round_result.drawn_card
-    else:
+    if not is_continuing():
         end_game()
