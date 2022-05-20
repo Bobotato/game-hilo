@@ -17,6 +17,7 @@ class Game:
     def __init__(self, name):
         self.deck = Deck(populate=True, shuffle_deck=True)
         self.player = Player(name)
+        self.__current_card = None
 
     def award_bet(self, bet, multiplier=2):
         """
