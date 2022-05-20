@@ -70,14 +70,20 @@ class Game:
         result = self.is_win(drawn_card, prediction)
         if result:
             self.award_bet(bet)
-        round_result = RoundResult(drawn_card, result)
+        round_result = RoundResult(
+            drawn_card,
+            result,
+            player_bankrupt=self.player.is_bankrupt(),
+            deck_empty=self.deck.is_empty(),
+        )
         self.__current_card = round_result.drawn_card
         return round_result
 
     def start_round(self):
         """Starts round, drawing current_card and returning
         an instance of Roundinfo"""
-        self.__current_card = self.deck.draw_card()
+        if isinstance(self.__current_card, type(None)):
+            self.__current_card = self.deck.draw_card()
         return RoundInfo(self.player, self.__current_card)
 
     def take_bet(self, bet):
