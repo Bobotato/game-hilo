@@ -54,8 +54,7 @@ class Game:
 
     def compute_round_result(self, bet, prediction):
         """
-        Subtracts the player's bet, computes the result of a round with a given bet and prediction,
-        and returns an instance of Roundresult with the result.
+        Takes the player's bet and prediction and computes the result of the round.
 
         :param bet: The player's bet for the current round.
         :type bet: int
