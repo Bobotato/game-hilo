@@ -43,11 +43,13 @@ class Game:
         """
         match prediction:
             case Prediction.HIGHER:
-                return drawn_card > self.current_card
+                return drawn_card > self.__current_card
             case Prediction.LOWER:
-                return drawn_card < self.current_card
+                return drawn_card < self.__current_card
             case _:
-                raise TypeError("prediction must be an instance of a Prediction")
+                raise TypeError(
+                    "prediction must be an instance of a Prediction"
+                )
 
     def compute_round_result(self, bet, prediction):
         """
@@ -68,13 +70,14 @@ class Game:
         if result:
             self.award_bet(bet)
         round_result = RoundResult(drawn_card, result)
+        self.__current_card = round_result.drawn_card
         return round_result
 
     def start_round(self):
         """Starts round, drawing current_card and returning
         an instance of Roundinfo"""
-        self.current_card = self.deck.draw_card()
-        return RoundInfo(self.player, self.current_card)
+        self.__current_card = self.deck.draw_card()
+        return RoundInfo(self.player, self.__current_card)
 
     def take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
