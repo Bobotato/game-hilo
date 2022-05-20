@@ -3,9 +3,12 @@ from card import Card
 
 class RoundResult:
     """This class holds the result of the round"""
-    def __init__(self, drawn_card, win):
+
+    def __init__(self, drawn_card, win, *, player_bankrupt, deck_empty):
         self.drawn_card = drawn_card
         self.win = win
+        self.player_bankrupt = player_bankrupt
+        self.deck_empty = deck_empty
 
     @property
     def drawn_card(self):
@@ -29,4 +32,3 @@ class RoundResult:
 
     def __repr__(self):
         return f"{self.drawn_card}, {self.win}"
-
