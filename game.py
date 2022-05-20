@@ -19,7 +19,7 @@ class Game:
         self.player = Player(name)
         self.__current_card = None
 
-    def award_bet(self, bet, multiplier=2):
+    def award_bet(self, bet, *, multiplier=2):
         """
         Awards a bet to the player
 
