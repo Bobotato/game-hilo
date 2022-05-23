@@ -7,14 +7,6 @@ def end_game():
     sys.exit("Thanks for playing!")
 
 
-def game_over():
-    if not get_restart():
-        end_game()
-    else:
-        game = start_game()
-        print("Credits reset to 100, deck refilled.")
-
-
 def get_name():
     while True:
         print("What is your name?")
@@ -44,14 +36,13 @@ def get_bet(game):
             return bet
 
 
-def get_main_menu():
+def is_playing():
     while True:
         print("[1] Play\n" "[2] Ruleset\n" "[3] Exit\n")
         print("Enter your option number:")
         option = input("> ")
         if option == "1":
-            start_game()
-            break
+            return True
         elif option == "2":
             print(
                 "\nThe game uses a standard 52 card deck. "
@@ -62,7 +53,7 @@ def get_main_menu():
                 "answer forfeits your bet. Happy playing.\n"
             )
         elif option == "3":
-            sys.exit("Thanks for playing!")
+            return False
         else:
             print(
                 "\nYour input was not recognised, please try again. "
@@ -85,6 +76,11 @@ def get_prediction(round_info):
             print("Please only use 1 for higher or 2 for lower.")
 
 
+def is_game_over(round_result):
+    if round_result.is_player_bankrupt or round_result.is_deck_empty:
+        return True
+
+
 def is_restarting():
     while True:
         print(
@@ -94,6 +90,7 @@ def is_restarting():
         )
         restart = input("> ")
         if restart == "1":
+            print("Credits will reset to 100, and the deck will be populated.")
             return True
         elif restart == "2":
             return False
@@ -118,7 +115,7 @@ def print_bankrupt():
 
 
 def print_empty_deck():
-    print("The deck has been emptied! Good job!")
+    print("The deck has been emptied!")
 
 
 def print_result(round_result):
@@ -133,9 +130,10 @@ def print_result(round_result):
             f"You now have {game.player.credits} credits."
         )
 
-
-def start_game():
-    return Game(name)
+    if round_result.is_player_bankrupt:
+        print_bankrupt()
+    elif round_result.is_deck_empty:
+        print_empty_deck()
 
 
 print(
@@ -143,23 +141,25 @@ print(
     "It has been in development hell since 2020.\n"
 )
 name = get_name()
-get_main_menu()
 
-game = start_game()
-while True:
-    round_info = game.start_round()
-    prediction = get_prediction(round_info)
-    bet = get_bet(game)
-    round_result = game.compute_round_result(bet, prediction)
-    print_result(round_result)
+if is_playing():
+    game = Game(name)
 
-    if round_result.is_player_bankrupt:
-        print_bankrupt()
-        game_over()
+    while True:
+        round_info = game.start_round()
+        prediction = get_prediction(round_info)
+        bet = get_bet(game)
+        round_result = game.compute_round_result(bet, prediction)
+        print_result(round_result)
 
-    elif round_result.is_deck_empty:
-        print_empty_deck()
-        game_over()
+        if is_game_over(round_result):
 
-    elif not is_continuing():
-        end_game()
+            if not is_restarting():
+                break
+
+            game = Game(name)
+
+        elif not is_continuing():
+            break
+
+end_game()
