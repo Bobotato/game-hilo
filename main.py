@@ -4,9 +4,6 @@ from game import Game, Prediction
 
 
 def end_game():
-    """
-    Ends the game and closes the program.
-    """
     sys.exit("Thanks for playing!")
 
 
@@ -19,9 +16,6 @@ def game_over():
 
 
 def get_name():
-    """
-    Gets an input from a user to set their name.
-    """
     while True:
         print("What is your name?")
         name = str(input("> "))
@@ -32,13 +26,6 @@ def get_name():
 
 
 def get_bet():
-    """
-    Prints the player's credit balance, asks for a bet
-    from the user, returns bet.
-
-    :return: The player's bet for the round.
-    :rtype: int
-    """
     while True:
         print(
             f"\nYou have {game.player.credits} credits.\n"
@@ -84,10 +71,6 @@ def get_main_menu():
 
 
 def get_prediction():
-    """
-    Gets an input from the player to predict if the drawn card will be
-    higher or lower.
-    """
     while True:
         print(
             f"\nThe current card is {round_info.current_card}.\n"
@@ -103,10 +86,6 @@ def get_prediction():
 
 
 def get_restart():
-    """
-    Gets an input from the user to choose if they want to restart
-    the whole game with 100 credits. (Applies to gameover conditions)
-    """
     while True:
         print(
             "Would you like to try again with 100 credits?\n"
@@ -123,13 +102,6 @@ def get_restart():
 
 
 def is_continuing():
-    """
-    Gets an input from the player to choose if they want to play another
-    round.
-
-    :return: True/False based on the player's answer.
-    :rtype: bool
-    """
     while True:
         print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
         continuing = input("> ")
@@ -142,23 +114,14 @@ def is_continuing():
 
 
 def print_bankrupt():
-    """
-    Prints the bankruptcy message.
-    """
     print("You've reached zero credits, you're bankrupt!")
 
 
 def print_empty_deck():
-    """
-    Prints the empty deck message.
-    """
     print("The deck has been emptied! Good job!")
 
 
 def print_result():
-    """
-    Prints the result of the most recently played round.
-    """
     if round_result.win:
         print(
             f"\nThe next card was {round_result.drawn_card}. You won!\n"
@@ -172,13 +135,6 @@ def print_result():
 
 
 def start_game():
-    """
-    Creates an instance of a Game with the user's name.
-
-    :param name: A string representing the user's name.
-
-    :return: An instance of a Game
-    """
     return Game(name)
 
 
