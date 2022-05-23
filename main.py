@@ -183,8 +183,7 @@ name = get_name()
 get_main_menu()
 
 game = start_game()
-replay = True
-while replay:
+while True:
     round_info = game.start_round()
     prediction = get_prediction()
     bet = get_bet()
