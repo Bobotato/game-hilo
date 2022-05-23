@@ -32,21 +32,21 @@ def get_bet():
     :rtype: int
     """
     while True:
+        print(
+            f"\nYou have {game.player.credits} credits.\n"
+            "How much would you like to bet?\n"
+        )
         try:
-            print(
-                f"\nYou have {game.player.credits} credits.\n"
-                "How much would you like to bet?\n"
-            )
             bet = int(input("> "))
         except ValueError:
             print("Please only input whole numbers.\n")
+
+        if bet > game.player.credits:
+            print("You cannot bet more credits than you have.\n")
+        elif bet <= 0:
+            print("You cannot bet 0 or negative amounts.\n")
         else:
-            if bet > game.player.credits:
-                print("You cannot bet more credits than you have.\n")
-            elif bet <= 0:
-                print("You cannot bet 0 or negative amounts.\n")
-            else:
-                return bet
+            return bet
 
 
 def get_main_menu():
