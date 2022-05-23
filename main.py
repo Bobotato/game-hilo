@@ -40,7 +40,7 @@ def get_bet():
             )
             bet = int(input("> "))
         except ValueError:
-            print("Please only input integers.\n")
+            print("Please only input whole numbers.\n")
         else:
             if bet > game.player.credits:
                 print("You cannot bet more credits than you have.\n")
