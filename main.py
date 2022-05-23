@@ -10,6 +10,14 @@ def end_game():
     sys.exit("Thanks for playing!")
 
 
+def game_over():
+    if not get_restart():
+        end_game()
+    else:
+        game = start_game()
+        print("Credits reset to 100, deck refilled.")
+
+
 def get_name():
     """
     Gets an input from a user to set their name.
@@ -189,22 +197,13 @@ while True:
     round_result = game.compute_round_result(bet, prediction)
     print_result()
 
-    if round_result.player_bankrupt:
+    if round_result.is_player_bankrupt:
         print_bankrupt()
-        if get_restart():
-            game = start_game()
-            print("Your credits have been reset and the deck rebuilt!")
-            continue
-        else:
-            end_game()
-    elif round_result.deck_empty:
-        print_empty_deck()
-        if get_restart():
-            game = start_game()
-            print("Your credits have been reset and the deck rebuilt!")
-            continue
-        else:
-            end_game()
+        game_over()
 
-    if not is_continuing():
+    elif round_result.is_deck_empty:
+        print_empty_deck()
+        game_over()
+
+    elif not is_continuing():
         end_game()
