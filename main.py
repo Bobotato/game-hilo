@@ -7,16 +7,6 @@ def end_game():
     sys.exit("Thanks for playing!")
 
 
-def get_name():
-    while True:
-        print("What is your name?")
-        name = str(input("> "))
-        if name:
-            print(f"Hello {name}.\n")
-            return name
-        print("A man has no name, try again.\n")
-
-
 def get_bet(game):
     while True:
         print(
@@ -34,6 +24,48 @@ def get_bet(game):
             print("You cannot bet 0 or negative amounts.\n")
         else:
             return bet
+
+
+def get_name():
+    while True:
+        print("What is your name?")
+        name = str(input("> "))
+        if name:
+            print(f"Hello {name}.\n")
+            return name
+        print("A man has no name, try again.\n")
+
+
+def get_prediction(round_info):
+    while True:
+        print(
+            f"\nThe current card is {round_info.current_card}.\n"
+            "Will the drawn card be higher or lower?\n"
+            "[1] Higher\n"
+            "[2] Lower\n"
+        )
+        prediction = input("> ")
+        try:
+            return Prediction(int(prediction))
+        except ValueError:
+            print("Please only use 1 for higher or 2 for lower.")
+
+
+def is_continuing():
+    while True:
+        print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
+        continuing = input("> ")
+        if continuing == "1":
+            return True
+        elif continuing == "2":
+            return False
+        else:
+            print("Please only input either 1 or 2.")
+
+
+def is_game_over(round_result):
+    if round_result.is_player_bankrupt or round_result.is_deck_empty:
+        return True
 
 
 def is_playing():
@@ -61,26 +93,6 @@ def is_playing():
             )
 
 
-def get_prediction(round_info):
-    while True:
-        print(
-            f"\nThe current card is {round_info.current_card}.\n"
-            "Will the drawn card be higher or lower?\n"
-            "[1] Higher\n"
-            "[2] Lower\n"
-        )
-        prediction = input("> ")
-        try:
-            return Prediction(int(prediction))
-        except ValueError:
-            print("Please only use 1 for higher or 2 for lower.")
-
-
-def is_game_over(round_result):
-    if round_result.is_player_bankrupt or round_result.is_deck_empty:
-        return True
-
-
 def is_restarting():
     while True:
         print(
@@ -96,18 +108,6 @@ def is_restarting():
             return False
         else:
             print("Please only input 1 to restart or 2 to quit.")
-
-
-def is_continuing():
-    while True:
-        print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
-        continuing = input("> ")
-        if continuing == "1":
-            return True
-        elif continuing == "2":
-            return False
-        else:
-            print("Please only input either 1 or 2.")
 
 
 def print_bankrupt():
