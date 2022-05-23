@@ -75,7 +75,7 @@ class Game:
             is_player_bankrupt=self.player.is_bankrupt(),
             is_deck_empty=self.deck.is_empty(),
         )
-        self.__current_card = result.drawn_card
+        self.__current_card = drawn_card
         return result
 
     def start_round(self):
