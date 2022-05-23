@@ -35,9 +35,9 @@ class Game:
         Checks if the player won the round.
 
         :param drawn_card: The drawn card for the current round.
-        :type drawn_card: Card
+        :type drawn_card: :class:`card.Card`
         :param prediction: The player's prediction for the current round.
-        :type prediction: str
+        :type prediction: :class:`Prediction`
         :return: True/False based whether the player's prediction is correct.
         :rtype: bool
 
