@@ -1,7 +1,6 @@
 import sys
 
-from game import Game
-from game import Prediction
+from game import Game, Prediction
 
 
 def end_game():
