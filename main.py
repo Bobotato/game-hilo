@@ -25,7 +25,7 @@ def get_name():
         print("A man has no name, try again.\n")
 
 
-def get_bet():
+def get_bet(game):
     while True:
         print(
             f"\nYou have {game.player.credits} credits.\n"
@@ -70,7 +70,7 @@ def get_main_menu():
             )
 
 
-def get_prediction():
+def get_prediction(round_info):
     while True:
         print(
             f"\nThe current card is {round_info.current_card}.\n"
@@ -85,7 +85,7 @@ def get_prediction():
             print("Please only use 1 for higher or 2 for lower.")
 
 
-def get_restart():
+def is_restarting():
     while True:
         print(
             "Would you like to try again with 100 credits?\n"
@@ -121,7 +121,7 @@ def print_empty_deck():
     print("The deck has been emptied! Good job!")
 
 
-def print_result():
+def print_result(round_result):
     if round_result.win:
         print(
             f"\nThe next card was {round_result.drawn_card}. You won!\n"
@@ -148,10 +148,10 @@ get_main_menu()
 game = start_game()
 while True:
     round_info = game.start_round()
-    prediction = get_prediction()
-    bet = get_bet()
+    prediction = get_prediction(round_info)
+    bet = get_bet(game)
     round_result = game.compute_round_result(bet, prediction)
-    print_result()
+    print_result(round_result)
 
     if round_result.is_player_bankrupt:
         print_bankrupt()
