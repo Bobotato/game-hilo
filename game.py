@@ -81,7 +81,7 @@ class Game:
     def start_round(self):
         """Starts round, drawing current_card and returning
         an instance of Roundinfo"""
-        if isinstance(self.__current_card, type(None)):
+        if self.__current_card is None:
             self.__current_card = self.deck.draw_card()
         return RoundInfo(self.player, self.__current_card)
 
