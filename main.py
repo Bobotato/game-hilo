@@ -20,8 +20,7 @@ def get_name():
         if name:
             print(f"Hello {name}.\n")
             return name
-        else:
-            print("A man has no name, try again.\n")
+        print("A man has no name, try again.\n")
 
 
 def get_bet():
