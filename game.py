@@ -59,7 +59,7 @@ class Game:
         :param bet: The player's bet for the current round.
         :type bet: int
         :param prediction: The player's prediction for the current round.
-        :type prediction: str
+        :type prediction: Prediction
         :return: An instance of a RoundResult with drawn_card and the result
                  of the prediction.
         :rtype: RoundResult
