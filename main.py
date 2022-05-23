@@ -140,6 +140,7 @@ print(
     "\nWelcome to Alex's Hi-lo game.\n"
     "It has been in development hell since 2020.\n"
 )
+
 name = get_name()
 
 if is_playing():
@@ -147,16 +148,15 @@ if is_playing():
 
     while True:
         round_info = game.start_round()
+
         prediction = get_prediction(round_info)
         bet = get_bet(game)
         round_result = game.compute_round_result(bet, prediction)
         print_result(round_result)
 
         if is_game_over(round_result):
-
             if not is_restarting():
                 break
-
             game = Game(name)
 
         elif not is_continuing():
