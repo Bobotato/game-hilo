@@ -19,7 +19,7 @@ class Game:
         self.player = Player(name)
         self.__current_card = None
 
-    def __award_bet__(self, bet, *, multiplier=2):
+    def __award_bet(self, bet, *, multiplier=2):
         """
         Awards a bet to the player
 
@@ -42,12 +42,12 @@ class Game:
                  of the prediction.
         :rtype: RoundResult
         """
-        self.__take_bet__(bet)
+        self.__take_bet(bet)
         drawn_card = self.deck.draw_card()
-        win = self.__is_win__(drawn_card, prediction)
+        win = self.__is_win(drawn_card, prediction)
 
         if win:
-            self.__award_bet__(bet)
+            self.__award_bet(bet)
 
         result = RoundResult(
             drawn_card,
@@ -60,7 +60,7 @@ class Game:
 
         return result
 
-    def __is_win__(self, drawn_card, prediction):
+    def __is_win(self, drawn_card, prediction):
         """
         Checks if the player won the round.
 
@@ -89,7 +89,7 @@ class Game:
 
         return RoundInfo(self.player, self.__current_card)
 
-    def __take_bet__(self, bet):
+    def __take_bet(self, bet):
         """Takes the player's bet and removes it from their account"""
         if bet <= 0:
             raise ValueError("Bets cannot be 0 or negative.")
