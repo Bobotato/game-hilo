@@ -70,7 +70,6 @@ class Game:
         :type prediction: Prediction
         :return: True/False based whether the player's prediction is correct.
         :rtype: bool
-
         """
         match prediction:
             case Prediction.HIGHER:
