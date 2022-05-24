@@ -1,9 +1,9 @@
 from enum import Enum
 
-from deck import Deck
-from player import Player
-from roundinfo import RoundInfo
-from roundresult import RoundResult
+from .models.deck import Deck
+from .models.player import Player
+from .models.roundinfo import RoundInfo
+from .models.roundresult import RoundResult
 
 
 class Prediction(Enum):

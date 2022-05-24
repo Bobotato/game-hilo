@@ -1,6 +1,6 @@
 from random import shuffle
 
-from card import Card, SUITS, VALUES
+from .card import Card, SUITS, VALUES
 
 
 class Deck:
