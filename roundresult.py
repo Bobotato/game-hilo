@@ -18,6 +18,7 @@ class RoundResult:
     def drawn_card(self, drawn_card):
         if not isinstance(drawn_card, Card):
             raise TypeError("drawn_card must be an instance of a Card")
+
         self._drawn_card = drawn_card
 
     @property
@@ -28,6 +29,7 @@ class RoundResult:
     def win(self, win):
         if not isinstance(win, bool):
             raise TypeError("win must be a boolean")
+
         self._win = win
 
     def __repr__(self):

@@ -12,8 +12,10 @@ class Deck:
 
     def __init__(self, populate=False, shuffle_deck=False):
         self.cards = []
+
         if populate:
             self.populate()
+
         if shuffle_deck:
             shuffle(self.cards)
 
@@ -26,6 +28,7 @@ class Deck:
         for card in cards:
             if not isinstance(card, Card):
                 raise ValueError("You have tried to insert" "an invalid card.")
+
         self._cards = cards
 
     def draw_card(self):

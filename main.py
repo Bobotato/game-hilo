@@ -13,15 +13,19 @@ def get_bet(game):
             f"\nYou have {game.player.credits} credits.\n"
             "How much would you like to bet?\n"
         )
+
         try:
             bet = int(input("> "))
         except ValueError:
             print("Please only input whole numbers.\n")
+            continue
 
         if bet > game.player.credits:
             print("You cannot bet more credits than you have.\n")
+
         elif bet <= 0:
             print("You cannot bet 0 or negative amounts.\n")
+
         else:
             return bet
 
@@ -30,9 +34,11 @@ def get_name():
     while True:
         print("What is your name?")
         name = str(input("> "))
+
         if name:
             print(f"Hello {name}.\n")
             return name
+
         print("A man has no name, try again.\n")
 
 
@@ -45,6 +51,7 @@ def get_prediction(round_info):
             "[2] Lower\n"
         )
         prediction = input("> ")
+
         try:
             return Prediction(int(prediction))
         except ValueError:
@@ -55,10 +62,13 @@ def is_continuing():
     while True:
         print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
         continuing = input("> ")
+
         if continuing == "1":
             return True
+
         elif continuing == "2":
             return False
+
         else:
             print("Please only input either 1 or 2.")
 
@@ -73,8 +83,10 @@ def is_playing():
         print("[1] Play\n" "[2] Ruleset\n" "[3] Exit\n")
         print("Enter your option number:")
         option = input("> ")
+
         if option == "1":
             return True
+
         elif option == "2":
             print(
                 "\nThe game uses a standard 52 card deck. "
@@ -84,8 +96,10 @@ def is_playing():
                 "A right answer doubles your bet, and a wrong "
                 "answer forfeits your bet. Happy playing.\n"
             )
+
         elif option == "3":
             return False
+
         else:
             print(
                 "\nYour input was not recognised, please try again. "
@@ -101,11 +115,14 @@ def is_restarting():
             "[2] No\n"
         )
         restart = input("> ")
+
         if restart == "1":
             print("Credits will reset to 100, and the deck will be populated.")
             return True
+
         elif restart == "2":
             return False
+
         else:
             print("Please only input 1 to restart or 2 to quit.")
 
@@ -132,6 +149,7 @@ def print_result(round_result):
 
     if round_result.is_player_bankrupt:
         print_bankrupt()
+
     elif round_result.is_deck_empty:
         print_empty_deck()
 
@@ -143,23 +161,26 @@ print(
 
 name = get_name()
 
-if is_playing():
-    game = Game(name)
+if not is_playing():
+    end_game()
 
-    while True:
-        round_info = game.start_round()
+game = Game(name)
 
-        prediction = get_prediction(round_info)
-        bet = get_bet(game)
-        round_result = game.compute_round_result(bet, prediction)
-        print_result(round_result)
+while True:
+    round_info = game.start_round()
 
-        if is_game_over(round_result):
-            if not is_restarting():
-                break
-            game = Game(name)
+    round_result = game.compute_round_result(
+        bet=get_bet(game), prediction=get_prediction(round_info)
+    )
 
-        elif not is_continuing():
+    print_result(round_result)
+
+    if is_game_over(round_result):
+        if not is_restarting():
             break
+        game = Game(name)
+
+    elif not is_continuing():
+        break
 
 end_game()

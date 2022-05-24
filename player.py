@@ -13,6 +13,7 @@ class Player:
     def credits(self, credits):
         if credits < 0:
             raise ValueError("Player can't have negative credits.")
+
         self._credits = credits
 
     @property
@@ -23,6 +24,7 @@ class Player:
     def name(self, name):
         if not name:
             raise ValueError("Player name cannot be blank.")
+
         self._name = name
 
     def is_bankrupt(self):
