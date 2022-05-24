@@ -27,7 +27,7 @@ class Deck:
     def cards(self, cards):
         for card in cards:
             if not isinstance(card, Card):
-                raise ValueError("You have tried to insert" "an invalid card.")
+                raise ValueError("You have tried to insert an invalid card.")
 
         self._cards = cards
 
