@@ -60,7 +60,7 @@ def get_prediction(round_info):
 
 def is_continuing():
     while True:
-        print("Would you like to continue?\n" "[1] Yes\n" "[2] No\n")
+        print("Would you like to continue?\n[1] Yes\n[2] No\n")
         continuing = input("> ")
 
         if continuing == "1":
@@ -80,7 +80,7 @@ def is_game_over(round_result):
 
 def is_playing():
     while True:
-        print("[1] Play\n" "[2] Ruleset\n" "[3] Exit\n")
+        print("[1] Play\n[2] Ruleset\n[3] Exit\n")
         print("Enter your option number:")
         option = input("> ")
 
