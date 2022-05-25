@@ -1,4 +1,4 @@
-from enum import Enum
+ifrom enum import Enum
 
 from .models.deck import Deck
 from .models.player import Player
@@ -12,7 +12,7 @@ class Prediction(Enum):
 
 
 class Game:
-    """This class includes all the methods required for the game of Hilo EXTRA EXTRA EXTRA EXTRA EXTRA"""
+    """This class includes all the methods required for the game of Hilo"""
 
     def __init__(self, name):
         self.deck = Deck(populate=True, shuffle_deck=True)
