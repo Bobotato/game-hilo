@@ -12,7 +12,7 @@ class Prediction(Enum):
 
 
 class Game:
-    """This class includes all the methods required for the game of Hilo"""
+    """This class includes all the methods required for the game of Hilo EXTRA EXTRA EXTRA EXTRA EXTRA"""
 
     def __init__(self, name):
         self.deck = Deck(populate=True, shuffle_deck=True)
