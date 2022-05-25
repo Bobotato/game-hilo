@@ -1,4 +1,4 @@
-ifrom enum import Enum
+from enum import Enum
 
 from .models.deck import Deck
 from .models.player import Player
