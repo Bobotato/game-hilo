@@ -1,6 +1,6 @@
 import sys
 
-from game import Game, Prediction
+from hilo.game import Game, Prediction
 
 
 def end_game():
