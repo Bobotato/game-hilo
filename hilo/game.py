@@ -32,7 +32,7 @@ class Game:
 
     def compute_round_result(self, bet, prediction):
         """
-        Takes the player's bet and prediction and computes the result of the round.
+        Takes the player's bet and prediction and computes the round result.
 
         :param bet: The player's bet for the current round.
         :type bet: int
