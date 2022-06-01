@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 from .models.card import Card
 from .models.deck import Deck
@@ -16,9 +17,9 @@ class Game:
     """This class includes all the methods required for the game of Hilo"""
 
     def __init__(self, name: str) -> None:
-        self.deck = Deck(populate=True, shuffle_deck=True)
-        self.player = Player(name)
-        self.__current_card = None
+        self.deck: Deck = Deck(populate=True, shuffle_deck=True)
+        self.player: Player = Player(name)
+        self.__current_card: Optional[Card] = None
 
     def __award_bet(self, bet: int, *, multiplier: int = 2) -> None:
         """
