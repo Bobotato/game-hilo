@@ -48,5 +48,10 @@ class Card:
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
+    def __gt__(self, other):
+        return (VALUES.index(self.value), SUITS.index(self.suit)) > (
+            (VALUES.index(other.value), SUITS.index(other.suit))
+        )
+
     def __repr__(self):
         return f"{self.value}{self.suit}"
