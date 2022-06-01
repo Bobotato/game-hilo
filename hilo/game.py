@@ -1,6 +1,6 @@
 from enum import Enum
 
-from .models.deck import Card
+from .models.card import Card
 from .models.deck import Deck
 from .models.player import Player
 from .models.roundinfo import RoundInfo
