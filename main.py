@@ -76,8 +76,7 @@ def is_continuing() -> bool:
 
 
 def is_game_over(round_result: RoundResult) -> bool:
-    if round_result.is_player_bankrupt or round_result.is_deck_empty:
-        return True
+    return round_result.is_player_bankrupt or round_result.is_deck_empty
 
 
 def is_playing() -> bool:
