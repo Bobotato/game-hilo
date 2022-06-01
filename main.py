@@ -1,5 +1,4 @@
 import sys
-from types import ClassMethodDescriptorType
 
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
