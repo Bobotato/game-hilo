@@ -10,7 +10,9 @@ class Deck:
     or shuffle=True to shuffle the deck on init.
     """
 
-    def __init__(self, populate=False, shuffle_deck=False):
+    def __init__(
+        self, populate: bool = False, shuffle_deck: bool = False
+    ) -> None:
         self.cards = []
 
         if populate:
@@ -20,28 +22,28 @@ class Deck:
             shuffle(self.cards)
 
     @property
-    def cards(self):
+    def cards(self) -> list:
         return self._cards
 
     @cards.setter
-    def cards(self, cards):
+    def cards(self, cards: list) -> None:
         for card in cards:
             if not isinstance(card, Card):
                 raise ValueError("You have tried to insert an invalid card.")
 
         self._cards = cards
 
-    def draw_card(self):
+    def draw_card(self) -> Card:
         """Draws a card from the deck"""
         return self.cards.pop()
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """Checks if deck is empty"""
         return len(self.cards) == 0
 
-    def populate(self):
+    def populate(self) -> None:
         """Populates the deck with 52 cards"""
         self.cards = [Card(value, suit) for suit in SUITS for value in VALUES]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self.cards)
