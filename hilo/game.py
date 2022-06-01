@@ -1,5 +1,6 @@
 from enum import Enum
 
+from .models.deck import Card
 from .models.deck import Deck
 from .models.player import Player
 from .models.roundinfo import RoundInfo
@@ -14,12 +15,12 @@ class Prediction(Enum):
 class Game:
     """This class includes all the methods required for the game of Hilo"""
 
-    def __init__(self, name):
+    def __init__(self, name: str) -> None:
         self.deck = Deck(populate=True, shuffle_deck=True)
         self.player = Player(name)
         self.__current_card = None
 
-    def __award_bet(self, bet, *, multiplier=2):
+    def __award_bet(self, bet: int, *, multiplier: int = 2) -> None:
         """
         Awards a bet to the player
 
@@ -30,7 +31,9 @@ class Game:
         """
         self.player.credits += bet * multiplier
 
-    def compute_round_result(self, bet, prediction):
+    def compute_round_result(
+        self, bet: int, prediction: Prediction
+    ) -> RoundResult:
         """
         Takes the player's bet and prediction and computes the round result.
 
@@ -60,7 +63,7 @@ class Game:
 
         return result
 
-    def __is_win(self, drawn_card, prediction):
+    def __is_win(self, drawn_card: Card, prediction: Prediction) -> bool:
         """
         Checks if the player won the round.
 
@@ -81,7 +84,7 @@ class Game:
                     "prediction must be an instance of a Prediction"
                 )
 
-    def start_round(self):
+    def start_round(self) -> RoundInfo:
         """Starts round, drawing current_card and returning
         an instance of Roundinfo"""
         if self.__current_card is None:
@@ -89,7 +92,7 @@ class Game:
 
         return RoundInfo(self.player, self.__current_card)
 
-    def __take_bet(self, bet):
+    def __take_bet(self, bet: int) -> None:
         """Takes the player's bet and removes it from their account"""
         if bet <= 0:
             raise ValueError("Bets cannot be 0 or negative.")
