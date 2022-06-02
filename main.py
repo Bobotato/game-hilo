@@ -171,7 +171,7 @@ while True:
     round_info = game.start_round()
 
     round_result = game.compute_round_result(
-        bet=get_bet(game), prediction=get_prediction(round_info)
+        prediction=get_prediction(round_info), bet=get_bet(game)
     )
 
     print_result(round_result)
