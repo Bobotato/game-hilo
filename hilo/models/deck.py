@@ -1,5 +1,5 @@
-from typing import List
 from random import shuffle
+from typing import List
 
 from .card import SUITS, VALUES, Card
 
