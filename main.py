@@ -1,13 +1,15 @@
 import sys
 
 from hilo.game import Game, Prediction
+from hilo.models.roundinfo import RoundInfo
+from hilo.models.roundresult import RoundResult
 
 
 def end_game():
     sys.exit("Thanks for playing!")
 
 
-def get_bet(game):
+def get_bet(game: Game) -> int:
     while True:
         print(
             f"\nYou have {game.player.credits} credits.\n"
@@ -30,7 +32,7 @@ def get_bet(game):
             return bet
 
 
-def get_name():
+def get_name() -> str:
     while True:
         print("What is your name?")
         name = str(input("> "))
@@ -42,7 +44,7 @@ def get_name():
         print("A man has no name, try again.\n")
 
 
-def get_prediction(round_info):
+def get_prediction(round_info: RoundInfo) -> Prediction:
     while True:
         print(
             f"\nThe current card is {round_info.current_card}.\n"
@@ -58,7 +60,7 @@ def get_prediction(round_info):
             print("Please only use 1 for higher or 2 for lower.")
 
 
-def is_continuing():
+def is_continuing() -> bool:
     while True:
         print("Would you like to continue?\n[1] Yes\n[2] No\n")
         continuing = input("> ")
@@ -73,12 +75,11 @@ def is_continuing():
             print("Please only input either 1 or 2.")
 
 
-def is_game_over(round_result):
-    if round_result.is_player_bankrupt or round_result.is_deck_empty:
-        return True
+def is_game_over(round_result: RoundResult) -> bool:
+    return round_result.is_player_bankrupt or round_result.is_deck_empty
 
 
-def is_playing():
+def is_playing() -> bool:
     while True:
         print("[1] Play\n[2] Ruleset\n[3] Exit\n")
         print("Enter your option number:")
@@ -107,7 +108,7 @@ def is_playing():
             )
 
 
-def is_restarting():
+def is_restarting() -> bool:
     while True:
         print(
             "Would you like to try again with 100 credits?\n"
@@ -135,7 +136,7 @@ def print_empty_deck():
     print("The deck has been emptied!")
 
 
-def print_result(round_result):
+def print_result(round_result: RoundResult):
     if round_result.win:
         print(
             f"\nThe next card was {round_result.drawn_card}. You won!\n"
@@ -170,7 +171,7 @@ while True:
     round_info = game.start_round()
 
     round_result = game.compute_round_result(
-        bet=get_bet(game), prediction=get_prediction(round_info)
+        prediction=get_prediction(round_info), bet=get_bet(game)
     )
 
     print_result(round_result)

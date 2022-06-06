@@ -8,16 +8,16 @@ SUITS = ["D", "C", "H", "S"]
 class Card:
     """Standard Playing Card Class"""
 
-    def __init__(self, value, suit):
+    def __init__(self, value: str, suit: str) -> None:
         self.value = value
         self.suit = suit
 
     @property
-    def suit(self):
+    def suit(self) -> str:
         return self._suit
 
     @suit.setter
-    def suit(self, suit):
+    def suit(self, suit: str) -> None:
         if suit not in SUITS:
             raise ValueError(
                 "Suit must be a part of the 4 French suits."
@@ -26,11 +26,11 @@ class Card:
         self._suit = suit
 
     @property
-    def value(self):
+    def value(self) -> str:
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: str) -> None:
         if value not in VALUES:
             raise ValueError(
                 "Value must be a part of the 13 values "
@@ -38,15 +38,29 @@ class Card:
             )
         self._value = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
         return (VALUES.index(self.value), SUITS.index(self.suit)) == (
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
         return (VALUES.index(self.value), SUITS.index(self.suit)) < (
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
-    def __repr__(self):
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
+        return (VALUES.index(self.value), SUITS.index(self.suit)) > (
+            (VALUES.index(other.value), SUITS.index(other.suit))
+        )
+
+    def __repr__(self) -> str:
         return f"{self.value}{self.suit}"
