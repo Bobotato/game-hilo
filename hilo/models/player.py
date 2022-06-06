@@ -6,22 +6,22 @@ class Player:
         self.credits = credits
 
     @property
-    def credits(self):
+    def credits(self) -> int:
         return self._credits
 
     @credits.setter
-    def credits(self, credits):
+    def credits(self, credits: int) -> None:
         if credits < 0:
             raise ValueError("Player can't have negative credits.")
 
         self._credits = credits
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
 
     @name.setter
-    def name(self, name):
+    def name(self, name: str) -> None:
         if not name:
             raise ValueError("Player name cannot be blank.")
 

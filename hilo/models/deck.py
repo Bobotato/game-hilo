@@ -1,3 +1,4 @@
+from typing import List
 from random import shuffle
 
 from .card import SUITS, VALUES, Card
@@ -22,11 +23,11 @@ class Deck:
             shuffle(self.cards)
 
     @property
-    def cards(self):
+    def cards(self) -> List[Card]:
         return self._cards
 
     @cards.setter
-    def cards(self, cards):
+    def cards(self, cards: List[Card]) -> None:
         for card in cards:
             if not isinstance(card, Card):
                 raise ValueError("You have tried to insert an invalid card.")

@@ -13,11 +13,11 @@ class Card:
         self.suit = suit
 
     @property
-    def suit(self):
+    def suit(self) -> str:
         return self._suit
 
     @suit.setter
-    def suit(self, suit):
+    def suit(self, suit: str) -> None:
         if suit not in SUITS:
             raise ValueError(
                 "Suit must be a part of the 4 French suits."
@@ -26,11 +26,11 @@ class Card:
         self._suit = suit
 
     @property
-    def value(self):
+    def value(self) -> str:
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: str) -> None:
         if value not in VALUES:
             raise ValueError(
                 "Value must be a part of the 13 values "
