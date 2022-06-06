@@ -8,7 +8,7 @@ SUITS = ["D", "C", "H", "S"]
 class Card:
     """Standard Playing Card Class"""
 
-    def __init__(self, value, suit):
+    def __init__(self, value: str, suit: str) -> None:
         self.value = value
         self.suit = suit
 
@@ -38,20 +38,29 @@ class Card:
             )
         self._value = value
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
         return (VALUES.index(self.value), SUITS.index(self.suit)) == (
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
         return (VALUES.index(self.value), SUITS.index(self.suit)) < (
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
-    def __gt__(self, other):
+    def __gt__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
         return (VALUES.index(self.value), SUITS.index(self.suit)) > (
             (VALUES.index(other.value), SUITS.index(other.suit))
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.value}{self.suit}"

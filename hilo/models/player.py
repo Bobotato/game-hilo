@@ -1,7 +1,7 @@
 class Player:
     """A class to represent a player and their credits"""
 
-    def __init__(self, name, credits=100):
+    def __init__(self, name: str, credits: int = 100) -> None:
         self.name = name
         self.credits = credits
 
@@ -27,9 +27,9 @@ class Player:
 
         self._name = name
 
-    def is_bankrupt(self):
+    def is_bankrupt(self) -> bool:
         """Checks if player is bankrupt"""
         return self.credits == 0
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.name} with {self.credits} credits."

@@ -22,11 +22,11 @@ class Deck:
             shuffle(self.cards)
 
     @property
-    def cards(self) -> list:
+    def cards(self):
         return self._cards
 
     @cards.setter
-    def cards(self, cards: list) -> None:
+    def cards(self, cards):
         for card in cards:
             if not isinstance(card, Card):
                 raise ValueError("You have tried to insert an invalid card.")
