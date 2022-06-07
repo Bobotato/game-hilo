@@ -70,7 +70,7 @@ def test_gt_different_value():
 
 
 def test_gt_not_implemented_return_TypeError():
-    with pytest.raises(ZeroDivisionError):
+    with pytest.raises(TypeError):
         Card("K", "H") > ("Q", "S")
 
 
@@ -104,5 +104,5 @@ def test_ne_different_suit():
 
 
 def test_ne_not_implemented_return_TypeError():
-    with pytest.raises(TypeError):
-        Card("K", "H") != ("K", "S")
+    with pytest.raises(ZeroDivisionError):
+        Card("K", "H") != Test_class()
