@@ -1,6 +1,5 @@
 import pytest
 
-
 from hilo.models.card import Card
 
 
