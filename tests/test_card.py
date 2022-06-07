@@ -3,7 +3,7 @@ import pytest
 from hilo.models.card import Card
 
 
-class Test_class:
+class TestClass:
     def __init__(self):
         return
 
@@ -22,7 +22,7 @@ def test_suit_setter():
     assert card.suit == "S"
 
 
-def test_suit_setter_invalid_value_return_ValueError():
+def test_suit_setter_invalid_value_raise_ValueError():
     with pytest.raises(ValueError):
         Card("A", "X")
 
@@ -38,7 +38,7 @@ def test_value_setter():
     assert card.value == "10"
 
 
-def test_value_setter_invalid_value_return_ValueError():
+def test_value_setter_invalid_value_raise_ValueError():
     with pytest.raises(ValueError):
         Card("12", "H")
 
@@ -47,9 +47,9 @@ def test_eq():
     assert Card("A", "H") == Card("A", "H")
 
 
-def test_eq_not_implemented_return_TypeError():
+def test_eq_not_implemented_raise_ZeroDivisionError():
     with pytest.raises(ZeroDivisionError):
-        Card("A", "H") == Test_class()
+        Card("A", "H") == TestClass()
 
 
 def test_gt_letter_cards():
@@ -68,7 +68,7 @@ def test_gt_different_value():
     assert Card("5", "H") > Card("4", "H")
 
 
-def test_gt_not_implemented_return_TypeError():
+def test_gt_not_implemented_raise_TypeError():
     with pytest.raises(TypeError):
         Card("K", "H") > ("Q", "S")
 
@@ -89,7 +89,7 @@ def test_lt_different_value():
     assert Card("5", "H") < Card("10", "H")
 
 
-def test_lt_not_implemented_return_TypeError():
+def test_lt_not_implemented_raise_TypeError():
     with pytest.raises(TypeError):
         Card("4", "H") < ("10", "H")
 
@@ -102,6 +102,6 @@ def test_ne_different_suit():
     assert Card("A", "H") != Card("A", "S")
 
 
-def test_ne_not_implemented_return_TypeError():
+def test_ne_not_implemented_raise_ZeroDivisionError():
     with pytest.raises(ZeroDivisionError):
-        Card("K", "H") != Test_class()
+        Card("K", "H") != TestClass()
