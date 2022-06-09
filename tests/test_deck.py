@@ -1,6 +1,5 @@
 from random import seed
 
-
 from hilo.models.card import Card
 from hilo.models.deck import Deck
 
