@@ -51,7 +51,7 @@ def test_eq():
 
 def test_eq_handled_by_rhs_when_not_card():
     with pytest.raises(ZeroDivisionError):
-        Card("A", "H") == TestClass()
+        Card("A", "H") == DummyClass()
 
 
 def test_gt_with_alphabetic_value():
@@ -106,4 +106,4 @@ def test_ne_with_different_suit():
 
 def test_ne_handled_by_rhs_when_not_card():
     with pytest.raises(ZeroDivisionError):
-        Card("K", "H") != TestClass()
+        Card("K", "H") != DummyClass()
