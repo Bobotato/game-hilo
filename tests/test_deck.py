@@ -3,7 +3,6 @@ from random import seed
 from hilo.models.card import Card
 from hilo.models.deck import Deck
 
-
 seeded_deck = Deck(populate=False, shuffle_deck=False)
 seeded_deck.cards = [
     Card("J", "S"),
