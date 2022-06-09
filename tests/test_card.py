@@ -5,7 +5,7 @@ from hilo.models.card import Card
 
 # TestClass is to test if the RHS implementation of __eq__/__ne__
 # is used when a Card is compared against a non-Card.
-class TestClass:
+class DummyClass:
     def __init__(self):
         return
 
