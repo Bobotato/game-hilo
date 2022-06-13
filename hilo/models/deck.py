@@ -17,7 +17,7 @@ class Deck:
         self.cards = []
 
         if populate:
-            self.populate()
+            self.cards = Deck.generate_full_deck()
 
         if shuffle_deck:
             shuffle(self.cards)
@@ -38,13 +38,14 @@ class Deck:
         """Draws a card from the deck"""
         return self.cards.pop()
 
-    def is_empty(self) -> bool:
-        """Checks if deck is empty"""
-        return len(self.cards) == 0
+    @staticmethod
+    def generate_full_deck() -> List[Card]:
+        """Generates a list of 52 cards"""
+        return [Card(value, suit) for suit in SUITS for value in VALUES]
 
-    def populate(self) -> None:
-        """Populates the deck with 52 cards"""
-        self.cards = [Card(value, suit) for suit in SUITS for value in VALUES]
+    def is_empty(self) -> bool:
+        "Checks if deck is empty" ""
+        return len(self.cards) == 0
 
     def __repr__(self) -> str:
         return str(self.cards)
