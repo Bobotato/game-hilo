@@ -123,18 +123,18 @@ def seeded_deck():
 
 
 def test_deck_init_populate_false_shuffle_false():
-    test_deck = Deck(populate=False, shuffle_deck=False)
-    assert test_deck.cards == []
+    dummy_deck = Deck(populate=False, shuffle_deck=False)
+    assert dummy_deck.cards == []
 
 
 def test_deck_init_populate_true_shuffle_false(ordered_deck):
-    test_deck = Deck(populate=True, shuffle_deck=False)
-    assert test_deck.cards == ordered_deck
+    dummy_deck = Deck(populate=True, shuffle_deck=False)
+    assert dummy_deck.cards == ordered_deck
 
 
 def test_deck_init_populate_false_shuffle_true():
-    test_deck = Deck(populate=False, shuffle_deck=True)
-    assert test_deck.cards == []
+    dummy_deck = Deck(populate=False, shuffle_deck=True)
+    assert dummy_deck.cards == []
 
 
 def test_deck_init_populate_true_shuffle_true(seeded_deck):
