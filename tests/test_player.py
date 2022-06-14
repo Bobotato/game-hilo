@@ -13,6 +13,11 @@ def test_player_init_credits():
     assert player.credits == 200
 
 
+def test_player_init_credits_default():
+    player = Player(name="dummy")
+    assert player.credits == 100
+
+
 def test_credits_getter():
     player = Player(name="dummy", credits=100)
     assert player.credits == 100
