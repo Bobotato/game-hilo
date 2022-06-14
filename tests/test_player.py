@@ -8,6 +8,11 @@ def test_player_init_name():
     assert player.name == "dummy"
 
 
+def test_player_init_name_default_raise_TypeError():
+    with pytest.raises(TypeError):
+        Player(credits=100)
+
+
 def test_player_init_credits():
     player = Player(name="dummy", credits=200)
     assert player.credits == 200
