@@ -8,11 +8,6 @@ def test_player_init_name():
     assert player.name == "dummy"
 
 
-def test_player_init_name_default_raise_TypeError():
-    with pytest.raises(TypeError):
-        Player(credits=100)
-
-
 def test_player_init_credits():
     player = Player(name="dummy", credits=200)
     assert player.credits == 200
@@ -57,13 +52,13 @@ def test_name_setter_invalid_name_raise_ValueError():
 
 def test_is_player_bankrupt():
     player = Player(name="dummy", credits=0)
-    assert player.credits <= 0
+    assert player.credits == 0
     assert player.is_bankrupt()
 
 
 def test_is_player_not_bankrupt():
     player = Player(name="dummy", credits=100)
-    assert player.credits > 0
+    assert player.credits == 100
     assert not player.is_bankrupt()
 
 
