@@ -29,7 +29,7 @@ class Player:
 
     def is_bankrupt(self) -> bool:
         """Checks if player is bankrupt"""
-        return self.credits == 0
+        return self.credits <= 0
 
     def __repr__(self) -> str:
         return f"{self.name} with {self.credits} credits."
