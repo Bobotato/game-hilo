@@ -123,47 +123,47 @@ def seeded_deck():
 
 
 def test_deck_init_populate_false_shuffle_false():
-    test_deck = Deck(populate=False, shuffle_deck=False)
-    assert test_deck.cards == []
+    deck = Deck(populate=False, shuffle_deck=False)
+    assert deck.cards == []
 
 
 def test_deck_init_populate_true_shuffle_false(ordered_deck):
-    test_deck = Deck(populate=True, shuffle_deck=False)
-    assert test_deck.cards == ordered_deck
+    deck = Deck(populate=True, shuffle_deck=False)
+    assert deck.cards == ordered_deck
 
 
 def test_deck_init_populate_false_shuffle_true():
-    test_deck = Deck(populate=False, shuffle_deck=True)
-    assert test_deck.cards == []
+    deck = Deck(populate=False, shuffle_deck=True)
+    assert deck.cards == []
 
 
 def test_deck_init_populate_true_shuffle_true(seeded_deck):
     seed(1)
-    dummy_deck = Deck(populate=True, shuffle_deck=True)
-    assert dummy_deck.cards == seeded_deck
+    deck = Deck(populate=True, shuffle_deck=True)
+    assert deck.cards == seeded_deck
 
 
 def test_cards_getter():
-    dummy_deck = Deck(populate=False, shuffle_deck=False)
-    dummy_deck.cards.append(Card("A", "H"))
-    assert dummy_deck.cards == [Card("A", "H")]
+    deck = Deck(populate=False, shuffle_deck=False)
+    deck.cards.append(Card("A", "H"))
+    assert deck.cards == [Card("A", "H")]
 
 
 def test_cards_setter():
-    dummy_deck = Deck(populate=False, shuffle_deck=False)
-    dummy_deck.cards = [Card("A", "H")]
-    assert dummy_deck.cards == [Card("A", "H")]
+    deck = Deck(populate=False, shuffle_deck=False)
+    deck.cards = [Card("A", "H")]
+    assert deck.cards == [Card("A", "H")]
 
 
 def test_draw_card_return_last_card():
-    dummy_deck = Deck(populate=True, shuffle_deck=False)
-    assert dummy_deck.draw_card() == Card("K", "S")
+    deck = Deck(populate=True, shuffle_deck=False)
+    assert deck.draw_card() == Card("K", "S")
 
 
 def test_is_deck_empty():
-    dummy_deck = Deck(populate=False, shuffle_deck=False)
-    assert dummy_deck.cards == []
-    assert dummy_deck.is_empty()
+    deck = Deck(populate=False, shuffle_deck=False)
+    assert deck.cards == []
+    assert deck.is_empty()
 
 
 def test_generate_full_deck(ordered_deck):
