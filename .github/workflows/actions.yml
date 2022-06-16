@@ -95,4 +95,3 @@ jobs:
           token: ${{ secrets.CODECOV }}
           fail_ci_if_error: true
           flags: pytest
-          verbose: true
