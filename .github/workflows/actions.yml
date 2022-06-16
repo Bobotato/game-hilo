@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Check out repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repo
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -60,3 +60,38 @@ jobs:
         run: |
           source .venv/bin/activate  
           pytest tests/ -v
+
+  check-code-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.4'
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Generate code coverage xml
+        run:  |
+          coverage run -m pytest
+          coverage xml
+
+      - name: Codecov upload
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV }}
+          fail_ci_if_error: true
+          flags: pytest
+          verbose: true
