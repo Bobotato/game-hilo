@@ -86,8 +86,7 @@ jobs:
       - name: Generate code coverage xml
         run:  |
           source .venv/bin/activate
-          coverage run -m pytest
-          coverage xml
+          pytest --cov=hilo --cov-branch tests/
 
       - name: Codecov upload
         uses: codecov/codecov-action@v3
