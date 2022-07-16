@@ -8,7 +8,7 @@ from hilo.models.card import Card
 
 
 @pytest.mark.integtest
-def test_successful_round_no_continue(monkeypatch, seeded_deck):
+def test_failed_round_bankruptcy_no_continue(monkeypatch, seeded_deck):
     monkeypatch.setattr("builtins.input", lambda _: "test")
     name = main.get_name()
     assert name == "test"
@@ -28,28 +28,26 @@ def test_successful_round_no_continue(monkeypatch, seeded_deck):
     round_info = game.start_round()
     assert round_info.player.name == "test"
 
-    monkeypatch.setattr("builtins.input", lambda _: "1")
+    monkeypatch.setattr("builtins.input", lambda _: "2")
     prediction = main.get_prediction(round_info)
-    assert prediction == Prediction.HIGHER
+    assert prediction == Prediction.LOWER
     monkeypatch.undo()
 
-    monkeypatch.setattr("builtins.input", lambda _: 50)
+    monkeypatch.setattr("builtins.input", lambda _: 100)
     bet = main.get_bet(game)
-    assert bet == 50
+    assert bet == 100
     monkeypatch.undo()
 
-    round_result = game.compute_round_result(
-        prediction=Prediction.HIGHER, bet=bet
-    )
+    round_result = game.compute_round_result(prediction=prediction, bet=bet)
     assert round_result.drawn_card == Card("J", "H")
-    assert round_result.win
-    assert not round_result.is_player_bankrupt
+    assert not round_result.win
+    assert round_result.is_player_bankrupt
     assert not round_result.is_deck_empty
-    assert game.player.credits == 150
+    assert game.player.credits == 0
 
-    assert not main.is_game_over(round_result)
+    assert main.is_game_over(round_result)
 
     monkeypatch.setattr("builtins.input", lambda _: "2")
-    assert not main.is_continuing()
+    assert not main.is_restarting()
     with pytest.raises(SystemExit):
         main.end_game()
