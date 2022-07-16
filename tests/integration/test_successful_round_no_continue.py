@@ -38,9 +38,7 @@ def test_successful_round_no_continue(monkeypatch, seeded_deck):
     assert bet == 50
     monkeypatch.undo()
 
-    round_result = game.compute_round_result(
-        prediction=Prediction.HIGHER, bet=bet
-    )
+    round_result = game.compute_round_result(prediction=prediction, bet=bet)
     assert round_result.drawn_card == Card("J", "H")
     assert round_result.win
     assert not round_result.is_player_bankrupt
