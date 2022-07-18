@@ -41,7 +41,7 @@ def test_start_round_gets_player_and_current_card_after_restart():
     game = Game("test")
     round_info = game.start_round()
     assert round_info.player.name == "test"
-    assert round_info.current_card == Card("J", "H")
+    assert round_info.current_card == Card("9", "D")
 
 
 @pytest.mark.integtest
@@ -122,10 +122,10 @@ def test_deck_pops_correctly_over_multiple_rounds(seeded_deck):
     assert game.deck.cards == seeded_deck[0:-2]
 
     game.start_round()
-    assert game.deck.cards == seeded_deck[0:-3]
+    assert game.deck.cards == seeded_deck[0:-2]
 
     game.compute_round_result(prediction=Prediction.HIGHER, bet=10)
-    assert game.deck.cards == seeded_deck[0:-4]
+    assert game.deck.cards == seeded_deck[0:-3]
 
 
 @pytest.mark.integtest
