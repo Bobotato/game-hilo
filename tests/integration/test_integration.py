@@ -7,7 +7,7 @@ from hilo.models.card import Card
 
 
 @pytest.mark.integtest
-def test_compute_round_result_can_compute_after_start_round():
+def test_can_play_single_round():
     seed(1)
     game = Game("test")
     game.start_round()
@@ -21,7 +21,7 @@ def test_compute_round_result_can_compute_after_start_round():
 
 
 @pytest.mark.integtest
-def test_compute_round_result_can_compute_over_multiple_rounds():
+def test_can_play_multiple_rounds():
     seed(1)
     game = Game("test")
     game.start_round()
@@ -40,7 +40,7 @@ def test_compute_round_result_can_compute_over_multiple_rounds():
 
 
 @pytest.mark.integtest
-def test_compute_round_result_can_compute_consecutively():
+def test_can_play_subsequent_rounds_without_explicitly_starting_round():
     seed(1)
     game = Game("test")
     game.start_round()
@@ -57,40 +57,20 @@ def test_compute_round_result_can_compute_consecutively():
 
 
 @pytest.mark.integtest
-def test_deck_pops_correctly_over_multiple_start_round_and_compute_round_result(  # noqa: E501
-    seeded_deck,
-):
+def test_player_credits_can_change_correctly_over_multiple_rounds():
     seed(1)
     game = Game("test")
-    game.start_round()
-    assert game.deck.cards == seeded_deck[0:-1]
-
-    game.compute_round_result(prediction=Prediction.HIGHER, bet=10)
-    assert game.deck.cards == seeded_deck[0:-2]
-
-    game.start_round()
-    assert game.deck.cards == seeded_deck[0:-2]
-
-    game.compute_round_result(prediction=Prediction.HIGHER, bet=10)
-    assert game.deck.cards == seeded_deck[0:-3]
-
-
-@pytest.mark.integtest
-def test_player_credits_change_correctly_over_multiple_start_rounds_and_compute_round_results():  # noqa: E501
-    seed(1)
-    game = Game("test")
-    assert game.player.credits == 100
-    game.start_round()
+    round_info = game.start_round()
     game.compute_round_result(prediction=Prediction.HIGHER, bet=100)
-    assert game.player.credits == 200
+    assert round_info.player.credits == 200
 
     game.start_round()
     game.compute_round_result(prediction=Prediction.HIGHER, bet=50)
-    assert game.player.credits == 150
+    assert round_info.player.credits == 150
 
 
 @pytest.mark.integtest
-def test_start_round_can_be_called_consecutively():
+def test_can_start_round_again_without_computing_round_result():
     seed(1)
     game = Game("test")
     round_info = game.start_round()
@@ -100,7 +80,7 @@ def test_start_round_can_be_called_consecutively():
 
 
 @pytest.mark.integtest
-def test_start_round_can_be_called_after_compute_round_result_if_also_called_beforehand():  # noqa: E501
+def test_can_start_round_again_after_computing_round_result():
     seed(1)
     game = Game("test")
     round_info = game.start_round()
@@ -112,7 +92,7 @@ def test_start_round_can_be_called_after_compute_round_result_if_also_called_bef
 
 
 @pytest.mark.integtest
-def test_start_round_called_after_compute_round_result_raises_typeError_if_not_called_beforehand():  # noqa: E501
+def test_cannot_compute_round_result_without_starting_round_first():
     seed(1)
     game = Game("test")
     with pytest.raises(TypeError):
