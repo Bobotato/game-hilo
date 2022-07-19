@@ -155,33 +155,34 @@ def print_result(round_result: RoundResult):
         print_empty_deck()
 
 
-print(
-    "\nWelcome to Alex's Hi-lo game.\n"
-    "It has been in development hell since 2020.\n"
-)
-
-name = get_name()
-
-if not is_playing():
-    end_game()
-
-game = Game(name)
-
-while True:
-    round_info = game.start_round()
-
-    round_result = game.compute_round_result(
-        prediction=get_prediction(round_info), bet=get_bet(game)
+if __name__ == "__main__":
+    print(
+        "\nWelcome to Alex's Hi-lo game.\n"
+        "It has been in development hell since 2020.\n"
     )
 
-    print_result(round_result)
+    name = get_name()
 
-    if is_game_over(round_result):
-        if not is_restarting():
+    if not is_playing():
+        end_game()
+
+    game = Game(name)
+
+    while True:
+        round_info = game.start_round()
+
+        round_result = game.compute_round_result(
+            prediction=get_prediction(round_info), bet=get_bet(game)
+        )
+
+        print_result(round_result)
+
+        if is_game_over(round_result):
+            if not is_restarting():
+                break
+            game = Game(name)
+
+        elif not is_continuing():
             break
-        game = Game(name)
 
-    elif not is_continuing():
-        break
-
-end_game()
+    end_game()
