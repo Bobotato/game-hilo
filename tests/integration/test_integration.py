@@ -63,7 +63,6 @@ def test_player_credits_changes_correctly_for_subsequent_round():
     round_info = game.start_round()
     assert round_info.player.credits == 100
     game.compute_round_result(prediction=Prediction.HIGHER, bet=100)
-    assert round_info.player.credits == 200
 
     game.start_round()
     game.compute_round_result(prediction=Prediction.HIGHER, bet=50)
