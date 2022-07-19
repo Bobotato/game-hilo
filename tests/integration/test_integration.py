@@ -100,7 +100,7 @@ def test_start_round_can_be_called_consecutively():
 
 
 @pytest.mark.integtest
-def test_start_round_can_be_called_after_compute_round_result_if_also_called_beforehand():  # noqa:E501
+def test_start_round_can_be_called_after_compute_round_result_if_also_called_beforehand():  # noqa: E501
     seed(1)
     game = Game("test")
     round_info = game.start_round()
@@ -112,7 +112,7 @@ def test_start_round_can_be_called_after_compute_round_result_if_also_called_bef
 
 
 @pytest.mark.integtest
-def test_start_round_called_after_compute_round_result_raises_typeError_if_not_called_beforehand():  # noqa:E501
+def test_start_round_called_after_compute_round_result_raises_typeError_if_not_called_beforehand():  # noqa: E501
     seed(1)
     game = Game("test")
     with pytest.raises(TypeError):
