@@ -57,10 +57,11 @@ def test_can_play_subsequent_rounds_without_explicitly_starting_round():
 
 
 @pytest.mark.integtest
-def test_player_credits_can_change_correctly_over_multiple_rounds():
+def test_player_credits_changes_correctly_for_subsequent_round():
     seed(1)
     game = Game("test")
     round_info = game.start_round()
+    assert round_info.player.credits == 100
     game.compute_round_result(prediction=Prediction.HIGHER, bet=100)
     assert round_info.player.credits == 200
 
@@ -70,7 +71,7 @@ def test_player_credits_can_change_correctly_over_multiple_rounds():
 
 
 @pytest.mark.integtest
-def test_can_start_round_again_without_computing_round_result():
+def test_can_start_round_again_without_playing():
     seed(1)
     game = Game("test")
     round_info = game.start_round()
@@ -80,7 +81,7 @@ def test_can_start_round_again_without_computing_round_result():
 
 
 @pytest.mark.integtest
-def test_can_start_round_again_after_computing_round_result():
+def test_can_start_round_again_after_playing():
     seed(1)
     game = Game("test")
     round_info = game.start_round()
@@ -92,7 +93,7 @@ def test_can_start_round_again_after_computing_round_result():
 
 
 @pytest.mark.integtest
-def test_cannot_compute_round_result_without_starting_round_first():
+def test_cannot_play_first_round_without_starting_round_first():
     seed(1)
     game = Game("test")
     with pytest.raises(TypeError):
