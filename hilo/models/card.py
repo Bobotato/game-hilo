@@ -1,66 +1,67 @@
-from functools import total_ordering
-
-VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
-SUITS = ["D", "C", "H", "S"]
+from dataclasses import dataclass, field
+from enum import Enum
 
 
-@total_ordering
+class Ranks(Enum):
+    A = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+    EIGHT = 8
+    NINE = 9
+    TEN = 10
+    J = 11
+    Q = 12
+    K = 13
+
+
+class Suits(Enum):
+    D = 1
+    C = 2
+    H = 3
+    S = 4
+
+
+RANKS = list(Ranks)
+SUITS = list(Suits)
+
+
+@dataclass(frozen=True)
 class Card:
-    """Standard Playing Card Class"""
+    """Standard playing card class"""
 
-    def __init__(self, value: str, suit: str) -> None:
-        self.value = value
-        self.suit = suit
+    sort_index: int = field(repr=False)
+    rank: Ranks
+    suit: Suits
 
-    @property
-    def suit(self) -> str:
-        return self._suit
+    @classmethod
+    def create(cls, rank: Ranks, suit: Suits) -> "Card":
+        return cls(cls.__calculate_sort_index(rank, suit), rank, suit)
 
-    @suit.setter
-    def suit(self, suit: str) -> None:
-        if suit not in SUITS:
-            raise ValueError(
-                "Suit must be a part of the 4 French suits."
-                "(H for Hearts, D for Diamonds...)"
-            )
-        self._suit = suit
-
-    @property
-    def value(self) -> str:
-        return self._value
-
-    @value.setter
-    def value(self, value: str) -> None:
-        if value not in VALUES:
-            raise ValueError(
-                "Value must be a part of the 13 values "
-                "in a standard deck of cards. (A, 2, 3..)"
-            )
-        self._value = value
+    @staticmethod
+    def __calculate_sort_index(rank: Ranks, suit: Suits) -> int:
+        return RANKS.index(rank) * len(SUITS) + SUITS.index(suit)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Card):
             return NotImplemented
 
-        return (VALUES.index(self.value), SUITS.index(self.suit)) == (
-            (VALUES.index(other.value), SUITS.index(other.suit))
-        )
-
-    def __lt__(self, other: object) -> bool:
-        if not isinstance(other, Card):
-            return NotImplemented
-
-        return (VALUES.index(self.value), SUITS.index(self.suit)) < (
-            (VALUES.index(other.value), SUITS.index(other.suit))
-        )
+        return self.sort_index == other.sort_index
 
     def __gt__(self, other: object) -> bool:
         if not isinstance(other, Card):
             return NotImplemented
 
-        return (VALUES.index(self.value), SUITS.index(self.suit)) > (
-            (VALUES.index(other.value), SUITS.index(other.suit))
-        )
+        return self.sort_index > other.sort_index
 
-    def __repr__(self) -> str:
-        return f"{self.value}{self.suit}"
+    def __lt__(self, other: object) -> bool:
+        if not isinstance(other, Card):
+            return NotImplemented
+
+        return self.sort_index < other.sort_index
+
+    def __str__(self) -> str:
+        return f"{self.rank.name} of {self.suit.name}"

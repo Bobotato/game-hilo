@@ -3,7 +3,7 @@ from random import seed
 import pytest
 
 from hilo.game import Game, Prediction
-from hilo.models.card import Card
+from hilo.models.card import Card, Ranks, Suits
 
 
 @pytest.mark.integtest
@@ -14,7 +14,7 @@ def test_can_play_single_round():
     round_result = game.compute_round_result(
         prediction=Prediction.HIGHER, bet=50
     )
-    assert round_result.drawn_card == Card("J", "H")
+    assert round_result.drawn_card == Card.create(Ranks.J, Suits.H)
     assert round_result.win
     assert not round_result.is_player_bankrupt
     assert not round_result.is_deck_empty
@@ -33,7 +33,7 @@ def test_can_play_multiple_rounds():
     round_result = game.compute_round_result(
         prediction=Prediction.LOWER, bet=50
     )
-    assert round_result.drawn_card == Card("10", "S")
+    assert round_result.drawn_card == Card.create(Ranks.TEN, Suits.S)
     assert round_result.win
     assert not round_result.is_player_bankrupt
     assert not round_result.is_deck_empty
@@ -50,7 +50,7 @@ def test_can_play_subsequent_rounds_without_explicitly_starting_round():
     round_result = game.compute_round_result(
         prediction=Prediction.LOWER, bet=10
     )
-    assert round_result.drawn_card == Card("10", "S")
+    assert round_result.drawn_card == Card.create(Ranks.TEN, Suits.S)
     assert round_result.win
     assert not round_result.is_player_bankrupt
     assert not round_result.is_deck_empty
@@ -76,7 +76,7 @@ def test_can_start_round_again_without_playing():
     round_info = game.start_round()
     round_info = game.start_round()
     assert round_info.player.name == "test"
-    assert round_info.current_card == Card("9", "D")
+    assert round_info.current_card == Card.create(Ranks.NINE, Suits.D)
 
 
 @pytest.mark.integtest
@@ -88,7 +88,7 @@ def test_can_start_round_again_after_playing():
 
     round_info = game.start_round()
     assert round_info.player.name == "test"
-    assert round_info.current_card == Card("J", "H")
+    assert round_info.current_card == Card.create(Ranks.J, Suits.H)
 
 
 @pytest.mark.integtest
