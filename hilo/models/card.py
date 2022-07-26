@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from functools import total_ordering
 
 
 class Ranks(Enum):
@@ -29,6 +30,7 @@ RANKS = list(Ranks)
 SUITS = list(Suits)
 
 
+@total_ordering
 @dataclass(frozen=True)
 class Card:
     """Standard playing card class"""
