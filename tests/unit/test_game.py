@@ -4,15 +4,15 @@ import pytest
 
 from hilo.game import Game, Prediction
 from hilo.models.card import Card, Ranks, Suits
-from hilo.models.deck import Deck
+from hilo.models.player import Player
+from hilo.models.roundinfo import RoundInfo
+from hilo.models.roundresult import RoundResult
 
 
 def test_game_init(seeded_deck):
     seed(1)
-    deck = Deck(populate=True, shuffle_deck=True)
-    seed(1)
     game = Game("test")
-    assert game.deck.cards == deck.cards
+    assert game.deck.cards == seeded_deck
     assert game.player.name == "test"
     assert game._Game__current_card is None
 
@@ -41,10 +41,12 @@ def test_compute_round_result():
     game.start_round()
     assert game._Game__current_card == Card.create(Ranks.NINE, Suits.D)
     result = game.compute_round_result(bet=100, prediction=Prediction.HIGHER)
-    assert result.drawn_card == Card.create(Ranks.J, Suits.H)
-    assert result.win
-    assert not result.is_player_bankrupt
-    assert not result.is_deck_empty
+    assert result == RoundResult(
+        drawn_card=Card.create(Ranks.J, Suits.H),
+        win=True,
+        is_player_bankrupt=False,
+        is_deck_empty=False,
+    )
     assert game._Game__current_card == Card.create(Ranks.J, Suits.H)
     assert game.player.credits == 200
 
@@ -80,8 +82,9 @@ def test_start_round():
     game._Game__current_card = Card.create(Ranks.A, Suits.H)
 
     roundinfo = game.start_round()
-    assert roundinfo.player.name == "test"
-    assert roundinfo.current_card == Card.create(Ranks.A, Suits.H)
+    assert roundinfo == RoundInfo(
+        player=Player("test", 100), current_card=Card.create(Ranks.A, Suits.H)
+    )
 
 
 def test_start_round_no_current_card():
@@ -90,9 +93,10 @@ def test_start_round_no_current_card():
     assert game._Game__current_card is None
 
     roundinfo = game.start_round()
-    assert roundinfo.player.name == "test"
     assert game._Game__current_card == Card.create(Ranks.NINE, Suits.D)
-    assert roundinfo.current_card == Card.create(Ranks.NINE, Suits.D)
+    assert roundinfo == RoundInfo(
+        player=Player("test"), current_card=Card.create(Ranks.NINE, Suits.D)
+    )
 
 
 def test_take_bet():
