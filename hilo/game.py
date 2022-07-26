@@ -20,6 +20,7 @@ class Game:
 
     name: InitVar[str]
     deck: Deck = field(init=False)
+    player: Player = field(init=False)
     __current_card: Optional[Card] = None
 
     def __post_init__(self, name):
