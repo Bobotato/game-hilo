@@ -18,7 +18,7 @@ class Prediction(Enum):
 class Game:
     """This class includes all the methods required for the game of Hilo"""
 
-    name: InitVar[str] = "Anonymous"
+    name: InitVar[str]
     deck: Deck = field(init=False)
     __current_card: Optional[Card] = None
 
