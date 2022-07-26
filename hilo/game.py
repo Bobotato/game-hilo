@@ -1,4 +1,4 @@
-from dataclasses import InitVar, dataclass
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 from typing import Optional
 
@@ -18,12 +18,13 @@ class Prediction(Enum):
 class Game:
     """This class includes all the methods required for the game of Hilo"""
 
-    name: InitVar[str]
-    deck: Deck = Deck(populate=True, shuffle_deck=True)
+    name: InitVar[str] = "Anonymous"
+    deck: Deck = field(init=False)
     __current_card: Optional[Card] = None
 
     def __post_init__(self, name):
         self.player = Player(name)
+        self.deck = Deck(populate=True, shuffle_deck=True)
 
     def __award_bet(self, bet: int, *, multiplier: int = 2) -> None:
         """
