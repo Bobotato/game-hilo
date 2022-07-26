@@ -8,5 +8,6 @@ def test_roundinfo_init():
     roundinfo = RoundInfo(
         player=player, current_card=Card.create(Ranks.A, Suits.H)
     )
-    assert roundinfo.player == player
-    assert roundinfo.current_card == Card.create(Ranks.A, Suits.H)
+    assert roundinfo == RoundInfo(
+        player=player, current_card=Card.create(Ranks.A, Suits.H)
+    )
