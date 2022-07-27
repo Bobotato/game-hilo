@@ -14,7 +14,8 @@ class DummyClass:
 
 def test_card_create():
     card = Card.create(Ranks.A, Suits.D)
-    assert card == Card.create(Ranks.A, Suits.D)
+    assert card.rank == Ranks.A
+    assert card.suit == Suits.D
     assert card.sort_index == 0
 
 
