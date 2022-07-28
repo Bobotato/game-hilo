@@ -1,5 +1,6 @@
 import sys
 
+from database import loginpage
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -34,14 +35,36 @@ def get_bet(game: Game) -> int:
 
 def get_name() -> str:
     while True:
-        print("What is your name?")
+        print("Please type in your username:")
         name = str(input("> "))
 
         if name:
             print(f"Hello {name}.\n")
             return name
 
-        print("A man has no name, try again.\n")
+        print("No entry was detected, please try again.\n")
+
+
+def get_password() -> str:
+    while True:
+        print("Please type in your password:")
+        password = str(input("> "))
+
+        if password:
+            return password
+
+        print("No entry was detected, please try again.")
+
+
+def get_new_account_password() -> str:
+    while True:
+        print("Please type in a strong password for the account:")
+        password = str(input("> "))
+
+        if password:
+            return password
+
+        print("Your password cannot be blank!")
 
 
 def get_prediction(round_info: RoundInfo) -> Prediction:
@@ -73,6 +96,27 @@ def is_continuing() -> bool:
 
         else:
             print("Please only input either 1 or 2.")
+
+
+def is_creating_account(username) -> bool:
+    while True:
+        print(
+            f"Would you like to make an account with username: {username}?\n"
+            "[1] Yes\n"
+            "[2] No\n"
+        )
+        creating = input("> ")
+
+        if creating == "1":
+            return True
+
+        elif creating == "2":
+            return False
+
+        else:
+            print(
+                "Please only input either 1 to create an account or 2 to exit."
+            )
 
 
 def is_game_over(round_result: RoundResult) -> bool:
@@ -128,6 +172,21 @@ def is_restarting() -> bool:
             print("Please only input 1 to restart or 2 to quit.")
 
 
+def is_retrying_password() -> bool:
+    while True:
+        print("Would you like to try again or quit?\n[1] Try Again\n[2] Quit")
+        retrying = input("> ")
+
+        if retrying == "1":
+            return True
+
+        elif retrying == "2":
+            return False
+
+        else:
+            print("Please only input 1 to try again, or 2 to quit.")
+
+
 def print_bankrupt():
     print("You've reached zero credits, you're bankrupt!")
 
@@ -162,6 +221,20 @@ if __name__ == "__main__":
     )
 
     name = get_name()
+
+    conn = loginpage.connect_db()
+    cur = loginpage.create_cursor(conn)
+
+    if not loginpage.is_returning_player(cur, name):
+        if not is_creating_account(name):
+            end_game()
+
+        loginpage.add_new_player(cur, name, get_new_account_password())
+        conn.commit()
+
+    while not loginpage.is_password_correct(cur, name, get_password()):
+        if not is_retrying_password():
+            end_game()
 
     if not is_playing():
         end_game()
