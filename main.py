@@ -1,6 +1,6 @@
 import sys
 
-from database.loginpage import DatabaseConnection as DBC
+from database.connection import DatabaseConnection as DBC
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
