@@ -1,48 +1,52 @@
 import psycopg2
 
 
-def add_new_player(cursor, username, password) -> None:
-    cursor.execute(
-        "INSERT INTO users(username, password) VALUES (%s, %s);",
-        (username, password),
-    )
-    print(f"Added {username} as a new player!")
+class DatabaseConnection:
+    def __init__(self):
+        self.connection = self.connect_db()
+        self.cursor = self.create_cursor()
 
+    def add_new_player(self, username: str, password: str) -> None:
+        self.cursor.execute(
+            "INSERT INTO users(username, password) VALUES (%s, %s);",
+            (username, password),
+        )
+        self.connection.commit()
+        print(f"Added {username} as a new player!")
 
-def is_returning_player(cursor, username) -> bool:
-    cursor.execute("SELECT * FROM users WHERE username = (%s);", (username,))
+    def is_returning_player(self, username: str) -> bool:
+        self.cursor.execute(
+            "SELECT * FROM users WHERE username = (%s);", (username,)
+        )
 
-    if not cursor.fetchone():
-        print("It looks like you're new.")
-        return False
+        if not self.cursor.fetchone():
+            print("It looks like you're new.")
+            return False
 
-    print(f"Welcome back {username}.")
-    return True
+        print(f"Welcome back {username}.")
+        return True
 
+    def connect_db(self):
+        connection = psycopg2.connect(
+            user="hilo",
+            password="hilo",
+            host="localhost",
+            port="5432",
+            database="hilo",
+        )
+        return connection
 
-def connect_db():
-    connection = psycopg2.connect(
-        user="alex",
-        password="alexvm",
-        host="localhost",
-        port="5432",
-        database="hilo",
-    )
-    return connection
+    def create_cursor(self):
+        cursor = self.connection.cursor()
+        print(self.connection.get_dsn_parameters(), "\n")
+        return cursor
 
+    def is_password_correct(self, username, password) -> bool:
+        self.cursor.execute(
+            "SELECT password FROM users WHERE username = (%s);", (username,)
+        )
 
-def create_cursor(connection):
-    cursor = connection.cursor()
-    print(connection.get_dsn_parameters(), "\n")
-    return cursor
+        if password != self.cursor.fetchone()[0]:
+            return False
 
-
-def is_password_correct(cursor, username, password):
-    cursor.execute(
-        "SELECT password FROM users WHERE username = (%s);", (username,)
-    )
-
-    if password != cursor.fetchone()[0]:
-        return False
-
-    return True
+        return True

@@ -1,6 +1,6 @@
 import sys
 
-from database import loginpage
+from database.loginpage import DatabaseConnection as DBC
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -51,9 +51,10 @@ def get_password() -> str:
         password = str(input("> "))
 
         if password:
+            print("Logging you in...\n")
             return password
 
-        print("No entry was detected, please try again.")
+        print("No entry was detected, please try again.\n")
 
 
 def get_new_account_password() -> str:
@@ -64,7 +65,7 @@ def get_new_account_password() -> str:
         if password:
             return password
 
-        print("Your password cannot be blank!")
+        print("Your password cannot be blank!\n")
 
 
 def get_prediction(round_info: RoundInfo) -> Prediction:
@@ -174,7 +175,7 @@ def is_restarting() -> bool:
 
 def is_retrying_password() -> bool:
     while True:
-        print("Would you like to try again or quit?\n[1] Try Again\n[2] Quit")
+        print("Would you like to try again or quit?\n[1] Yes\n[2] Quit")
         retrying = input("> ")
 
         if retrying == "1":
@@ -214,6 +215,10 @@ def print_result(round_result: RoundResult):
         print_empty_deck()
 
 
+def print_wrong_password():
+    print("Your password is incorrect.")
+
+
 if __name__ == "__main__":
     print(
         "\nWelcome to Alex's Hi-lo game.\n"
@@ -222,17 +227,17 @@ if __name__ == "__main__":
 
     name = get_name()
 
-    conn = loginpage.connect_db()
-    cur = loginpage.create_cursor(conn)
+    conn = DBC()
 
-    if not loginpage.is_returning_player(cur, name):
+    if not conn.is_returning_player(name):
         if not is_creating_account(name):
             end_game()
 
-        loginpage.add_new_player(cur, name, get_new_account_password())
-        conn.commit()
+        conn.add_new_player(name, get_new_account_password())
 
-    while not loginpage.is_password_correct(cur, name, get_password()):
+    while not conn.is_password_correct(name, get_password()):
+        print_wrong_password()
+
         if not is_retrying_password():
             end_game()
 
