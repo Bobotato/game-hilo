@@ -1,6 +1,7 @@
 import sys
+from getpass import getpass
 
-from database.connection import DatabaseConnection as DBC
+from database.connection import DatabaseConnection
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -48,10 +49,10 @@ def get_name() -> str:
 def get_password() -> str:
     while True:
         print("Please type in your password:")
-        password = str(input("> "))
+        password = getpass(prompt="> ", stream=None)
 
         if password:
-            print("Logging you in...\n")
+            print("Attempting to log you in...\n")
             return password
 
         print("No entry was detected, please try again.\n")
@@ -227,15 +228,19 @@ if __name__ == "__main__":
 
     name = get_name()
 
-    conn = DBC()
+    conn = DatabaseConnection("password")
 
     if not conn.is_returning_player(name):
         if not is_creating_account(name):
             end_game()
 
-        conn.add_new_player(name, get_new_account_password())
+        conn.add_new_player(
+            name, conn.hash_password(get_new_account_password())
+        )
 
-    while not conn.is_password_correct(name, get_password()):
+    while not conn.is_password_correct(
+        name, conn.hash_password(get_password())
+    ):
         print_wrong_password()
 
         if not is_retrying_password():

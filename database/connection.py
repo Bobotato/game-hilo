@@ -1,9 +1,11 @@
+import hashlib
+
 import psycopg2
 
 
 class DatabaseConnection:
-    def __init__(self):
-        self.connection = self.connect_db()
+    def __init__(self, password):
+        self.connection = self.connect_db(password)
         self.cursor = self.create_cursor()
 
     def add_new_player(self, username: str, password: str) -> None:
@@ -12,12 +14,11 @@ class DatabaseConnection:
             (username, password),
         )
         self.connection.commit()
-        print(f"Added {username} as a new player!")
 
-    def connect_db(self):
+    def connect_db(self, password):
         connection = psycopg2.connect(
             user="hilo",
-            password="hilo",
+            password=password,
             host="localhost",
             port="5432",
             database="hilo",
@@ -26,8 +27,10 @@ class DatabaseConnection:
 
     def create_cursor(self):
         cursor = self.connection.cursor()
-        print(self.connection.get_dsn_parameters(), "\n")
         return cursor
+
+    def hash_password(self, password):
+        return str(hashlib.sha256(password).hexdigest())
 
     def is_password_correct(self, username, password) -> bool:
         self.cursor.execute(
@@ -42,8 +45,6 @@ class DatabaseConnection:
         )
 
         if not self.cursor.fetchone():
-            print("It looks like you're new.")
             return False
 
-        print(f"Welcome back {username}.")
         return True
