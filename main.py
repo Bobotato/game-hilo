@@ -2,6 +2,7 @@ import sys
 from getpass import getpass
 
 from database.connection import DatabaseConnection
+from database.encryption import Encryptor
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -49,7 +50,7 @@ def get_name() -> str:
 def get_password() -> str:
     while True:
         print("Please type in your password:")
-        password = getpass(prompt="> ", stream=None)
+        password = getpass(prompt="> \n", stream=None)
 
         if password:
             print("Attempting to log you in...\n")
@@ -61,7 +62,7 @@ def get_password() -> str:
 def get_new_account_password() -> str:
     while True:
         print("Please type in a strong password for the account:")
-        password = str(input("> "))
+        password = getpass(prompt="> \n", stream=None)
 
         if password:
             return password
@@ -197,6 +198,10 @@ def print_empty_deck():
     print("The deck has been emptied!")
 
 
+def print_registered_user_successful():
+    print("New user registered!")
+
+
 def print_result(round_result: RoundResult):
     if round_result.win:
         print(
@@ -228,18 +233,18 @@ if __name__ == "__main__":
 
     name = get_name()
 
-    conn = DatabaseConnection("password")
+    connection = DatabaseConnection()
 
-    if not conn.is_returning_player(name):
+    if not connection.is_returning_player(name):
         if not is_creating_account(name):
             end_game()
 
-        conn.add_new_player(
-            name, conn.hash_password(get_new_account_password())
-        )
+        connection.add_new_player(name, get_new_account_password())
+        print_registered_user_successful()
 
-    while not conn.is_password_correct(
-        name, conn.hash_password(get_password())
+    while not Encryptor.is_password_correct(
+        get_password(),
+        connection.retrieve_password_hash(name),
     ):
         print_wrong_password()
 
