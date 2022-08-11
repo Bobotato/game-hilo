@@ -14,16 +14,16 @@ class UserManager:
         )
         self.repo.commit_update()
 
-    def hash_password(self, encoded_password):
+    def hash_password(self, encoded_password) -> bytes:
         return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
 
-    def is_existing_player(self):
+    def is_existing_player(self) -> bool:
         if not self.repo.retrieve_user(self.username):
             return False
         else:
             return True
 
-    def is_password_correct(self, password: str):
+    def is_password_correct(self, password: str) -> bool:
         return bcrypt.checkpw(
             password.encode(),
             self.repo.retrieve_password_hash(self.username).encode(),
