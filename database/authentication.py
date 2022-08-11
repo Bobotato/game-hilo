@@ -18,7 +18,7 @@ class UserManager:
         return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
 
     def is_existing_player(self) -> bool:
-        if not self.repo.retrieve_user(self.username):
+        if self.repo.retrieve_user(self.username) is None:
             return False
         else:
             return True
