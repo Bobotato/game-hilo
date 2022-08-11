@@ -19,6 +19,9 @@ class DatabaseConnection:
             port=os.getenv("DB_PORT"),
             database=os.getenv("DB_NAME"),
         )
+
+        connection.set_session(autocommit=True)
+
         return connection
 
     def create_cursor(self):
