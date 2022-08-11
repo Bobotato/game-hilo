@@ -1,8 +1,7 @@
 import sys
 from getpass import getpass
 
-from database.connection import DatabaseConnection
-from database.encryption import Encryptor
+from database.authentication import UserManager
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -198,7 +197,7 @@ def print_empty_deck():
     print("The deck has been emptied!")
 
 
-def print_registered_user_successful():
+def print_registered_user():
     print("New user registered!")
 
 
@@ -233,18 +232,17 @@ if __name__ == "__main__":
 
     name = get_name()
 
-    connection = DatabaseConnection()
+    umgr = UserManager(name)
 
-    if not connection.is_returning_player(name):
+    if not umgr.is_existing_player():
         if not is_creating_account(name):
             end_game()
 
-        connection.add_new_player(name, get_new_account_password())
-        print_registered_user_successful()
+        umgr.add_new_player(get_new_account_password())
+        print_registered_user()
 
-    while not Encryptor.is_password_correct(
+    while not umgr.is_password_correct(
         get_password(),
-        connection.retrieve_password_hash(name),
     ):
         print_wrong_password()
 
