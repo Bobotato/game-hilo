@@ -27,3 +27,7 @@ class DatabaseConnection:
     def create_cursor(self):
         cursor = self.connection.cursor()
         return cursor
+
+    def close_connection(self):
+        self.connection.cursor()
+        self.connection.close()
