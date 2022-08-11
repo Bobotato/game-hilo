@@ -1,6 +1,6 @@
 import bcrypt
 
-from .repository import UserRepository
+from repository.user import UserRepository
 
 
 class UserManager:

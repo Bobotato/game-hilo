@@ -1,4 +1,4 @@
-from .connection import DatabaseConnection
+from database.connection import DatabaseConnection
 
 
 class UserRepository:

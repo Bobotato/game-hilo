@@ -1,7 +1,7 @@
 import sys
 from getpass import getpass
 
-from database.authentication import UserManager
+from authentication.authentication import UserManager
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
