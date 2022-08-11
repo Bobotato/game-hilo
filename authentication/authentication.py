@@ -12,7 +12,6 @@ class UserManager:
         self.repo.add_new_entry(
             self.username, self.hash_password(password.encode()).decode()
         )
-        self.repo.commit_update()
 
     def hash_password(self, encoded_password) -> bytes:
         return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
