@@ -6,7 +6,7 @@ from .repository import UserRepository
 class UserManager:
     def __init__(self, username):
         self.repo = UserRepository()
-        self.username = username()
+        self.username = username
 
     def add_new_player(self, password: str) -> None:
         self.repo.add_new_entry(
