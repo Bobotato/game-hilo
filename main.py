@@ -189,7 +189,7 @@ def print_empty_deck():
 
 
 def print_logged_in():
-    print("You have logged in.")
+    print("You have logged in.\n")
 
 
 def print_result(round_result: RoundResult):
