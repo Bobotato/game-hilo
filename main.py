@@ -5,6 +5,7 @@ from authentication.authentication import UserManager
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
+from repository.errors import UsernameTakenException
 
 
 def end_game():
@@ -34,13 +35,24 @@ def get_bet(game: Game) -> int:
             return bet
 
 
+def get_login_menu_choice() -> str:
+    while True:
+        print("[1] Login\n" "[2] Register New User\n" "[3] Exit\n")
+        choice = input("> ")
+
+        if choice in ["1", "2", "3"]:
+            return choice
+
+        print("Please only input 1, 2, or 3.\n")
+
+
 def get_name() -> str:
     while True:
-        print("Please type in your username:")
+        print("\nWho is playing today?")
         name = str(input("> "))
 
         if name:
-            print(f"Hello {name}.\n")
+            print(f"\nHello {name}.\n")
             return name
 
         print("No entry was detected, please try again.\n")
@@ -48,11 +60,11 @@ def get_name() -> str:
 
 def get_password() -> str:
     while True:
-        print("Please type in your password:")
-        password = getpass(prompt="> \n", stream=None)
+        print("\nPlease type in your password:")
+        password = getpass(prompt=">", stream=None)
 
         if password:
-            print("Attempting to log you in...\n")
+            print("Attempting to log you in...")
             return password
 
         print("No entry was detected, please try again.\n")
@@ -60,8 +72,8 @@ def get_password() -> str:
 
 def get_new_account_password() -> str:
     while True:
-        print("Please type in a strong password for the account:")
-        password = getpass(prompt="> \n", stream=None)
+        print("\nPlease type in a strong password for the account:")
+        password = getpass(prompt=">", stream=None)
 
         if password:
             return password
@@ -72,7 +84,7 @@ def get_new_account_password() -> str:
 def get_prediction(round_info: RoundInfo) -> Prediction:
     while True:
         print(
-            f"\nThe current card is {round_info.current_card}.\n"
+            f"The current card is {round_info.current_card}.\n"
             "Will the drawn card be higher or lower?\n"
             "[1] Higher\n"
             "[2] Lower\n"
@@ -83,6 +95,17 @@ def get_prediction(round_info: RoundInfo) -> Prediction:
             return Prediction(int(prediction))
         except ValueError:
             print("Please only use 1 for higher or 2 for lower.")
+
+
+def get_username() -> str:
+    while True:
+        print("\nWhat is your username?")
+        username = str(input("> "))
+
+        if username:
+            return username
+
+        print("No entry was detected, please try again.\n")
 
 
 def is_continuing() -> bool:
@@ -98,27 +121,6 @@ def is_continuing() -> bool:
 
         else:
             print("Please only input either 1 or 2.")
-
-
-def is_creating_account(username) -> bool:
-    while True:
-        print(
-            f"Would you like to make an account with username: {username}?\n"
-            "[1] Yes\n"
-            "[2] No\n"
-        )
-        creating = input("> ")
-
-        if creating == "1":
-            return True
-
-        elif creating == "2":
-            return False
-
-        else:
-            print(
-                "Please only input either 1 to create an account or 2 to exit."
-            )
 
 
 def is_game_over(round_result: RoundResult) -> bool:
@@ -174,19 +176,8 @@ def is_restarting() -> bool:
             print("Please only input 1 to restart or 2 to quit.")
 
 
-def is_retrying_password() -> bool:
-    while True:
-        print("Would you like to try again or quit?\n[1] Yes\n[2] Quit")
-        retrying = input("> ")
-
-        if retrying == "1":
-            return True
-
-        elif retrying == "2":
-            return False
-
-        else:
-            print("Please only input 1 to try again, or 2 to quit.")
+def print_account_created():
+    print("Account created and automatically logged in.")
 
 
 def print_bankrupt():
@@ -197,8 +188,8 @@ def print_empty_deck():
     print("The deck has been emptied!")
 
 
-def print_registered_user():
-    print("New user registered!")
+def print_logged_in():
+    print("You have logged in.")
 
 
 def print_result(round_result: RoundResult):
@@ -220,6 +211,10 @@ def print_result(round_result: RoundResult):
         print_empty_deck()
 
 
+def print_username_not_available():
+    print("This username is already in use. Please try a different username.")
+
+
 def print_wrong_password():
     print("Your password is incorrect.")
 
@@ -230,28 +225,39 @@ if __name__ == "__main__":
         "It has been in development hell since 2020.\n"
     )
 
-    name = get_name()
+    umgr = UserManager()
 
-    umgr = UserManager(name)
+    match get_login_menu_choice():
 
-    if not umgr.is_existing_player():
-        if not is_creating_account(name):
+        case "1":
+            while True:
+                if umgr.is_password_correct(get_username(), get_password()):
+                    print_logged_in()
+                    break
+                else:
+                    print_wrong_password()
+
+        case "2":
+            while True:
+                try:
+                    umgr.add_new_player(
+                        get_username(), get_new_account_password()
+                    )
+                    print_account_created()
+                    break
+                except UsernameTakenException:
+                    print_username_not_available()
+                    continue
+
+        case "3":
             end_game()
 
-        umgr.add_new_player(get_new_account_password())
-        print_registered_user()
-
-    while not umgr.is_password_correct(
-        get_password(),
-    ):
-        print_wrong_password()
-
-        if not is_retrying_password():
-            end_game()
+    umgr.repo.dbc.close_connection()
 
     if not is_playing():
         end_game()
 
+    name = get_name()
     game = Game(name)
 
     while True:
