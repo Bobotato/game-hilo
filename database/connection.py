@@ -7,17 +7,17 @@ from dotenv import load_dotenv
 
 class DatabaseConnection:
     def __init__(self):
-        self.connection: psycopg2.connection = self.connect_db()
-        self.cursor: psycopg2.cursor = self.create_cursor()
+        self.connection: psycopg2.extensions.connection = self.connect_db()
+        self.cursor: psycopg2.extensions.cursor = self.create_cursor()
 
-    def connect_db(self) -> psycopg2.connection:
+    def connect_db(self) -> psycopg2.extensions.connection:
         load_dotenv()
 
         try:
             connection = psycopg2.connect(
                 user=os.getenv("DB_USER"),
                 password=os.getenv("DB_PASSWORD"),
-                host=os.getenv("asdasd"),
+                host=os.getenv("DB_HOST"),
                 port=os.getenv("DB_PORT"),
                 database=os.getenv("DB_NAME"),
             )
@@ -32,7 +32,7 @@ class DatabaseConnection:
 
         return connection
 
-    def create_cursor(self) -> psycopg2.cursor:
+    def create_cursor(self) -> psycopg2.extensions.cursor:
         cursor = self.connection.cursor()
         return cursor
 
