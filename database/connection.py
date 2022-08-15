@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 class DatabaseConnection:
     def __init__(self):
-        self.connection = self.connect_db()
-        self.cursor = self.create_cursor()
+        self.connection: psycopg2.connection = self.connect_db()
+        self.cursor: psycopg2.cursor = self.create_cursor()
 
     def connect_db(self) -> psycopg2.connection:
         load_dotenv()
