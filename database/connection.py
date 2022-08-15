@@ -10,7 +10,7 @@ class DatabaseConnection:
         self.connection = self.connect_db()
         self.cursor = self.create_cursor()
 
-    def connect_db(self):
+    def connect_db(self) -> psycopg2.connection:
         load_dotenv()
 
         try:
@@ -32,10 +32,10 @@ class DatabaseConnection:
 
         return connection
 
-    def create_cursor(self):
+    def create_cursor(self) -> psycopg2.cursor:
         cursor = self.connection.cursor()
         return cursor
 
-    def close_connection(self):
+    def close_connection(self) -> None:
         self.connection.cursor()
         self.connection.close()
