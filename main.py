@@ -9,6 +9,26 @@ from hilo.models.roundresult import RoundResult
 from repository.errors import UsernameTakenException
 
 
+def attempt_login() -> None:
+    while True:
+        if authenticate(credentials=get_login_credentials()):
+            print_logged_in()
+            break
+        else:
+            print_wrong_password()
+
+
+def create_new_account() -> None:
+    while True:
+        try:
+            register(credentials=get_login_credentials())
+            print_account_created()
+            break
+        except UsernameTakenException:
+            print_username_not_available()
+            continue
+
+
 def end_game():
     sys.exit("Thanks for playing!")
 
@@ -169,6 +189,19 @@ def is_restarting() -> bool:
             print("Please only input 1 to restart or 2 to quit.")
 
 
+def login_menu() -> None:
+    match get_login_menu_choice():
+
+        case "1":
+            attempt_login()
+
+        case "2":
+            create_new_account()
+
+        case "3":
+            end_game()
+
+
 def print_account_created():
     print("Account created and automatically logged in.")
 
@@ -210,39 +243,6 @@ def print_username_not_available():
 
 def print_wrong_password():
     print("Your password is incorrect.")
-
-
-def attempt_login() -> None:
-    while True:
-        if authenticate(credentials=get_login_credentials()):
-            print_logged_in()
-            break
-        else:
-            print_wrong_password()
-
-
-def create_new_account() -> None:
-    while True:
-        try:
-            register(credentials=get_login_credentials())
-            print_account_created()
-            break
-        except UsernameTakenException:
-            print_username_not_available()
-            continue
-
-
-def login_menu() -> None:
-    match get_login_menu_choice():
-
-        case "1":
-            attempt_login()
-
-        case "2":
-            create_new_account()
-
-        case "3":
-            end_game()
 
 
 if __name__ == "__main__":
