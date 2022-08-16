@@ -1,27 +1,34 @@
 import bcrypt
+import psycopg2
 
+from database.connection import DatabaseConnection
 from repository.errors import UsernameTakenException
 from repository.models.user import User
-from repository.user import UserRepository
+from repository.user import add_entry, get_entry
 
 
-class UserManager:
-    def __init__(self):
-        self.repo = UserRepository()
-
-    def add_new_player(self, username: str, password: str) -> None:
-        try:
-            self.repo.add_entry(
-                User(username, self.hash_password(password.encode()).decode())
-            )
-        except UsernameTakenException:
-            raise UsernameTakenException
-
-    def hash_password(self, encoded_password) -> bytes:
-        return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
-
-    def is_password_correct(self, username: str, password: str) -> bool:
-        return bcrypt.checkpw(
-            password.encode(),
-            self.repo.get_entry(username).password_hash.encode(),
+@DatabaseConnection.bind_connection
+def add_new_player(
+    cursor: psycopg2.extensions.cursor, username: str, password: str
+) -> None:
+    try:
+        add_entry(
+            cursor,
+            User(username, hash_password(password.encode()).decode()),
         )
+
+    except UsernameTakenException:
+        raise UsernameTakenException
+
+
+def hash_password(encoded_password) -> bytes:
+    return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
+
+
+@DatabaseConnection.bind_connection
+def is_password_correct(
+    cursor: psycopg2.extensions.cursor, username: str, password: str
+) -> bool:
+    return bcrypt.checkpw(
+        password.encode(), get_entry(cursor, username).password_hash.encode()
+    )

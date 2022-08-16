@@ -1,7 +1,7 @@
 import sys
 from getpass import getpass
 
-from authentication.authentication import UserManager
+from authentication.authentication import add_new_player, is_password_correct
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -225,13 +225,13 @@ if __name__ == "__main__":
         "It has been in development hell since 2020.\n"
     )
 
-    umgr = UserManager()
-
     match get_login_menu_choice():
 
         case "1":
             while True:
-                if umgr.is_password_correct(get_username(), get_password()):
+                if is_password_correct(
+                    username=get_username(), password=get_password()
+                ):
                     print_logged_in()
                     break
                 else:
@@ -240,8 +240,9 @@ if __name__ == "__main__":
         case "2":
             while True:
                 try:
-                    umgr.add_new_player(
-                        get_username(), get_new_account_password()
+                    add_new_player(
+                        username=get_username(),
+                        password=get_new_account_password(),
                     )
                     print_account_created()
                     break
@@ -251,8 +252,6 @@ if __name__ == "__main__":
 
         case "3":
             end_game()
-
-    umgr.repo.dbc.close_connection()
 
     if not is_playing():
         end_game()

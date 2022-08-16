@@ -39,3 +39,15 @@ class DatabaseConnection:
     def close_connection(self) -> None:
         self.connection.cursor()
         self.connection.close()
+
+    @classmethod
+    def bind_connection(cls, func):
+        """Decorator that opens and closes a connection."""
+
+        def wrap(*args, **kwargs):
+            dbc = DatabaseConnection()
+            query = func(cursor=dbc.cursor, *args, **kwargs)
+            dbc.close_connection()
+            return query
+
+        return wrap
