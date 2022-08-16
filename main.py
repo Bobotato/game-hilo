@@ -2,6 +2,7 @@ import sys
 from getpass import getpass
 
 from authentication.authenticator import authenticate, register
+from authentication.models.credentials import Credentials
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -35,6 +36,10 @@ def get_bet(game: Game) -> int:
             return bet
 
 
+def get_login_credentials() -> Credentials:
+    return Credentials(get_username(), get_password())
+
+
 def get_login_menu_choice() -> str:
     while True:
         print("[1] Login\n" "[2] Register New User\n" "[3] Exit\n")
@@ -64,21 +69,9 @@ def get_password() -> str:
         password = getpass(prompt=">", stream=None)
 
         if password:
-            print("Attempting to log you in...")
             return password
 
         print("No entry was detected, please try again.\n")
-
-
-def get_new_account_password() -> str:
-    while True:
-        print("\nPlease type in a strong password for the account:")
-        password = getpass(prompt=">", stream=None)
-
-        if password:
-            return password
-
-        print("Your password cannot be blank!\n")
 
 
 def get_prediction(round_info: RoundInfo) -> Prediction:
@@ -221,7 +214,7 @@ def print_wrong_password():
 
 def attempt_login() -> None:
     while True:
-        if authenticate(username=get_username(), password=get_password()):
+        if authenticate(credentials=get_login_credentials()):
             print_logged_in()
             break
         else:
@@ -231,10 +224,7 @@ def attempt_login() -> None:
 def create_new_account() -> None:
     while True:
         try:
-            register(
-                username=get_username(),
-                password=get_new_account_password(),
-            )
+            register(credentials=get_login_credentials())
             print_account_created()
             break
         except UsernameTakenException:
@@ -242,12 +232,7 @@ def create_new_account() -> None:
             continue
 
 
-if __name__ == "__main__":
-    print(
-        "\nWelcome to Alex's Hi-lo game.\n"
-        "It has been in development hell since 2020.\n"
-    )
-
+def login_menu() -> None:
     match get_login_menu_choice():
 
         case "1":
@@ -258,6 +243,15 @@ if __name__ == "__main__":
 
         case "3":
             end_game()
+
+
+if __name__ == "__main__":
+    print(
+        "\nWelcome to Alex's Hi-lo game.\n"
+        "It has been in development hell since 2020.\n"
+    )
+
+    login_menu()
 
     if not is_playing():
         end_game()
