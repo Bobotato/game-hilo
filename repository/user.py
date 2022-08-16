@@ -2,7 +2,7 @@ import sys
 
 import psycopg2
 
-from repository.errors import UserDoesNotExistException, UsernameTakenException
+from repository.errors import NoSuchUserException, UsernameTakenException
 from repository.models.user import User
 
 
@@ -34,4 +34,4 @@ def get_entry(cursor: psycopg2.extensions.cursor, username: str) -> User:
         return User(username, password_hash)
 
     except TypeError:
-        raise UserDoesNotExistException
+        raise NoSuchUserException

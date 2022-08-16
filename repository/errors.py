@@ -3,6 +3,6 @@ class UsernameTakenException(Exception):
         return "The username has already been taken."
 
 
-class UserDoesNotExistException(Exception):
+class NoSuchUserException(Exception):
     def __str__(self):
         return "The user cannot be found."
