@@ -1,7 +1,7 @@
 import sys
 from getpass import getpass
 
-from authentication.authentication import add_new_player, is_password_correct
+from authentication.authenticator import authenticate, register
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
@@ -221,9 +221,7 @@ def print_wrong_password():
 
 def attempt_login() -> None:
     while True:
-        if is_password_correct(
-            username=get_username(), password=get_password()
-        ):
+        if authenticate(username=get_username(), password=get_password()):
             print_logged_in()
             break
         else:
@@ -233,7 +231,7 @@ def attempt_login() -> None:
 def create_new_account() -> None:
     while True:
         try:
-            add_new_player(
+            register(
                 username=get_username(),
                 password=get_new_account_password(),
             )

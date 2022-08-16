@@ -8,7 +8,7 @@ from repository.user import add_entry, get_entry
 
 
 @DatabaseConnection.bind_connection
-def add_new_player(
+def register(
     cursor: psycopg2.extensions.cursor, username: str, password: str
 ) -> None:
     try:
@@ -26,7 +26,7 @@ def hash_password(encoded_password) -> bytes:
 
 
 @DatabaseConnection.bind_connection
-def is_password_correct(
+def authenticate(
     cursor: psycopg2.extensions.cursor, username: str, password: str
 ) -> bool:
     return bcrypt.checkpw(
