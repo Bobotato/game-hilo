@@ -219,6 +219,31 @@ def print_wrong_password():
     print("Your password is incorrect.")
 
 
+def attempt_login() -> None:
+    while True:
+        if is_password_correct(
+            username=get_username(), password=get_password()
+        ):
+            print_logged_in()
+            break
+        else:
+            print_wrong_password()
+
+
+def create_new_account() -> None:
+    while True:
+        try:
+            add_new_player(
+                username=get_username(),
+                password=get_new_account_password(),
+            )
+            print_account_created()
+            break
+        except UsernameTakenException:
+            print_username_not_available()
+            continue
+
+
 if __name__ == "__main__":
     print(
         "\nWelcome to Alex's Hi-lo game.\n"
@@ -228,27 +253,10 @@ if __name__ == "__main__":
     match get_login_menu_choice():
 
         case "1":
-            while True:
-                if is_password_correct(
-                    username=get_username(), password=get_password()
-                ):
-                    print_logged_in()
-                    break
-                else:
-                    print_wrong_password()
+            attempt_login()
 
         case "2":
-            while True:
-                try:
-                    add_new_player(
-                        username=get_username(),
-                        password=get_new_account_password(),
-                    )
-                    print_account_created()
-                    break
-                except UsernameTakenException:
-                    print_username_not_available()
-                    continue
+            create_new_account()
 
         case "3":
             end_game()
