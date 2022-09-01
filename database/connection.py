@@ -10,6 +10,18 @@ class DatabaseConnection:
         self.connection: psycopg2.extensions.connection = self.connect_db()
         self.cursor: psycopg2.extensions.cursor = self.create_cursor()
 
+    @classmethod
+    def bind_connection(cls, func):
+        """Decorator that opens and closes a connection."""
+
+        def wrap(*args, **kwargs):
+            dbc = DatabaseConnection()
+            query = func(cursor=dbc.cursor, *args, **kwargs)
+            dbc.close_connection()
+            return query
+
+        return wrap
+
     def connect_db(self) -> psycopg2.extensions.connection:
         load_dotenv()
 
@@ -32,22 +44,9 @@ class DatabaseConnection:
 
         return connection
 
+    def close_connection(self) -> None:
+        self.connection.close()
+
     def create_cursor(self) -> psycopg2.extensions.cursor:
         cursor = self.connection.cursor()
         return cursor
-
-    def close_connection(self) -> None:
-        self.connection.cursor()
-        self.connection.close()
-
-    @classmethod
-    def bind_connection(cls, func):
-        """Decorator that opens and closes a connection."""
-
-        def wrap(*args, **kwargs):
-            dbc = DatabaseConnection()
-            query = func(cursor=dbc.cursor, *args, **kwargs)
-            dbc.close_connection()
-            return query
-
-        return wrap
