@@ -42,19 +42,16 @@ def test_DatabaseConnection_init(monkeypatch):
 
 
 def test_bind_connection(monkeypatch):
-    monkeypatch.setattr(psycopg2, "connect", open_connection)
-
-    class RecipientClass:
-        def __init__(self, cursor):
-            self.cursor = cursor
+    monkeypatch.setattr(DatabaseConnection, "connect_db", lambda: None)
+    monkeypatch.setattr(DatabaseConnection, "create_cursor", lambda: "cursor")
+    monkeypatch.setattr(DatabaseConnection, "close_connection", lambda: None)
 
     @DatabaseConnection.bind_connection
-    def test_function(cursor, **kwargs):
-        return RecipientClass(cursor)
+    def test_function(cursor, *args, **kwargs):
+        assert cursor == "cursor"
+        return "return"
 
-    test = test_function()
-    assert isinstance(test, RecipientClass)
-    assert test.cursor == "cursor opened"
+    assert test_function() == "return"
 
 
 def test_connect_db(monkeypatch):

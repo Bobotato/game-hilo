@@ -1,31 +1,20 @@
 import bcrypt
 import pytest
 
-import repository
 from authentication.authenticator import authenticate, hash_password, register
 from authentication.models.credentials import Credentials
-
-
-def test_register(monkeypatch):
-    def mock_add_entry(**kwargs):
-        return "test_add_entry"
-
-    monkeypatch.setattr(repository.user, "add_entry", mock_add_entry)
-    assert (
-        register(credentials=Credentials("test_username", "test_password"))
-        == "test_add_entry"
-    )
+from repository.errors import UsernameTakenException
 
 
 def test_register_raises_UsernameTakenException(monkeypatch):
     def raise_UsernameTakenException(**kwargs):
-        raise repository.errors.UsernameTakenException
+        raise UsernameTakenException
 
     monkeypatch.setattr(
-        repository.user, "add_entry", raise_UsernameTakenException
+        "authentication.authenticator.add_entry", raise_UsernameTakenException
     )
-    with pytest.raises(repository.errors.UsernameTakenException):
-        register(credentials=Credentials("test5555", "test5555"))
+    with pytest.raises(UsernameTakenException):
+        register(credentials=Credentials("test_username", "test_password"))
 
 
 def test_hash_password(monkeypatch):
@@ -38,8 +27,8 @@ def test_hash_password(monkeypatch):
 
 
 def test_authenticate(monkeypatch):
-    def simplified_checking(**kwargs):
+    def simplified_checking(*args, **kwargs):
         return "checkpw"
 
     monkeypatch.setattr(bcrypt, "checkpw", simplified_checking)
-    assert authenticate() == "checkpw"
+    assert authenticate(Credentials("test", "testpw")) == "checkpw"
