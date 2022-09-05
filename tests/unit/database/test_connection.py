@@ -42,9 +42,15 @@ def test_DatabaseConnection_init(monkeypatch):
 
 
 def test_bind_connection(monkeypatch):
-    monkeypatch.setattr(DatabaseConnection, "connect_db", lambda: None)
-    monkeypatch.setattr(DatabaseConnection, "create_cursor", lambda: "cursor")
-    monkeypatch.setattr(DatabaseConnection, "close_connection", lambda: None)
+    monkeypatch.setattr(
+        DatabaseConnection, "connect_db", lambda *args, **kwargs: None
+    )
+    monkeypatch.setattr(
+        DatabaseConnection, "create_cursor", lambda *args, **kwargs: "cursor"
+    )
+    monkeypatch.setattr(
+        DatabaseConnection, "close_connection", lambda *args, **kwargs: None
+    )
 
     @DatabaseConnection.bind_connection
     def test_function(cursor, *args, **kwargs):
