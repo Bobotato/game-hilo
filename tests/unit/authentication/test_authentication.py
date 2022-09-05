@@ -18,17 +18,27 @@ def test_register_raises_UsernameTakenException(monkeypatch):
 
 
 def test_hash_password(monkeypatch):
-    def simplified_hashing(encoded_password, salt):
+    def mock_hashing(encoded_password, salt):
         return (b"salt" + encoded_password)[::-1]
 
-    monkeypatch.setattr(bcrypt, "hashpw", simplified_hashing)
+    monkeypatch.setattr(bcrypt, "hashpw", mock_hashing)
 
     assert hash_password("password".encode()) == "drowssaptlas".encode()
 
 
 def test_authenticate(monkeypatch):
-    def simplified_checking(*args, **kwargs):
-        return "checkpw"
+    def mock_checking(*args, **kwargs):
+        return "check_pw"
 
-    monkeypatch.setattr(bcrypt, "checkpw", simplified_checking)
-    assert authenticate(Credentials("test", "testpw")) == "checkpw"
+    def mock_get_entry(*args, **kwargs):
+        class MockUser:
+            password_hash = "testpw"
+
+        return MockUser
+
+    monkeypatch.setattr(bcrypt, "checkpw", mock_checking)
+    monkeypatch.setattr(
+        "authentication.authenticator.get_entry", mock_get_entry
+    )
+
+    assert authenticate(Credentials("test", "testpw")) == "check_pw"
