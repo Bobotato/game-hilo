@@ -1,5 +1,6 @@
 import os
 import sys
+from functools import wraps
 
 import psycopg2
 from dotenv import load_dotenv
@@ -14,6 +15,7 @@ class DatabaseConnection:
     def bind_connection(cls, func):
         """Decorator that opens and closes a connection."""
 
+        @wraps(func)
         def wrap(*args, **kwargs):
             dbc = DatabaseConnection()
             query = func(cursor=dbc.cursor, *args, **kwargs)
