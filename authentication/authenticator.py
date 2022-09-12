@@ -11,7 +11,7 @@ def register(credentials: Credentials) -> None:
         add_entry(
             user=User(
                 credentials.username,
-                hash_password(credentials.password.encode()).decode(),
+                hash_password(credentials.password),
             ),
         )
 
@@ -19,12 +19,14 @@ def register(credentials: Credentials) -> None:
         raise UsernameTakenException
 
 
-def hash_password(encoded_password) -> bytes:
-    return bcrypt.hashpw(encoded_password, bcrypt.gensalt())
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode("latin-1")
 
 
 def authenticate(credentials: Credentials) -> bool:
     return bcrypt.checkpw(
         credentials.password.encode(),
-        get_entry(username=credentials.username).password_hash.encode(),
+        get_entry(username=credentials.username).password_hash.encode(
+            "latin-1"
+        ),
     )
