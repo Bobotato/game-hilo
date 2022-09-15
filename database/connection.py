@@ -1,9 +1,14 @@
 import os
 import sys
 from functools import wraps
+from typing import Any, Callable, TypeVar
 
 import psycopg2
 from dotenv import load_dotenv
+from typing_extensions import Concatenate, ParamSpec
+
+_P = ParamSpec("_P")
+_R = TypeVar("_R")
 
 
 class DatabaseConnection:
@@ -12,11 +17,13 @@ class DatabaseConnection:
         self.cursor: psycopg2.extensions.cursor = self.create_cursor()
 
     @classmethod
-    def bind_connection(cls, func):
+    def bind_connection(
+        cls, func: Callable[Concatenate[Any, _P], _R]
+    ) -> Callable[_P, _R]:
         """Decorator that opens and closes a connection."""
 
         @wraps(func)
-        def wrap(*args, **kwargs):
+        def wrap(*args: _P.args, **kwargs: _P.kwargs) -> _R:
             dbc = DatabaseConnection()
             query = func(cursor=dbc.cursor, *args, **kwargs)
             dbc.close_connection()
