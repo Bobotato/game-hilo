@@ -4,10 +4,11 @@ import pytest
 from authentication.authenticator import authenticate, hash_password, register
 from authentication.models.credentials import Credentials
 from repository.errors import UsernameTakenException
+from repository.models.user import User
 
 
 def test_register_raises_UsernameTakenException(monkeypatch):
-    def raise_UsernameTakenException(**kwargs):
+    def raise_UsernameTakenException(**_):
         raise UsernameTakenException
 
     monkeypatch.setattr(
@@ -18,27 +19,26 @@ def test_register_raises_UsernameTakenException(monkeypatch):
 
 
 def test_hash_password(monkeypatch):
-    def mock_hashing(encoded_password, salt):
-        return (b"salt" + encoded_password)[::-1]
+    def mock_salt_generation():
+        return b"$2b$12$PLiYfdCEt70UukCL5m1li."
 
-    monkeypatch.setattr(bcrypt, "hashpw", mock_hashing)
+    monkeypatch.setattr(bcrypt, "gensalt", mock_salt_generation)
 
-    assert hash_password("password".encode()) == "drowssaptlas".encode()
+    assert (
+        hash_password("password")
+        == "$2b$12$PLiYfdCEt70UukCL5m1li.1nLlQqZcv1qKSyel1DEjpIl0Tk0Keqi"
+    )
 
 
 def test_authenticate(monkeypatch):
-    def mock_checking(*args, **kwargs):
-        return "check_pw"
+    def mock_get_entry(**_):
+        return User(
+            "test_username",
+            "$2b$12$PLiYfdCEt70UukCL5m1li.1nLlQqZcv1qKSyel1DEjpIl0Tk0Keqi",
+        )
 
-    def mock_get_entry(*args, **kwargs):
-        class MockUser:
-            password_hash = "testpw"
-
-        return MockUser
-
-    monkeypatch.setattr(bcrypt, "checkpw", mock_checking)
     monkeypatch.setattr(
         "authentication.authenticator.get_entry", mock_get_entry
     )
 
-    assert authenticate(Credentials("test", "testpw")) == "check_pw"
+    assert authenticate(Credentials("test_username", "password"))
