@@ -9,31 +9,21 @@ class MockConnection:
         self.closed = "connection open"
         self.session = "no autocommit"
 
-    def close(self, **kwargs):
+    def close(self, **_):
         self.closed = "connection closed"
 
-    def cursor(self, **kwargs):
+    def cursor(self, **_):
         return "cursor opened"
 
-    def set_session(self, **kwargs):
+    def set_session(self, **_):
         self.session = "session autocommit enabled"
 
 
-def open_connection(**kwargs):
+def open_connection(**_):
     return MockConnection()
 
 
 def test_DatabaseConnection_init(monkeypatch):
-    def mock_psycopg2(**kwargs):
-        class MockDatabaseConnection:
-            def connect_db(self):
-                return "connected_db"
-
-            def create_cursor(self):
-                return "created cursor"
-
-        return MockDatabaseConnection()
-
     monkeypatch.setattr(psycopg2, "connect", open_connection)
 
     conn = DatabaseConnection()
@@ -42,18 +32,16 @@ def test_DatabaseConnection_init(monkeypatch):
 
 
 def test_bind_connection(monkeypatch):
+    monkeypatch.setattr(DatabaseConnection, "connect_db", lambda *_: None)
     monkeypatch.setattr(
-        DatabaseConnection, "connect_db", lambda *args, **kwargs: None
+        DatabaseConnection, "create_cursor", lambda *_: "cursor"
     )
     monkeypatch.setattr(
-        DatabaseConnection, "create_cursor", lambda *args, **kwargs: "cursor"
-    )
-    monkeypatch.setattr(
-        DatabaseConnection, "close_connection", lambda *args, **kwargs: None
+        DatabaseConnection, "close_connection", lambda *_: None
     )
 
     @DatabaseConnection.bind_connection
-    def test_function(cursor, *args, **kwargs):
+    def test_function(cursor=None, *_):
         assert cursor == "cursor"
         return "return"
 
@@ -69,8 +57,8 @@ def test_connect_db(monkeypatch):
 
 
 def test_connect_db_exits_on_raising_OperationalError(monkeypatch):
-    def raise_OperationalError(**kwargs):
-        raise psycopg2.errors.OperationalError
+    def raise_OperationalError(**_):
+        raise psycopg2.errors.OperationalError  # pyright: ignore [reportGeneralTypeIssues] # noqa: E501
 
     monkeypatch.setattr(psycopg2, "connect", raise_OperationalError)
     with pytest.raises(SystemExit):
@@ -78,7 +66,7 @@ def test_connect_db_exits_on_raising_OperationalError(monkeypatch):
 
 
 def test_connect_db_exits_on_raising_Error(monkeypatch):
-    def raise_Error(**kwargs):
+    def raise_Error(**_):
         raise psycopg2.Error
 
     monkeypatch.setattr(psycopg2, "connect", raise_Error)

@@ -5,14 +5,6 @@ from repository.errors import NoSuchUserException, UsernameTakenException
 from repository.user import add_entry, get_entry
 
 
-def mock_cursor_return_test(*args, **kwargs):
-    class MockCursor:
-        def execute(self, *args, **kwargs):
-            return "test"
-
-    return MockCursor
-
-
 def mock_user():
     class MockUser:
         username = "test_username"
@@ -24,8 +16,8 @@ def mock_user():
 def test_add_entry_raise_UsernameTakenException(monkeypatch):
     def mock_cursor_raise_UniqueViolation():
         class MockCursorRaiseUniqueViolation:
-            def execute(self, *args, **kwargs):
-                raise psycopg2.errors.UniqueViolation
+            def execute(self, *_):
+                raise psycopg2.errors.UniqueViolation  # pyright: ignore [reportGeneralTypeIssues] # noqa: E501
 
         return MockCursorRaiseUniqueViolation
 
@@ -43,7 +35,7 @@ def test_add_entry_raise_UsernameTakenException(monkeypatch):
 def test_add_entry_exit_on_Error(monkeypatch):
     def mock_cursor_raise_Error():
         class MockCursorRaiseError:
-            def execute(self, *args, **kwargs):
+            def execute(self, *_):
                 raise psycopg2.Error
 
         return MockCursorRaiseError
@@ -59,13 +51,13 @@ def test_add_entry_exit_on_Error(monkeypatch):
 def test_get_entry(monkeypatch):
     def mock_cursor_return_test():
         class MockCursorReturnTest:
-            def execute(self, *args, **kwargs):
+            def execute(self, *_):
                 return "test_execute"
 
-            def fetchone(*args, **kwargs):
+            def fetchone(self):
                 return (1, "test_username", "test_password_hash")
 
-        return MockCursorReturnTest
+        return MockCursorReturnTest()
 
     monkeypatch.setattr("psycopg2.extensions.cursor", mock_cursor_return_test)
     monkeypatch.setattr("repository.models.user.User", mock_user)
@@ -80,10 +72,10 @@ def test_get_entry(monkeypatch):
 def test_get_entry_raise_NoSuchUserException(monkeypatch):
     def mock_cursor_raise_TypeError():
         class MockCursorFetchoneRaiseTypeError:
-            def execute(self, *args, **kwargs):
+            def execute(self, *_):
                 return None
 
-            def fetchone(self, *args, **kwargs):
+            def fetchone(self):
                 raise TypeError
 
         return MockCursorFetchoneRaiseTypeError
