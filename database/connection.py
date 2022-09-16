@@ -13,8 +13,8 @@ _R = TypeVar("_R")
 
 class DatabaseConnection:
     def __init__(self):
-        self.connection: psycopg2.extensions.connection = self.connect_db()
-        self.cursor: psycopg2.extensions.cursor = self.create_cursor()
+        self.connection: "psycopg2.connection" = self.connect_db()
+        self.cursor: "psycopg2.cursor" = self.create_cursor()
 
     @classmethod
     def bind_connection(
@@ -24,14 +24,14 @@ class DatabaseConnection:
 
         @wraps(func)
         def wrap(*args: _P.args, **kwargs: _P.kwargs) -> _R:
-            dbc = DatabaseConnection()
+            dbc = cls()
             query = func(cursor=dbc.cursor, *args, **kwargs)
             dbc.close_connection()
             return query
 
         return wrap
 
-    def connect_db(self) -> psycopg2.extensions.connection:
+    def connect_db(self) -> "psycopg2.connection":
         load_dotenv()
 
         try:
@@ -43,7 +43,7 @@ class DatabaseConnection:
                 database=os.getenv("DB_NAME"),
             )
 
-        except psycopg2.errors.OperationalError:
+        except psycopg2.OperationalError:
             sys.exit("There was an issue connecting to the database.")
 
         except psycopg2.Error:
@@ -56,6 +56,6 @@ class DatabaseConnection:
     def close_connection(self) -> None:
         self.connection.close()
 
-    def create_cursor(self) -> psycopg2.extensions.cursor:
+    def create_cursor(self) -> "psycopg2.cursor":
         cursor = self.connection.cursor()
         return cursor
