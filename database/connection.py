@@ -25,7 +25,7 @@ class DatabaseConnection:
         @wraps(func)
         def wrap(*args: _P.args, **kwargs: _P.kwargs) -> _R:
             dbc = cls()
-            query = func(cursor=dbc.cursor, *args, **kwargs)
+            query = func(dbc.cursor, *args, **kwargs)
             dbc.close_connection()
             return query
 
