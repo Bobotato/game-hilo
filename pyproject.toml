@@ -6,7 +6,7 @@ authors = ["Bobotato <bhojwanialexander@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "3.10.4"
-psycopg2 = "^2.9.3"
+psycopg2-binary = "^2.9.3"
 bcrypt = "^3.2.2"
 python-dotenv = "^0.20.0"
 
