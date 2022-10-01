@@ -1,15 +1,15 @@
 FROM python:3
 
-WORKDIR /game
+WORKDIR /app
 
-COPY requirements.txt /game/requirements.txt
+COPY requirements.txt /app/requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY ./ /game
+COPY . /app
 
 RUN apt-get update
 
 RUN apt-get install socat -y
 
-CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"python /game/main.py"
+CMD "python /app/main.py"
