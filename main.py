@@ -1,6 +1,5 @@
 import sys
 
-
 from authentication.authenticator import authenticate, register
 from authentication.models.credentials import Credentials
 from hilo.game import Game, Prediction
