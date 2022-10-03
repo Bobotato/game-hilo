@@ -12,4 +12,4 @@ RUN apt-get update
 
 RUN apt-get install socat -y
 
-CMD "python /app/main.py"
+CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"python -u main.py"
