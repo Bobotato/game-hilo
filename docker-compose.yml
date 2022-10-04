@@ -15,17 +15,10 @@ services:
         - database
     environment:
         - PYTHONUNBUFFERED=1
-    links:
-        - database
     ports:
         - 1337:1337
-    stdin_open: true
-    tty: true
     volumes:
-      - type: bind
-        source: ./.env
-        target: /app/.env
-        read_only: true
+        - ./.env:/app/.env:ro
 
 volumes:
   pgdata:
