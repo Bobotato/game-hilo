@@ -9,6 +9,7 @@ python = "3.10.4"
 psycopg2-binary = "^2.9.3"
 bcrypt = "^3.2.2"
 python-dotenv = "^0.20.0"
+typing-extensions ="^4.3.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.19.0"
