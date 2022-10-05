@@ -1,15 +1,36 @@
-FROM python:3
+FROM python:3.10.7-slim as base
+
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
+FROM base as build
 
-RUN pip install -r requirements.txt
+RUN apt-get update
+RUN apt-get install python3-pip -y
 
-COPY . /app
+RUN pip3 install --upgrade pip
+RUN pip3 install "poetry==1.1.12"
+RUN python -m venv /venv
+
+COPY pyproject.toml poetry.lock ./
+
+RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
+
+FROM base as deploy
+
+EXPOSE 1337
+
+ENV PATH="/venv/bin:${PATH}"
+ENV VIRTUAL_ENV="/venv"
 
 RUN apt-get update
 
 RUN apt-get install socat -y
 
-CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"python -u main.py"
+COPY --from=build /venv /venv
+COPY . /app
+
+CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"python main.py"
