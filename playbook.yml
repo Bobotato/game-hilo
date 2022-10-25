@@ -1,0 +1,116 @@
+---
+- hosts: all
+  become: true
+  vars:
+    created_username: alex
+
+  tasks:
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install containerd
+      apt:
+        name: containerd.io
+        state: latest
+
+    - name: Install docker-compose-plugin
+      apt:
+        name: docker-compose
+        state: latest
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Install Postgresql
+      apt:
+        name: postgresql
+        state: latest
+
+    - name: Install Postgresql-contrib
+      apt:
+        name: postgresql-contrib
+        state: latest
+
+    - name: Log into DockerHub
+      docker_login:
+        username: valenciaga
+        password: D00mdesire!123docker
+
+    #    - name: Pull DB image from repository
+    #      docker_image:
+    #        name: valenciaga/hilogame
+    #        source: pull
+    #        tag: 'database'
+    #
+    #    - name: Pull game image from repository
+    #      docker_image:
+    #        name: valenciaga/hilogame
+    #        source: pull
+    #        tag: 'game'
+
+    - name: Copy docker compose file from local
+      ansible.builtin.copy:
+        src: docker-compose-prod.yml
+        dest: docker-compose.yml
+
+    - name: Copy .env file from local
+      ansible.builtin.copy:
+        src: .env
+        dest: ./.env
+
+#- name: Run with inline docker compose file
+#      docker_compose:
+#        project_name: hilo/db
+#        definition:
+#          version: "3.9"
+#          services:
+#            database:
+#              container_name: database
+#              image: valenciaga/hilogame:database
+#              volumes:
+#                - pgdata:/var/lib/postgresql/data
+#            app:
+#              container_name: game
+#              image: valenciaga/hilogame:game
+#              depends_on:
+#                - database
+#              ports:
+#                - 1337:1337
+#              volumes:
+#                - ./.env:/app/.env:ro
+#
+#          volumes:
+#            pgdata:
