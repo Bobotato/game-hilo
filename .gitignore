@@ -51,3 +51,6 @@ docs/_build/
 
 # Environment files
 .env
+
+# Vault Password
+vault_pass.txt

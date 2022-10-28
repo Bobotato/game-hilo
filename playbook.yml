@@ -54,63 +54,40 @@
       pip:
         name: docker
 
-    - name: Install Postgresql
-      apt:
-        name: postgresql
-        state: latest
-
-    - name: Install Postgresql-contrib
-      apt:
-        name: postgresql-contrib
-        state: latest
-
     - name: Log into DockerHub
       docker_login:
-        username: valenciaga
-        password: D00mdesire!123docker
-
-    #    - name: Pull DB image from repository
-    #      docker_image:
-    #        name: valenciaga/hilogame
-    #        source: pull
-    #        tag: 'database'
-    #
-    #    - name: Pull game image from repository
-    #      docker_image:
-    #        name: valenciaga/hilogame
-    #        source: pull
-    #        tag: 'game'
-
-    - name: Copy docker compose file from local
-      ansible.builtin.copy:
-        src: docker-compose-prod.yml
-        dest: docker-compose.yml
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
 
     - name: Copy .env file from local
       ansible.builtin.copy:
         src: .env
         dest: ./.env
 
-#- name: Run with inline docker compose file
-#      docker_compose:
-#        project_name: hilo/db
-#        definition:
-#          version: "3.9"
-#          services:
-#            database:
-#              container_name: database
-#              image: valenciaga/hilogame:database
-#              volumes:
-#                - pgdata:/var/lib/postgresql/data
-#            app:
-#              container_name: game
-#              image: valenciaga/hilogame:game
-#              depends_on:
-#                - database
-#              ports:
-#                - 1337:1337
-#              volumes:
-#                - ./.env:/app/.env:ro
-#
-#          volumes:
-#            pgdata:
+    - name: Create docker-compose file
+      ansible.builtin.copy:
+        dest: docker-compose.yml
+        content: |
+          version: "3.9"
+          services:
+
+            database:
+              container_name: psqldb
+              image: valenciaga/hilogame:database
+              volumes:
+                  - pgdata:/var/lib/postgresql/data
+
+            app:
+              container_name: hilogame
+              image: valenciaga/hilogame:game
+              env_file: ./.env
+              depends_on:
+                  - database
+              ports:
+                  - 1337:1337
+              volumes:
+                  - ./.env:/app/.env:ro
+
+          volumes:
+            pgdata:
+
