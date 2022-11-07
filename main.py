@@ -1,5 +1,4 @@
 import sys
-from getpass import getpass
 
 from authentication.authenticator import authenticate, register
 from authentication.models.credentials import Credentials
@@ -86,7 +85,7 @@ def get_name() -> str:
 def get_password() -> str:
     while True:
         print("\nPlease type in your password:")
-        password = getpass(prompt=">", stream=None)
+        password = str(input("> "))
 
         if password:
             return password

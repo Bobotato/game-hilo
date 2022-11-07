@@ -1,0 +1,8 @@
+.cache
+.env
+.gitignore
+.pre-commit-config.yaml
+
+/.git
+/.github
+/tests
