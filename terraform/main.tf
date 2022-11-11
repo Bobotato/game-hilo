@@ -1,6 +1,6 @@
 resource "digitalocean_droplet" "hilo-game" {
-  count = 3
-  image = "ubuntu-20-04-x64"
+  count = 1
+  image = "debian-11-x64"
   name = "hilo-game-${count.index}"
   region = "sgp1"
   size = "s-1vcpu-512mb-10gb"
@@ -18,7 +18,8 @@ resource "digitalocean_droplet" "hilo-game" {
   }
 
     provisioner "local-exec" {
-        command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u root -i '${self.ipv4_address},' -e @/home/alex/Desktop/game-hilo/dockerhub_login.enc --vault-password-file /home/alex/Desktop/game-hilo/vault_pass.txt /home/alex/Desktop/game-hilo/playbook.yml"
+                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && ansible-playbook -u root -i '${self.ipv4_address},' --private-key ${var.pvt_key} -e @/home/alex/Desktop/game-hilo/terraform/dockerhub_login.yml -e @/home/alex/Desktop/game-hilo/terraform/database_details.yml /home/alex/Desktop/game-hilo/playbook.yml"
+
     }
 }
 
