@@ -21,6 +21,8 @@ RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
 
 FROM base as deploy
 
+EXPOSE 1337
+
 ENV PATH="/venv/bin:${PATH}"
 ENV VIRTUAL_ENV="/venv"
 
