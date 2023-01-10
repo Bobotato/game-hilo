@@ -1,14 +1,25 @@
 from fastapi.testclient import TestClient
+from freezegun import freeze_time
 
 from api.main import app
 
 client = TestClient(app)
 
 
-def test_authenticate(monkeypatch):
-    def mock_get_user_by_username(*args, **kwargs):
-        return 1
+class MockUser:
+    def __init__(self):
+        self.username = "test"
+        self.password_hash = (
+            "$2b$12$ol/TcrgrOS.0WqJaQXdEWeBomfSLWHvNJEocZIJewS2FNaxJBNhx2"
+        )
 
+
+def mock_get_user_by_username(*args, **kwargs):
+    return MockUser()
+
+
+@freeze_time("2000-01-01")
+def test_authenticate(monkeypatch):
     monkeypatch.setattr(
         "api.router.user.user.get_user_by_username", mock_get_user_by_username
     )
@@ -25,23 +36,12 @@ def test_authenticate(monkeypatch):
 
 
 def test_authenticate_invalid_password(monkeypatch):
-    def mock_get_user_by_username(*args, **kwargs):
-        return 1
-
-    def mock_verify_password_return_False(*args, **kwargs):
-        return False
-
     monkeypatch.setattr(
         "api.router.user.user.get_user_by_username", mock_get_user_by_username
     )
 
-    monkeypatch.setattr(
-        "passlib.context.CryptContext.verify",
-        mock_verify_password_return_False,
-    )
-
     response = client.post(
-        "/user/authenticate", json={"username": "test", "password": "test"}
+        "/user/authenticate", json={"username": "test", "password": "nottest"}
     )
 
     assert response.status_code == 400
@@ -66,3 +66,9 @@ def test_authenticate_username_does_not_exist(monkeypatch):
 
     assert response.status_code == 400
     assert response.json() == {"detail": "User does not exist."}
+
+
+def test_authenticate_missing_request():
+    response = client.post("/user/authenticate")
+
+    assert response.status_code == 422
