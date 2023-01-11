@@ -8,3 +8,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, index=True)
     password_hash = Column(String, index=True)
+    access_token = Column(String, index=True)

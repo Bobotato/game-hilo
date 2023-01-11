@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.repository.crud import get_user_by_username, register_user
 from api.router.user import schemas
-from api.router.user.jwt import generate_jwt
+from api.router.user.jwt import generate_token
 
 router = APIRouter()
 
@@ -25,7 +25,7 @@ def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
             detail="Password does not match the given username.",
         )
 
-    token = generate_jwt(data={"sub": user.username})
+    token = generate_token(data={"sub": user.username})
     return token
 
 
@@ -43,5 +43,5 @@ def register(request: schemas.Credentials, db: Session = Depends(get_db)):
         db=db,
     )
 
-    token = generate_jwt(data={"sub": request.username})
+    token = generate_token(data={"sub": request.username})
     return token
