@@ -10,7 +10,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 20
 
 
-def generate_token(data: Token) -> str:
+def generate_token(data: dict) -> str:
     encode = data.copy()
     expiry = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     encode.update({"exp": expiry})
