@@ -1,6 +1,10 @@
 from pydantic import BaseModel
 
 
+class Bet(BaseModel):
+    bet: int
+
+
 class Card(BaseModel):
     rank: str
     suit: str
@@ -9,6 +13,10 @@ class Card(BaseModel):
 class Player(BaseModel):
     username: str
     credits: int
+
+
+class Prediction(BaseModel):
+    prediction: str
 
 
 class RoundInfo(BaseModel):
