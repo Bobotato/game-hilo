@@ -6,13 +6,16 @@ from api.database import get_db
 from api.repository.crud import get_user_by_username, register_user
 from api.router.user import schemas
 from api.router.user.jwt import generate_token
+from api.router.user.schemas import Token
 
 router = APIRouter()
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-@router.post("/user/authenticate", tags=["User Operations"])
+@router.post(
+    "/user/authenticate", tags=["User Operations"], response_model=Token
+)
 def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
     user = get_user_by_username(username=request.username, db=db)
 
@@ -25,11 +28,11 @@ def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
             detail="Password does not match the given username.",
         )
 
-    token = generate_token(data={"sub": user.username})
-    return token
+    access_token = generate_token(data={"sub": user.username})
+    return {"access_token": access_token}
 
 
-@router.post("/user/register", tags=["User Operations"])
+@router.post("/user/register", tags=["User Operations"], response_model=Token)
 def register(request: schemas.Credentials, db: Session = Depends(get_db)):
     if get_user_by_username(request.username, db=db):
         raise HTTPException(
@@ -43,5 +46,5 @@ def register(request: schemas.Credentials, db: Session = Depends(get_db)):
         db=db,
     )
 
-    token = generate_token(data={"sub": request.username})
-    return token
+    access_token = generate_token(data={"sub": request.username})
+    return {"access_token": access_token}
