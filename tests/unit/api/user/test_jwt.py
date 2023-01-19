@@ -4,6 +4,8 @@ from freezegun import freeze_time
 
 from api.router.user.jwt import decode_token, generate_token
 
+invalid_token = "nonsense"
+
 test_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
 
 
@@ -26,4 +28,4 @@ def test_decode_token_raise_ExpiredSignatureError():
 
 def test_decode_token_raise_JWTError():
     with pytest.raises(HTTPException):
-        decode_token("nonsense")
+        decode_token(invalid_token)
