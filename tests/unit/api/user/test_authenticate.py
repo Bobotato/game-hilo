@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from freezegun import freeze_time
 
 from api.main import app
+from api.repository.errors import NoSuchUserException
 
 client = TestClient(app)
 
@@ -49,13 +50,13 @@ def test_authenticate_invalid_password(monkeypatch):
     }
 
 
-def test_authenticate_username_does_not_exist(monkeypatch):
-    def mock_get_user_by_username_return_None(*args, **kwargs):
-        return None
+def test_authenticate_missing_user_return_NoSuchUserException(monkeypatch):
+    def mock_get_user_by_username_return_NoSuchUserException(*args, **kwargs):
+        raise NoSuchUserException
 
     monkeypatch.setattr(
         "api.router.user.user.get_user_by_username",
-        mock_get_user_by_username_return_None,
+        mock_get_user_by_username_return_NoSuchUserException,
     )
 
     response = client.post(
