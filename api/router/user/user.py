@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from api.database import get_db
 from api.repository.crud import get_user_by_username, register_user
+from api.repository.errors import NoSuchUserException
 from api.router.user import schemas
 from api.router.user.jwt import generate_token
 from api.router.user.schemas import Token
@@ -17,9 +18,10 @@ password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
     "/user/authenticate", tags=["User Operations"], response_model=Token
 )
 def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
-    user = get_user_by_username(username=request.username, db=db)
+    try:
+        user = get_user_by_username(username=request.username, db=db)
 
-    if not user:
+    except NoSuchUserException:
         raise HTTPException(status_code=400, detail="User does not exist.")
 
     if not password_context.verify(request.password, user.password_hash):

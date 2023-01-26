@@ -20,12 +20,12 @@ class Prediction(BaseModel):
 
 
 class RoundInfo(BaseModel):
-    player: Player
-    current_card: Card
+    player: dict
+    current_card: dict
 
 
 class RoundResult(BaseModel):
-    drawn_card: Card
+    drawn_card: dict
     win: bool
     is_player_bankrupt: bool
     is_deck_empty: bool
