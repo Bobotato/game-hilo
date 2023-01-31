@@ -15,7 +15,7 @@ class MockUser:
         )
 
 
-def mock_get_user_by_username(*args, **kwargs):
+def mock_get_user_by_username(**_):
     return MockUser()
 
 
@@ -51,7 +51,7 @@ def test_authenticate_invalid_password(monkeypatch):
 
 
 def test_authenticate_missing_user_return_NoSuchUserException(monkeypatch):
-    def mock_get_user_by_username_return_NoSuchUserException(*args, **kwargs):
+    def mock_get_user_by_username_return_NoSuchUserException(**_):
         raise NoSuchUserException
 
     monkeypatch.setattr(

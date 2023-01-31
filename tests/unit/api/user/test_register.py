@@ -6,15 +6,15 @@ from api.main import app
 client = TestClient(app)
 
 
-def mock_register_user(*args, **kwargs):
+def mock_register_user(**_):
     return 1
 
 
-def mock_get_user_by_username_return_False(*args, **kwargs):
+def mock_get_user_by_username_return_False(**_):
     return False
 
 
-def mock_get_user_by_username_return_True(*args, **kwargs):
+def mock_get_user_by_username_return_True(**_):
     return True
 
 

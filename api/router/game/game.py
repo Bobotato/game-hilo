@@ -23,21 +23,23 @@ def info(token: Token, db: Session = Depends(get_db)):
     user = get_user_from_token(token=token, db=db)
 
     if not user.game:
-        game = Game(user.username)
-        pickled_game = pickle_object(game)
+        game = Game(name=user.username)
+        pickled_game = pickle_object(object=game)
         update_game(username=user.username, value=pickled_game, db=db)
 
     else:
-        game = unpickle_object(user.game)
+        game = unpickle_object(pickled_object=user.game)
 
     roundinfo = game.start_round()
 
     update_round_info(
         username=user.username,
-        value=pickle_object(roundinfo),
+        value=pickle_object(object=roundinfo),
         db=db,
     )
-    update_game(username=user.username, value=pickle_object(game), db=db)
+    update_game(
+        username=user.username, value=pickle_object(object=game), db=db
+    )
 
     return roundinfo
 
@@ -68,12 +70,14 @@ def result(
             detail="Round info does not exist, start a round first.",
         )
 
-    game = unpickle_object(user.game)
+    game = unpickle_object(pickled_object=user.game)
 
     roundresult = game.compute_round_result(
         bet=bet, prediction=Prediction(int(prediction))
     )
 
-    update_game(username=user.username, value=pickle_object(game), db=db)
+    update_game(
+        username=user.username, value=pickle_object(object=game), db=db
+    )
 
     return roundresult

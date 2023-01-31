@@ -36,7 +36,7 @@ def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
 
 @router.post("/user/register", tags=["User Operations"], response_model=Token)
 def register(request: schemas.Credentials, db: Session = Depends(get_db)):
-    if get_user_by_username(request.username, db=db):
+    if get_user_by_username(username=request.username, db=db):
         raise HTTPException(
             status_code=409,
             detail="Account with the given username already exists",

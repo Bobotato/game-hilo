@@ -8,10 +8,10 @@ client = TestClient(app)
 
 
 class MockGame:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **_):
         pass
 
-    def start_round(self, *args, **kwargs):
+    def start_round(self, **_):
         return {
             "player": {"name": "test", "credits": 100},
             "current_card": {"sort_index": 1, "rank": 1, "suit": 2},
@@ -42,17 +42,17 @@ class MockUserNoRoundInfo:
         self.round_info = None
 
 
-def mock_update_game(*args, **kwargs):
+def mock_update_game(**_):
     return "updated"
 
 
-def mock_update_round_info(*args, **kwargs):
+def mock_update_round_info(**_):
     return "updated"
 
 
 @freeze_time("2000-01-01")
 def test_info(monkeypatch):
-    def mock_get_user_from_token_return_MockUser(*args, **kwargs):
+    def mock_get_user_from_token_return_MockUser(**_):
         return MockUser(mock_game=pickled_mock_game)
 
     monkeypatch.setattr(
@@ -81,7 +81,7 @@ def test_info(monkeypatch):
 
 @freeze_time("2000-01-01")
 def test_info_no_game(monkeypatch):
-    def mock_get_user_from_token_return_MockUserNoGame(*args, **kwargs):
+    def mock_get_user_from_token_return_MockUserNoGame(**_):
         return MockUserNoGame()
 
     monkeypatch.setattr(
