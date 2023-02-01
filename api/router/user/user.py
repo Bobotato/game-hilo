@@ -36,17 +36,19 @@ def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
 
 @router.post("/user/register", tags=["User Operations"], response_model=Token)
 def register(request: schemas.Credentials, db: Session = Depends(get_db)):
-    if get_user_by_username(username=request.username, db=db):
-        raise HTTPException(
-            status_code=409,
-            detail="Account with the given username already exists",
+    try:
+        if get_user_by_username(username=request.username, db=db):
+            raise HTTPException(
+                status_code=409,
+                detail="Account with the given username already exists",
+            )
+
+    except NoSuchUserException:
+        register_user(
+            username=request.username,
+            password_hash=password_context.hash(request.password),
+            db=db,
         )
 
-    register_user(
-        username=request.username,
-        password_hash=password_context.hash(request.password),
-        db=db,
-    )
-
-    access_token = generate_token(data={"sub": request.username})
-    return {"access_token": access_token}
+        access_token = generate_token(data={"sub": request.username})
+        return {"access_token": access_token}
