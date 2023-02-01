@@ -2,6 +2,7 @@ from fastapi.testclient import TestClient
 from freezegun import freeze_time
 
 from api.main import app
+from api.repository.errors import NoSuchUserException
 
 client = TestClient(app)
 
@@ -10,8 +11,8 @@ def mock_register_user(**_):
     return 1
 
 
-def mock_get_user_by_username_return_False(**_):
-    return False
+def mock_get_user_by_username_raise_NoSuchUserException(**_):
+    raise NoSuchUserException
 
 
 def mock_get_user_by_username_return_True(**_):
@@ -22,7 +23,7 @@ def mock_get_user_by_username_return_True(**_):
 def test_register(monkeypatch):
     monkeypatch.setattr(
         "api.router.user.user.get_user_by_username",
-        mock_get_user_by_username_return_False,
+        mock_get_user_by_username_raise_NoSuchUserException,
     )
 
     monkeypatch.setattr(
