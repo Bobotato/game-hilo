@@ -34,6 +34,11 @@ types-freezegun = "^1.1.10"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.isort]
+multi_line_output= 3
+include_trailing_comma= true
+line_length= 88
+
 [tool.pytest.ini_options]
 markers = [
     "integtest: marks tests as integration tests"
