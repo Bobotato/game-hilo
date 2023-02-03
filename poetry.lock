@@ -718,7 +718,7 @@ python-versions = ">=3.7"
 name = "types-freezegun"
 version = "1.1.10"
 description = "Typing stubs for freezegun"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 
@@ -763,7 +763,7 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.4"
-content-hash = "3f99cde8fd4123736435830dd1699e9c4efe6f5ff95130ec0dc5cfb4bd483512"
+content-hash = "4616af9fe8f1681a2d450b5ad9c6cfc9fcda96bbd463cd2bd190967878531c78"
 
 [metadata.files]
 anyio = []
