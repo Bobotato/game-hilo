@@ -1,17 +1,18 @@
-from fastapi import APIRouter, Depends, HTTPException
-from passlib.context import CryptContext
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.repository.crud import get_user_by_username, register_user
-from api.repository.errors import NoSuchUserException
+from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router.user import schemas
-from api.router.user.jwt import generate_token
 from api.router.user.schemas import Token
+from api.router.user.services import (
+    create_token,
+    register_user,
+    verify_password,
+)
 
 router = APIRouter()
-
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post(
@@ -19,36 +20,39 @@ password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 )
 def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
     try:
-        user = get_user_by_username(username=request.username, db=db)
+        if not verify_password(credentials=request, db=db):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password does not match the given username.",
+            )
 
     except NoSuchUserException:
-        raise HTTPException(status_code=400, detail="User does not exist.")
-
-    if not password_context.verify(request.password, user.password_hash):
         raise HTTPException(
-            status_code=400,
-            detail="Password does not match the given username.",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User does not exist.",
         )
 
-    access_token = generate_token(data={"sub": user.username})
-    return {"access_token": access_token}
+    except InvalidRequestError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Something went wrong.",
+        )
+
+    return {"access_token": create_token(credentials=request)}
 
 
 @router.post("/user/register", tags=["User Operations"], response_model=Token)
 def register(request: schemas.Credentials, db: Session = Depends(get_db)):
     try:
-        if get_user_by_username(username=request.username, db=db):
-            raise HTTPException(
-                status_code=409,
-                detail="Account with the given username already exists",
-            )
-
-    except NoSuchUserException:
         register_user(
-            username=request.username,
-            password_hash=password_context.hash(request.password),
+            credentials=request,
             db=db,
         )
 
-        access_token = generate_token(data={"sub": request.username})
-        return {"access_token": access_token}
+    except UsernameTakenException:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The username has already been taken.",
+        )
+
+    return {"access_token": create_token(credentials=request)}
