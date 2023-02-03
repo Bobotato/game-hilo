@@ -18,7 +18,21 @@ def get_user_by_username(username: str, db: Session) -> User:
     raise NoSuchUserException
 
 
-def register_user(username: str, password_hash: str, db: Session) -> None:
+def get_password_hash_by_username(username: str, db: Session) -> str:
+    try:
+        hash = (
+            db.query(User.password_hash).filter_by(username=username).scalar()
+        )
+        if hash:
+            return hash
+
+    except InvalidRequestError:
+        raise InvalidRequestError("Filters are invalid")
+
+    raise NoSuchUserException
+
+
+def add_user(username: str, password_hash: str, db: Session) -> None:
     new_user = User(username=username, password_hash=password_hash)
     db.add(new_user)
     db.commit()
