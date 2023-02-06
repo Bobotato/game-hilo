@@ -19,14 +19,16 @@ def create_token(credentials: schemas.Credentials) -> str:
 
 
 def register_user(credentials: schemas.Credentials, db: Session) -> None:
-    if get_user_by_username(username=credentials.username, db=db):
-        raise UsernameTakenException
+    try:
+        if get_user_by_username(username=credentials.username, db=db):
+            raise UsernameTakenException
 
-    add_user(
-        credentials.username,
-        password_context.hash(credentials.password),
-        db=db,
-    )
+    except NoSuchUserException:
+        add_user(
+            credentials.username,
+            password_context.hash(credentials.password),
+            db=db,
+        )
 
 
 def verify_password(credentials: schemas.Credentials, db: Session) -> bool:
