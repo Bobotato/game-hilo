@@ -1,30 +1,20 @@
 from pydantic import BaseModel
 
 
-class Bet(BaseModel):
-    bet: int
+class InfoIn(BaseModel):
+    access_token: str
 
 
-class Card(BaseModel):
-    rank: str
-    suit: str
-
-
-class Player(BaseModel):
-    username: str
-    credits: int
-
-
-class Prediction(BaseModel):
-    prediction: str
-
-
-class RoundInfo(BaseModel):
+class InfoOut(BaseModel):
     player: dict
     current_card: dict
 
 
-class RoundResult(BaseModel):
+class ResultIn(BaseModel):
+    access_token: str
+
+
+class ResultOut(BaseModel):
     drawn_card: dict
     win: bool
     is_player_bankrupt: bool

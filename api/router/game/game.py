@@ -3,9 +3,8 @@ from sqlalchemy.orm import Session
 
 from api.database import get_db
 from api.repository.errors import NoGameException, NoRoundInfoException
-from api.router.game.schemas import RoundInfo, RoundResult
+from api.router.game import schemas
 from api.router.game.services import get_info, get_result
-from api.router.user.schemas import Token
 
 router = APIRouter()
 
@@ -14,9 +13,9 @@ router = APIRouter()
     "/game/info",
     summary="Gets the information for the current round.",
     tags=["Game Operations"],
-    response_model=RoundInfo,
+    response_model=schemas.InfoOut,
 )
-def info(token: Token, db: Session = Depends(get_db)):
+def info(token: schemas.InfoIn, db: Session = Depends(get_db)):
     return get_info(token=token, db=db)
 
 
@@ -24,10 +23,10 @@ def info(token: Token, db: Session = Depends(get_db)):
     "/game/result",
     summary="Gets the result of a game round.",
     tags=["Game Operations"],
-    response_model=RoundResult,
+    response_model=schemas.ResultOut,
 )
 def result(
-    token: Token,
+    token: schemas.ResultIn,
     bet: int,
     prediction: int,
     db: Session = Depends(get_db),

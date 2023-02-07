@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router.user import schemas
-from api.router.user.schemas import Token
 from api.router.user.services import (
     create_token,
     register_user,
@@ -16,11 +15,15 @@ router = APIRouter()
 
 
 @router.post(
-    "/user/authenticate", tags=["User Operations"], response_model=Token
+    "/user/authenticate",
+    tags=["User Operations"],
+    response_model=schemas.AuthenticateOut,
 )
-def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
+def authenticate(
+    credentials: schemas.AuthenticateIn, db: Session = Depends(get_db)
+):
     try:
-        if not verify_password(credentials=request, db=db):
+        if not verify_password(credentials=credentials, db=db):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Password does not match the given username.",
@@ -38,14 +41,18 @@ def authenticate(request: schemas.Credentials, db: Session = Depends(get_db)):
             detail="Something went wrong.",
         )
 
-    return {"access_token": create_token(credentials=request)}
+    return {"access_token": create_token(credentials=credentials)}
 
 
-@router.post("/user/register", tags=["User Operations"], response_model=Token)
-def register(request: schemas.Credentials, db: Session = Depends(get_db)):
+@router.post(
+    "/user/register",
+    tags=["User Operations"],
+    response_model=schemas.AuthenticateOut,
+)
+def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
     try:
         register_user(
-            credentials=request,
+            credentials=credentials,
             db=db,
         )
 
@@ -55,4 +62,4 @@ def register(request: schemas.Credentials, db: Session = Depends(get_db)):
             detail="The username has already been taken.",
         )
 
-    return {"access_token": create_token(credentials=request)}
+    return {"access_token": create_token(credentials=credentials)}
