@@ -9,7 +9,7 @@ from api.repository.crud import (
 )
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router.user import schemas
-from api.services.jwt import generate_token
+from api.services.user.jwt import generate_token
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
