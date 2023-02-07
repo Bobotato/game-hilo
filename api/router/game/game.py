@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.repository.errors import NoGameException, NoRoundInfoException
 from api.router.game import schemas
-from api.router.game.services import get_info, get_result
+from api.services.game import get_info, get_result
 
 router = APIRouter()
 

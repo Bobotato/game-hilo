@@ -5,11 +5,7 @@ from sqlalchemy.orm import Session
 from api.database import get_db
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router.user import schemas
-from api.router.user.services import (
-    create_token,
-    register_user,
-    verify_password,
-)
+from api.services.user import create_token, register_user, verify_password
 
 router = APIRouter()
 
