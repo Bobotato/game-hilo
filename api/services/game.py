@@ -8,8 +8,8 @@ from api.repository.crud import (
 )
 from api.repository.errors import NoGameException, NoRoundInfoException
 from api.router.game import schemas
-from api.router.game.pickler import pickle_object, unpickle_object
-from api.router.user.jwt import decode_token
+from api.services.jwt import decode_token
+from api.services.pickler import pickle_object, unpickle_object
 from hilo.game import Game, Prediction
 from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
