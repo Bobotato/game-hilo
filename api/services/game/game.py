@@ -1,11 +1,8 @@
 from sqlalchemy.orm import Session
 
 from api.models import User
+from api.repository.errors import NoGameException, NoRoundInfoException
 from api.repository.game.game import GameRepository
-from api.repository.errors import (
-    NoGameException,
-    NoRoundInfoException,
-)
 from api.router.game import schemas
 from api.services.game.pickler import pickle_object, unpickle_object
 from api.services.user.jwt import decode_token

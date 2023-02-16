@@ -3,12 +3,12 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.models import User
-from api.repository.user.user import UserRepository
 from api.repository.errors import (
     GenericException,
     NoSuchUserException,
     UsernameTakenException,
 )
+from api.repository.user.user import UserRepository
 from api.router.user import schemas
 from api.services.user.jwt import generate_token
 

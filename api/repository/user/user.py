@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 
-from sqlalchemy import column
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
