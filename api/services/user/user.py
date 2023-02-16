@@ -2,12 +2,13 @@ from passlib.context import CryptContext
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
-from api.repository.crud import (
-    add_user,
-    get_password_hash_by_username,
-    get_user_by_username,
+from api.models import User
+from api.repository.user.user import UserRepository
+from api.repository.errors import (
+    GenericException,
+    NoSuchUserException,
+    UsernameTakenException,
 )
-from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router.user import schemas
 from api.services.user.jwt import generate_token
 
@@ -21,29 +22,34 @@ def create_token(
 
 
 def register_user(credentials: schemas.RegisterIn, db: Session) -> None:
+    repo = UserRepository.create(db)
+
     try:
-        if get_user_by_username(username=credentials.username, db=db):
+        if repo.get(target=User.username, username=credentials.username):
             raise UsernameTakenException
 
-    except NoSuchUserException:
-        add_user(
-            credentials.username,
-            password_context.hash(credentials.password),
-            db=db,
+    except GenericException:
+        repo.add(
+            User(
+                username=credentials.username,
+                password_hash=password_context.hash(credentials.password),
+            )
         )
 
 
 def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
+    repo = UserRepository.create(db)
+
     try:
         return password_context.verify(
             credentials.password,
-            get_password_hash_by_username(
-                username=credentials.username, db=db
-            ),
+            repo.get(target=User.password_hash, username=credentials.username)[
+                "password_hash"
+            ],
         )
 
     except InvalidRequestError:
         raise InvalidRequestError
 
-    except NoSuchUserException:
+    except GenericException:
         raise NoSuchUserException

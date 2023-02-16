@@ -1,12 +1,11 @@
 from sqlalchemy.orm import Session
 
-from api.repository.crud import (
-    get_game_by_username,
-    get_round_info_by_username,
-    update_game,
-    update_round_info,
+from api.models import User
+from api.repository.game.game import GameRepository
+from api.repository.errors import (
+    NoGameException,
+    NoRoundInfoException,
 )
-from api.repository.errors import NoGameException, NoRoundInfoException
 from api.router.game import schemas
 from api.services.game.pickler import pickle_object, unpickle_object
 from api.services.user.jwt import decode_token
@@ -15,29 +14,31 @@ from hilo.models.roundinfo import RoundInfo
 from hilo.models.roundresult import RoundResult
 
 
-def get_game_object(username: str, db: Session) -> Game:
-    try:
-        return unpickle_object(get_game_by_username(username=username, db=db))
+def get_game_object(username: str, repo: GameRepository) -> Game:
+    pickled_game = repo.get(target=User.game, username=username)["game"]
 
-    except NoGameException:
+    if pickled_game is None:
         raise NoGameException
+
+    else:
+        return unpickle_object(pickled_game)
 
 
 def get_info(token: schemas.InfoIn, db: Session) -> RoundInfo:
+    repo = GameRepository.create(db)
+
     username = get_username_from_token(token=token)
 
     try:
-        game = get_game_object(username=username, db=db)
+        game = get_game_object(username=username, repo=repo)
 
     except NoGameException:
         game = Game(name=username)
 
     round_info = game.start_round()
 
-    update_game(username=username, game=pickle_object(game), db=db)
-    update_round_info(
-        username=username, round_info=pickle_object(round_info), db=db
-    )
+    update_game(username=username, game=game, repo=repo)
+    update_round_info(username=username, round_info=round_info, repo=repo)
 
     return round_info
 
@@ -45,16 +46,18 @@ def get_info(token: schemas.InfoIn, db: Session) -> RoundInfo:
 def get_result(
     bet: int, prediction: int, token: schemas.ResultIn, db: Session
 ) -> RoundResult:
+    repo = GameRepository.create(db)
+
     username = get_username_from_token(token=token)
 
     try:
-        game = get_game_object(username=username, db=db)
+        game = get_game_object(username=username, repo=repo)
 
     except NoGameException:
         raise NoGameException
 
     try:
-        get_round_info_object(username=username, db=db)
+        get_round_info_object(username=username, repo=repo)
 
     except NoRoundInfoException:
         raise NoRoundInfoException
@@ -63,20 +66,40 @@ def get_result(
         bet=bet, prediction=Prediction(int(prediction))
     )
 
-    update_game(username=username, game=pickle_object(game), db=db)
+    update_game(username=username, game=game, repo=repo)
 
     return round_result
 
 
-def get_round_info_object(username: str, db: Session) -> RoundInfo:
-    try:
-        return unpickle_object(
-            get_round_info_by_username(username=username, db=db)
-        )
+def get_round_info_object(username: str, repo: GameRepository) -> RoundInfo:
+    pickled_round_info = repo.get(target=User.round_info, username=username)[
+        "round_info"
+    ]
 
-    except NoRoundInfoException:
+    if pickled_round_info is None:
         raise NoRoundInfoException
+
+    else:
+        return unpickle_object(pickled_round_info)
 
 
 def get_username_from_token(token: schemas.InfoIn | schemas.ResultIn) -> str:
     return decode_token(token=token.access_token)["sub"]
+
+
+def update_game(username: str, game: Game, repo: GameRepository) -> None:
+    repo.patch(
+        target=User.username,
+        search_term=username,
+        game=pickle_object(game),
+    )
+
+
+def update_round_info(
+    username: str, round_info: RoundInfo, repo: GameRepository
+) -> None:
+    repo.patch(
+        target=User.username,
+        search_term=username,
+        round_info=pickle_object(round_info),
+    )

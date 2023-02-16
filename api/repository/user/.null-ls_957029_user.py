@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from sqlalchemy import column
+from sqlalchemy import column, text
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
@@ -23,7 +23,11 @@ class UserRepository:
 
     def get(self, target: str, **filter):
         try:
-            query = self.__session.query(target).filter_by(**filter).first()
+            query = (
+                self.__session.query(column(target))
+                .filter_by(**filter)
+                .first()
+            )
             if query:
                 return query
 
@@ -31,3 +35,6 @@ class UserRepository:
             raise InvalidRequestError("Filters are invalid.")
 
         raise GenericException
+
+    def test(self):
+        return type(self.__session.query(User.password_hash).first())
