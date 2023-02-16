@@ -283,7 +283,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
 name = "identify"
-version = "2.5.17"
+version = "2.5.18"
 description = "File identification library for Python"
 category = "dev"
 optional = false
@@ -461,7 +461,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pydantic"
-version = "1.10.4"
+version = "1.10.5"
 description = "Data validation and settings management using python type hints"
 category = "main"
 optional = false
@@ -704,7 +704,7 @@ python-versions = "*"
 
 [[package]]
 name = "typing-extensions"
-version = "4.4.0"
+version = "4.5.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "main"
 optional = false
@@ -757,8 +757,8 @@ test = ["covdefaults (>=2.2.2)", "coverage-enable-subprocess (>=1)", "coverage (
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.10.6"
-content-hash = "ef9077b05a38f3d682031d9e3648f9e230046f819c625a27541be7bbc5d22db6"
+python-versions = "3.10.4"
+content-hash = "3fed7822117346249017518330e6f948d82de5847071f63bbd35cfa60d1ac5fe"
 
 [metadata.files]
 anyio = []
