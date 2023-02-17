@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
-from api.models import User
+from api.models import UserDetail
 from api.repository.errors import (
     GenericException,
     NoSuchUserException,
@@ -25,12 +25,12 @@ def register_user(credentials: schemas.RegisterIn, db: Session) -> None:
     repo = UserRepository.create(db)
 
     try:
-        if repo.get(target=User.username, username=credentials.username):
+        if repo.get(target=UserDetail.username, username=credentials.username):
             raise UsernameTakenException
 
     except GenericException:
         repo.add(
-            User(
+            UserDetail(
                 username=credentials.username,
                 password_hash=password_context.hash(credentials.password),
             )
@@ -43,9 +43,9 @@ def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
     try:
         return password_context.verify(
             credentials.password,
-            repo.get(target=User.password_hash, username=credentials.username)[
-                "password_hash"
-            ],
+            repo.get(
+                target=UserDetail.password_hash, username=credentials.username
+            )["password_hash"],
         )
 
     except InvalidRequestError:

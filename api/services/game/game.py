@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from api.models import User
+from api.models import GameState, UserDetail
 from api.repository.errors import NoGameException, NoRoundInfoException
 from api.repository.game.game import GameRepository
 from api.router.game import schemas
@@ -12,7 +12,7 @@ from hilo.models.roundresult import RoundResult
 
 
 def get_game_object(username: str, repo: GameRepository) -> Game:
-    pickled_game = repo.get(target=User.game, username=username)["game"]
+    pickled_game = repo.get(target=GameState.game, username=username)["game"]
 
     if pickled_game is None:
         raise NoGameException
@@ -69,9 +69,9 @@ def get_result(
 
 
 def get_round_info_object(username: str, repo: GameRepository) -> RoundInfo:
-    pickled_round_info = repo.get(target=User.round_info, username=username)[
-        "round_info"
-    ]
+    pickled_round_info = repo.get(
+        target=GameState.round_info, username=username
+    )["round_info"]
 
     if pickled_round_info is None:
         raise NoRoundInfoException
@@ -86,7 +86,7 @@ def get_username_from_token(token: schemas.InfoIn | schemas.ResultIn) -> str:
 
 def update_game(username: str, game: Game, repo: GameRepository) -> None:
     repo.patch(
-        target=User.username,
+        target=UserDetail.username,
         search_term=username,
         game=pickle_object(game),
     )
@@ -96,7 +96,7 @@ def update_round_info(
     username: str, round_info: RoundInfo, repo: GameRepository
 ) -> None:
     repo.patch(
-        target=User.username,
+        target=UserDetail.username,
         search_term=username,
         round_info=pickle_object(round_info),
     )

@@ -4,7 +4,7 @@ from sqlalchemy import update
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
-from api.models import User
+from api.models import GameState
 from api.repository.errors import GenericException
 
 
@@ -16,7 +16,7 @@ class GameRepository:
     def create(cls, session: Session) -> "GameRepository":
         return cls(session)
 
-    def add(self, user: User):
+    def add(self, user: GameState):
         self.__session.add(user)
         self.__session.commit()
 
@@ -32,6 +32,8 @@ class GameRepository:
         raise GenericException
 
     def patch(self, target: str, search_term: str, **values) -> None:
-        updater = update(User).where(target == search_term).values(**values)
+        updater = (
+            update(GameState).where(target == search_term).values(**values)
+        )
         self.__session.execute(updater)
         self.__session.commit()

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
-from api.models import User
+from api.models import UserDetail
 from api.repository.errors import GenericException
 
 
@@ -15,7 +15,7 @@ class UserRepository:
     def create(cls, session: Session) -> "UserRepository":
         return cls(session)
 
-    def add(self, user: User):
+    def add(self, user: UserDetail):
         self.__session.add(user)
         self.__session.commit()
         self.__session.refresh(user)
