@@ -13,7 +13,7 @@ router = APIRouter()
     "/game/info",
     summary="Gets the information for the current round.",
     tags=["Game Operations"],
-    #    response_model=schemas.InfoOut,
+    response_model=schemas.InfoOut,
 )
 def info(token: schemas.InfoIn, db: Session = Depends(get_db)):
     return get_info(token=token, db=db)
