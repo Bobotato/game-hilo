@@ -10,15 +10,22 @@ class UserDetail(Base):
     username = Column(String, index=True)
     password_hash = Column(String, index=True)
 
-    game_states = relationship("GameState", back_populates="user_details")
+    games = relationship("GameState", back_populates="user")
+
+    def __repr__(self):
+        return self.username
 
 
 class GameState(Base):
     __tablename__ = "gamestates"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user_details.id"))
     game = Column(String, index=True)
     round_info = Column(String, index=True)
     round_result = Column(String, index=True)
 
-    user_details = relationship("UserDetail", back_populates="game_states")
+    # Relationship attributes
+
+    user = relationship("UserDetail", back_populates="games")
+    username = Column(
+        String, ForeignKey("user_details.username"), nullable=False
+    )

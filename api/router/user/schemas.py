@@ -9,6 +9,9 @@ class AuthenticateIn(BaseModel):
 class AuthenticateOut(BaseModel):
     access_token: str
 
+    class Config:
+        orm_mode = True
+
 
 class RegisterIn(BaseModel):
     username: str

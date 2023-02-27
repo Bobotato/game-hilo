@@ -9,6 +9,9 @@ class InfoOut(BaseModel):
     player: dict
     current_card: dict
 
+    class Config:
+        orm_mode = True
+
 
 class ResultIn(BaseModel):
     access_token: str
@@ -19,3 +22,6 @@ class ResultOut(BaseModel):
     win: bool
     is_player_bankrupt: bool
     is_deck_empty: bool
+
+    class Config:
+        orm_mode = True

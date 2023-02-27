@@ -45,7 +45,7 @@ def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
             credentials.password,
             repo.get(
                 target=UserDetail.password_hash, username=credentials.username
-            )["password_hash"],
+            ).password_hash,
         )
 
     except InvalidRequestError:
