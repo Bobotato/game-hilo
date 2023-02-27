@@ -15,7 +15,7 @@ class UserRepository:
     def create(cls, session: Session) -> "UserRepository":
         return cls(session)
 
-    def add(self, user: UserDetail):
+    def add(self, user: UserDetail) -> None:
         self.__session.add(user)
         self.__session.commit()
         self.__session.refresh(user)
