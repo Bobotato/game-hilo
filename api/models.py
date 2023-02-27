@@ -23,8 +23,6 @@ class GameState(Base):
     round_info = Column(String, index=True)
     round_result = Column(String, index=True)
 
-    # Relationship attributes
-
     user = relationship("UserDetail", back_populates="games")
     username = Column(
         String, ForeignKey("user_details.username"), nullable=False
