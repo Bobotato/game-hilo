@@ -19,7 +19,6 @@ class GameState(Base):
     __tablename__ = "gamestates"
     id = Column(Integer, primary_key=True, index=True)
     game = Column(String, index=True)
-    drawn_card = Column(String, index=True)
 
     user = relationship("UserDetail", back_populates="games")
     username = Column(

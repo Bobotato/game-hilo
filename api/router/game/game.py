@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.repository.errors import NoRoundInfoException, NoSuchGameException
+from api.repository.errors import NoSuchGameException
 from api.router.game import schemas
 from api.services.game.game import get_info, get_result
 
@@ -38,10 +38,4 @@ def result(
         raise HTTPException(
             status_code=400,
             detail="There is no game associated with this player.",
-        )
-
-    except NoRoundInfoException:
-        raise HTTPException(
-            status_code=403,
-            detail="Round info does not exist, start a round first.",
         )
