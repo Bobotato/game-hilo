@@ -7,8 +7,8 @@ from api.repository.errors import (
     NoSuchGameException,
 )
 from api.repository.game.game import GameRepository
+from api.repository.pickler import pickle_object, unpickle_object
 from api.router.game import schemas
-from api.services.game.pickler import pickle_object, unpickle_object
 from api.services.user.jwt import decode_token
 from hilo.game import Game, Prediction
 from hilo.models.card import Card
