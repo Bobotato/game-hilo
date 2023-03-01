@@ -5,7 +5,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.models import GameState
-from api.repository.errors import GenericException
+from api.repository.errors import NoSuchGameException
 
 
 @dataclass
@@ -29,7 +29,7 @@ class GameRepository:
         except InvalidRequestError:
             raise InvalidRequestError("Filters are invalid.")
 
-        raise GenericException
+        raise NoSuchGameException
 
     def patch(self, target: str, search_term: str, **values) -> None:
         updater = (

@@ -3,7 +3,7 @@ class GenericException(Exception):
         return "Query produced no results."
 
 
-class NoGameException(Exception):
+class NoSuchGameException(Exception):
     def __str__(self):
         return "No game object can be found."
 

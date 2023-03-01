@@ -21,6 +21,7 @@ class GameState(Base):
     game = Column(String, index=True)
     round_info = Column(String, index=True)
     round_result = Column(String, index=True)
+    drawn_card = Column(String, index=True)
 
     user = relationship("UserDetail", back_populates="games")
     username = Column(

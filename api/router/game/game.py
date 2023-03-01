@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.repository.errors import NoGameException, NoRoundInfoException
+from api.repository.errors import NoRoundInfoException, NoSuchGameException
 from api.router.game import schemas
 from api.services.game.game import get_info, get_result
 
@@ -34,7 +34,7 @@ def result(
     try:
         return get_result(bet=bet, prediction=prediction, token=token, db=db)
 
-    except NoGameException:
+    except NoSuchGameException:
         raise HTTPException(
             status_code=400,
             detail="There is no game associated with this player.",
