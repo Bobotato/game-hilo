@@ -1,9 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.repository.errors import NoSuchUserException, UsernameTakenException
+from api.repository.errors import (
+    InvalidCredentialsException,
+    NoSuchUserException,
+    UsernameTakenException,
+)
 from api.router.user import schemas
 from api.services.user.user import create_token, register_user, verify_password
 
@@ -20,22 +24,13 @@ def authenticate(
 ):
     try:
         if not verify_password(credentials=credentials, db=db):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Password does not match the given username.",
-            )
+            raise InvalidCredentialsException
 
     except NoSuchUserException:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User does not exist.",
-        )
+        raise InvalidCredentialsException
 
     except InvalidRequestError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Something went wrong.",
-        )
+        raise InvalidRequestError
 
     return {"access_token": create_token(credentials=credentials)}
 
@@ -43,7 +38,7 @@ def authenticate(
 @router.post(
     "/user/register",
     tags=["User Operations"],
-    response_model=schemas.AuthenticateOut,
+    response_model=schemas.RegisterOut,
 )
 def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
     try:
@@ -53,9 +48,6 @@ def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
         )
 
     except UsernameTakenException:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The username has already been taken.",
-        )
+        raise UsernameTakenException
 
     return {"access_token": create_token(credentials=credentials)}

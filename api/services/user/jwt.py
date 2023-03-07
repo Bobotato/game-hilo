@@ -2,7 +2,6 @@ import os
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
-from fastapi import HTTPException
 from jose import ExpiredSignatureError, JWTError, jwt
 
 load_dotenv()
@@ -30,7 +29,7 @@ def decode_token(token: str) -> dict:
         return decoded_jwt
 
     except ExpiredSignatureError:
-        raise HTTPException(status_code=403, detail="Token has expired.")
+        raise ExpiredSignatureError
 
     except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid credentials.")
+        raise JWTError
