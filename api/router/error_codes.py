@@ -9,12 +9,12 @@ INVALID_CREDENTIALS = {
 }
 
 INVALID_REQUEST = {
-    "error_code": "INVALID REQUEST",
+    "error_code": "INVALID_REQUEST",
     "detail": "The request was invalid.",
 }
 
 INVALID_TOKEN = {
-    "error_code": "INVALID TOKEN",
+    "error_code": "INVALID_TOKEN",
     "detail": "There is an issue with the supplied token.",
 }
 
