@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from api.models import GameState
 from api.repository.errors import NoSuchGameException
+from api.repository.pickler import unpickle_object
 
 
 @dataclass
@@ -23,8 +24,9 @@ class GameRepository:
     def get(self, target: str, **filter):
         try:
             query = self.__session.query(target).filter_by(**filter).first()
+
             if query:
-                return query
+                return unpickle_object(query["game"])
 
             raise NoSuchGameException
 

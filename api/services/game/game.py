@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from api.models import GameState
 from api.repository.errors import GenericException, NoSuchGameException
 from api.repository.game.game import GameRepository
-from api.repository.pickler import pickle_object, unpickle_object
+from api.repository.pickler import pickle_object
 from api.router.game import schemas
 from api.services.user.jwt import decode_token
 from hilo.game import Game, Prediction
@@ -16,14 +16,10 @@ def create_game_state(username: str, repo: GameRepository) -> None:
 
 def get_game_object(username: str, repo: GameRepository) -> Game:
     try:
-        pickled_game = repo.get(target=GameState.game, username=username)[
-            "game"
-        ]
+        return repo.get(target=GameState.game, username=username)
 
     except GenericException:
         raise NoSuchGameException
-
-    return unpickle_object(pickled_game)
 
 
 def get_info(token: schemas.InfoIn, db: Session):
