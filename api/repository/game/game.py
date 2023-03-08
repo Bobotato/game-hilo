@@ -26,10 +26,10 @@ class GameRepository:
             if query:
                 return query
 
+            raise NoSuchGameException
+
         except InvalidRequestError:
             raise InvalidRequestError("Filters are invalid.")
-
-        raise NoSuchGameException
 
     def patch(self, target: str, search_term: str, **values) -> None:
         updater = (
