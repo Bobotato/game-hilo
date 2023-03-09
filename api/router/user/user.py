@@ -1,13 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.database import get_db
-from api.repository.errors import (
-    InvalidCredentialsException,
-    NoSuchUserException,
-    UsernameTakenException,
-)
+from api.repository.errors import NoSuchUserException, UsernameTakenException
+from api.router import error_codes
 from api.router.user import schemas
 from api.services.user.user import create_token, register_user, verify_password
 
@@ -24,13 +22,31 @@ def authenticate(
 ):
     try:
         if not verify_password(credentials=credentials, db=db):
-            raise InvalidCredentialsException
+            return JSONResponse(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_CREDENTIALS,
+                    "detail": "The credentials input were invalid.",
+                },
+            )
 
     except NoSuchUserException:
-        raise InvalidCredentialsException
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.EXPIRED_TOKEN,
+                "detail": "The token has expired. Please login again.",
+            },
+        )
 
     except InvalidRequestError:
-        raise InvalidRequestError
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={
+                "error_code": error_codes.INVALID_REQUEST,
+                "detail": "The request was invalid.",
+            },
+        )
 
     return {"access_token": create_token(credentials=credentials)}
 
@@ -48,6 +64,12 @@ def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
         )
 
     except UsernameTakenException:
-        raise UsernameTakenException
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={
+                "error_code": error_codes.USERNAME_TAKEN,
+                "detail": "The username has already been taken.",
+            },
+        )
 
     return {"access_token": create_token(credentials=credentials)}

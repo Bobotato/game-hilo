@@ -93,3 +93,6 @@ terraform.rc
 
 # Ignore database files
 *.db
+
+# Ignore vscode config files
+.vscode/*

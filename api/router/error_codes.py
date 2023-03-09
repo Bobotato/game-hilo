@@ -1,29 +1,16 @@
-EXPIRED_TOKEN = {
-    "error_code": "EXPIRED_TOKEN",
-    "detail": "The token has expired. Please login again.",
-}
+EXPIRED_TOKEN = "EXPIRED_TOKEN"
 
-INVALID_CREDENTIALS = {
-    "error_code": "INVALID_CREDENTIALS",
-    "detail": "The credentials input were invalid.",
-}
 
-INVALID_REQUEST = {
-    "error_code": "INVALID_REQUEST",
-    "detail": "The request was invalid.",
-}
+INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
 
-INVALID_TOKEN = {
-    "error_code": "INVALID_TOKEN",
-    "detail": "There is an issue with the supplied token.",
-}
 
-NO_SUCH_GAME = {
-    "error_code": "NO_SUCH_GAME",
-    "detail": "There is no game associated with this player.",
-}
+INVALID_REQUEST = "INVALID_REQUEST"
 
-USERNAME_TAKEN = {
-    "error_code": "USERNAME_TAKEN",
-    "detail": "The username has already been taken.",
-}
+
+INVALID_TOKEN = "INVALID_TOKEN"
+
+
+NO_SUCH_GAME = "NO_SUCH_GAME"
+
+
+USERNAME_TAKEN = "USERNAME_TAKEN"
