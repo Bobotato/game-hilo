@@ -1,8 +1,8 @@
 import pytest
-from fastapi import HTTPException
 from freezegun import freeze_time
+from jose import ExpiredSignatureError, JWTError
 
-from api.router.user.jwt import decode_token, generate_token
+from api.services.user.jwt import decode_token, generate_token
 
 invalid_token = "nonsense"
 
@@ -22,10 +22,10 @@ def test_decode_token():
 
 
 def test_decode_token_raise_ExpiredSignatureError():
-    with pytest.raises(HTTPException):
+    with pytest.raises(ExpiredSignatureError):
         decode_token(test_token)
 
 
 def test_decode_token_raise_JWTError():
-    with pytest.raises(HTTPException):
+    with pytest.raises(JWTError):
         decode_token(invalid_token)
