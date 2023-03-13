@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from api.models import GameState
 from api.repository.errors import NoSuchGameException
 from api.repository.pickler import unpickle_object
+from hilo.game import Game
 
 
 @dataclass
@@ -17,11 +18,11 @@ class GameRepository:
     def create(cls, session: Session) -> "GameRepository":
         return cls(session)
 
-    def add(self, user: GameState):
+    def add(self, user: GameState) -> None:
         self.__session.add(user)
         self.__session.commit()
 
-    def get(self, target: str, **filter):
+    def get(self, target: str, **filter) -> Game:
         try:
             query = self.__session.query(target).filter_by(**filter).first()
 
