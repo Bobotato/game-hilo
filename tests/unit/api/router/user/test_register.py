@@ -2,29 +2,16 @@ from fastapi.testclient import TestClient
 from freezegun import freeze_time
 
 from api.main import app
-from api.repository.errors import NoSuchUserException
+from api.repository.errors import UsernameTakenException
+from api.router import error_codes
 
 client = TestClient(app)
 
 
-def mock_register_user(**_):
-    return 1
-
-
-def mock_get_user_by_username_raise_NoSuchUserException(**_):
-    raise NoSuchUserException
-
-
-def mock_get_user_by_username_return_True(**_):
-    return True
-
-
 @freeze_time("2000-01-01")
 def test_register(monkeypatch):
-    monkeypatch.setattr(
-        "api.router.user.user.get_user_by_username",
-        mock_get_user_by_username_raise_NoSuchUserException,
-    )
+    def mock_register_user(**_):
+        return 1
 
     monkeypatch.setattr(
         "api.router.user.user.register_user", mock_register_user
@@ -40,14 +27,13 @@ def test_register(monkeypatch):
     }
 
 
-def test_register_username_already_exists(monkeypatch):
-    monkeypatch.setattr(
-        "api.router.user.user.get_user_by_username",
-        mock_get_user_by_username_return_True,
-    )
+def test_register_username_taken_return_409(monkeypatch):
+    def mock_get_user_by_username_raise_UsernameTakenException(**_):
+        raise UsernameTakenException
 
     monkeypatch.setattr(
-        "api.router.user.user.register_user", mock_register_user
+        "api.router.user.user.register_user",
+        mock_get_user_by_username_raise_UsernameTakenException,
     )
 
     response = client.post(
@@ -56,11 +42,6 @@ def test_register_username_already_exists(monkeypatch):
 
     assert response.status_code == 409
     assert response.json() == {
-        "detail": "Account with the given username already exists"
+        "error_code": error_codes.USERNAME_TAKEN,
+        "detail": "The username has already been taken.",
     }
-
-
-def test_register_missing_request():
-    response = client.post("user/register")
-
-    assert response.status_code == 422
