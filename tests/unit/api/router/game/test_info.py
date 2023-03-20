@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-from freezegun import freeze_time
 from jose import ExpiredSignatureError, JWTError
 
 from api.main import app
@@ -8,7 +7,6 @@ from api.router import error_codes
 client = TestClient(app)
 
 
-@freeze_time("2000-01-01")
 def test_info(monkeypatch):
     def mock_get_info(**_):
         return {
