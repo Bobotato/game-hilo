@@ -794,7 +794,7 @@ test = ["covdefaults (>=2.2.2)", "coverage-enable-subprocess (>=1)", "coverage (
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.4"
-content-hash = "24b64d3b8575acb529d0259241f36eee88d8f6adf66fb87235f1310a9772d466"
+content-hash = "de6d60c339f747fdee42b90b7a9a99106677071af33fa767823a55cbf32a1605"
 
 [metadata.files]
 anyio = []
