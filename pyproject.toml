@@ -32,6 +32,7 @@ freezegun = "^1.2.2"
 types-freezegun = "^1.1.10"
 uvicorn = "^0.20.0"
 pytest-env = "^0.8.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -599,6 +599,7 @@ optional = false
 python-versions = "*"
 
 [package.dependencies]
+cryptography = {version = ">=3.4.0", optional = true, markers = "extra == \"cryptography\""}
 ecdsa = "!=0.15"
 pyasn1 = "*"
 rsa = "*"
@@ -793,7 +794,7 @@ test = ["covdefaults (>=2.2.2)", "coverage-enable-subprocess (>=1)", "coverage (
 [metadata]
 lock-version = "1.1"
 python-versions = "3.10.4"
-content-hash = "8125a1a6e0c6d04e7536e088cf7b494f6efacc5918a99989da4e1579cb4c89da"
+content-hash = "1c3a28c2697ec76f1a6a2127cb7b74cedbb0fdb439876da027f15659f31ef5d9"
 
 [metadata.files]
 anyio = []
