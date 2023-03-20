@@ -34,8 +34,8 @@ def authenticate(
         return JSONResponse(
             status_code=status.HTTP_401_UNAUTHORIZED,
             content={
-                "error_code": error_codes.EXPIRED_TOKEN,
-                "detail": "The token has expired. Please login again.",
+                "error_code": error_codes.INVALID_CREDENTIALS,
+                "detail": "The credentials input were invalid.",
             },
         )
 
