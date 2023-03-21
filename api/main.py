@@ -11,8 +11,3 @@ models.Base.metadata.create_all(engine)
 
 app.include_router(user.router)
 app.include_router(game.router)
-
-
-@app.get("/ping", tags=["Testing Operations"])
-def ping():
-    return {"msg": "Pong"}
