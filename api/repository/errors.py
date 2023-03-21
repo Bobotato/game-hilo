@@ -1,8 +1,3 @@
-class GenericException(Exception):
-    def __str__(self):
-        return "Query produced no results."
-
-
 class ExpiredTokenException(Exception):
     def __str__(self):
         return "The supplied token has expired."

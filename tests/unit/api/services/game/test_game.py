@@ -1,7 +1,7 @@
 import pytest
 from freezegun import freeze_time
 
-from api.repository.errors import GenericException, NoSuchGameException
+from api.repository.errors import NoSuchGameException
 from api.services.game.game import (
     create_game_state,
     get_game_object,
@@ -46,12 +46,12 @@ def mock_game_repository():
     return MockGameRepository()
 
 
-def mock_game_repository_return_GenericException():
-    class MockGameRepositoryReturnGenericException:
+def mock_game_repository_raise_NoSuchGameException():
+    class MockGameRepositoryRaiseNoSuchGameException:
         def get(self, **_):
-            raise GenericException
+            raise NoSuchGameException
 
-    return MockGameRepositoryReturnGenericException()
+    return MockGameRepositoryRaiseNoSuchGameException()
 
 
 class MockGameRepositorywithCreateClassMethod:
@@ -117,11 +117,11 @@ def test_get_game_object():
     )
 
 
-def test_get_game_object_no_such_game_returns_NoSuchGameException():
+def test_get_game_object_no_such_game_raises_NoSuchGameException():
     with pytest.raises(NoSuchGameException):
         get_game_object(
             username="test",
-            repo=mock_game_repository_return_GenericException(),
+            repo=mock_game_repository_raise_NoSuchGameException(),
         )
 
 

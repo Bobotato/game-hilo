@@ -2,11 +2,7 @@ import pytest
 from freezegun import freeze_time
 from sqlalchemy.exc import InvalidRequestError
 
-from api.repository.errors import (
-    GenericException,
-    NoSuchUserException,
-    UsernameTakenException,
-)
+from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.services.user.user import create_token, register_user, verify_password
 
 
@@ -23,7 +19,7 @@ class MockUserRepository:
         return PasswordHash()
 
 
-class MockUserRepositoryGetRaisesGenericException:
+class MockUserRepositoryGetRaisesNoSuchUserException:
     @classmethod
     def create(cls, *_):
         return cls()
@@ -32,7 +28,7 @@ class MockUserRepositoryGetRaisesGenericException:
         raise SuccessException
 
     def get(self, **_):
-        raise GenericException
+        raise NoSuchUserException
 
 
 class MockUserRepositoryGetRaisesInvalidRequestError:
@@ -88,7 +84,7 @@ def test_create_token():
 def test_register_user(monkeypatch):
     monkeypatch.setattr(
         "api.services.user.user.UserRepository",
-        MockUserRepositoryGetRaisesGenericException,
+        MockUserRepositoryGetRaisesNoSuchUserException,
     )
 
     with pytest.raises(SuccessException):
@@ -135,7 +131,7 @@ def test_verify_password_no_such_user_raises_no_such_user_exception(
 ):
     monkeypatch.setattr(
         "api.services.user.user.UserRepository",
-        MockUserRepositoryGetRaisesGenericException,
+        MockUserRepositoryGetRaisesNoSuchUserException,
     )
 
     with pytest.raises(NoSuchUserException):

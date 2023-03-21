@@ -3,11 +3,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.models import UserDetail
-from api.repository.errors import (
-    GenericException,
-    NoSuchUserException,
-    UsernameTakenException,
-)
+from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.repository.user.user import UserRepository
 from api.router.user import schemas
 from api.services.user.jwt import generate_token
@@ -28,7 +24,7 @@ def register_user(credentials: schemas.RegisterIn, db: Session) -> None:
         if repo.get(target=UserDetail.username, username=credentials.username):
             raise UsernameTakenException
 
-    except GenericException:
+    except NoSuchUserException:
         repo.add(
             UserDetail(
                 username=credentials.username,
@@ -51,5 +47,5 @@ def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
     except InvalidRequestError:
         raise InvalidRequestError
 
-    except GenericException:
+    except NoSuchUserException:
         raise NoSuchUserException

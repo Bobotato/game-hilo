@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from api.models import GameState
-from api.repository.errors import GenericException, NoSuchGameException
+from api.repository.errors import NoSuchGameException
 from api.repository.game.game import GameRepository
 from api.repository.pickler import pickle_object
 from api.router.game import schemas
@@ -18,7 +18,7 @@ def get_game_object(username: str, repo: GameRepository) -> Game:
     try:
         return repo.get(target=GameState.game, username=username)
 
-    except GenericException:
+    except NoSuchGameException:
         raise NoSuchGameException
 
 
@@ -52,7 +52,7 @@ def get_result(
     try:
         game = get_game_object(username=username, repo=repo)
 
-    except GenericException:
+    except NoSuchGameException:
         raise NoSuchGameException
 
     round_result = game.compute_round_result(

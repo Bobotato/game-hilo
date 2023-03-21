@@ -4,7 +4,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
 from api.models import UserDetail
-from api.repository.errors import GenericException
+from api.repository.errors import NoSuchUserException
 
 
 @dataclass
@@ -29,4 +29,4 @@ class UserRepository:
         except InvalidRequestError:
             raise InvalidRequestError("Filters are invalid.")
 
-        raise GenericException
+        raise NoSuchUserException

@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy.exc import InvalidRequestError
 
-from api.repository.errors import GenericException
+from api.repository.errors import NoSuchUserException
 from api.repository.user.user import UserRepository
 
 
@@ -51,15 +51,17 @@ def test_UserRepository_get_raises_InvalidRequestError():
         repo.get(target="test")
 
 
-def test_UserRepository_get_raises_GenericException():
-    def mock_session_raise_GenericException():
-        class MockSessionRaiseGenericException:
+def test_UserRepository_get_raises_NoSuchUserException():
+    def mock_session_raise_NoSuchUserException():
+        class MockSessionRaiseNoSuchUserException:
             def query(self, *_, **__):
-                raise GenericException
+                raise NoSuchUserException
 
-        return MockSessionRaiseGenericException()
+        return MockSessionRaiseNoSuchUserException()
 
-    repo = UserRepository.create(session=mock_session_raise_GenericException())
+    repo = UserRepository.create(
+        session=mock_session_raise_NoSuchUserException()
+    )
 
-    with pytest.raises(GenericException):
+    with pytest.raises(NoSuchUserException):
         repo.get(target="test")
