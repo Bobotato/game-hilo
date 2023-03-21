@@ -5,7 +5,7 @@ from api.database import engine
 from api.router.game import game
 from api.router.user import user
 
-app = FastAPI()
+app = FastAPI(docs_url=None, redoc_url=None)
 
 models.Base.metadata.create_all(engine)
 
