@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from api.models import GameState
 from api.repository.errors import NoSuchGameException
-from api.repository.pickler import unpickle_object
+from api.repository.pickler import pickle_object, unpickle_object
 from hilo.game import Game
 
 
@@ -34,9 +34,15 @@ class GameRepository:
         except InvalidRequestError:
             raise InvalidRequestError("Filters are invalid.")
 
-    def patch(self, target: str, search_term: str, **values) -> None:
+    def patch(
+        self, target: str, search_term: str, patch_target: str, patch_value
+    ) -> None:
+        pickled_value = pickle_object(patch_value)
+
         updater = (
-            update(GameState).where(target == search_term).values(**values)
+            update(GameState)
+            .where(target == search_term)
+            .values({patch_target: pickled_value})
         )
         self.__session.execute(updater)
         self.__session.commit()

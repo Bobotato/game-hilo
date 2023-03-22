@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from api.models import GameState
 from api.repository.errors import NoSuchGameException
 from api.repository.game.game import GameRepository
-from api.repository.pickler import pickle_object
 from api.router.game import schemas
 from api.services.user.jwt import decode_token
 from hilo.game import Game, Prediction
@@ -72,5 +71,6 @@ def update_game(username: str, game: Game, repo: GameRepository) -> None:
     repo.patch(
         target=GameState.username,
         search_term=username,
-        game=pickle_object(game),
+        patch_target="game",
+        patch_value=game,
     )
