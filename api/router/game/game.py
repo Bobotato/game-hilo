@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Header, status
 from fastapi.responses import JSONResponse
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
@@ -18,7 +20,9 @@ router = APIRouter()
     tags=["Game Operations"],
     response_model=schemas.InfoOut,
 )
-def info(token: schemas.InfoIn, db: Session = Depends(get_db)):
+def info(
+    token: Annotated[schemas.InfoIn, Header()], db: Session = Depends(get_db)
+):
     try:
         return get_info(token=token, db=db)
 
@@ -48,7 +52,7 @@ def info(token: schemas.InfoIn, db: Session = Depends(get_db)):
     response_model=schemas.ResultOut,
 )
 def result(
-    token: schemas.ResultIn,
+    token: Annotated[schemas.ResultIn, Header()],
     bet: int,
     prediction: int,
     db: Session = Depends(get_db),
