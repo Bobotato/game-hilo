@@ -82,10 +82,6 @@ def mock_get_username_from_token(**_):
     return "test"
 
 
-def mock_pickle_object(*_):
-    return "Pickled"
-
-
 def mock_session():
     class MockSession:
         pass
@@ -204,10 +200,6 @@ def test_get_username_from_token():
 
 
 def test_update_game(monkeypatch):
-    monkeypatch.setattr(
-        "api.services.game.game.pickle_object", mock_pickle_object
-    )
-
     with pytest.raises(SuccessfullyPatchedException):
         update_game(
             username="test", game=mock_game(), repo=mock_game_repository()
