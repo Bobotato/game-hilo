@@ -28,9 +28,7 @@ ENV VIRTUAL_ENV="/venv"
 
 RUN apt-get update
 
-RUN apt-get install socat -y
-
 COPY --from=build /venv /venv
 COPY . /app
 
-CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"python main.py"
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "1337"]
