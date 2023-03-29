@@ -50,7 +50,7 @@ coverage.xml
 docs/_build/
 
 # Environment files
-.env
+*.env
 
 # Local Credentials
 terraform/database_details.yml
