@@ -50,7 +50,7 @@ coverage.xml
 docs/_build/
 
 # Environment files
-.env
+*.env
 
 # Local Credentials
 terraform/database_details.yml
@@ -90,3 +90,9 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Ignore database files
+*.db
+
+# Ignore vscode config files
+.vscode/*

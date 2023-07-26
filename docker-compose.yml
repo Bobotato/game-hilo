@@ -9,7 +9,7 @@ services:
         - pgdata:/var/lib/postgresql/data
 
   app:
-    container_name: hilogame
+    container_name: hilogameapi
     build: .
     depends_on:
         - database
