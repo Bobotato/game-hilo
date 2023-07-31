@@ -1,5 +1,5 @@
 # game-hilo
-A terminal based hi-lo card game. 
+A terminal based hi-lo card game.
 
 How to play:
 Hi-lo is a simple card game in which the player is presented an initial card and is tasked to guess if a following card will be higher or lower in terms of value. The player has a wallet and must bet on his/her guess. The aim of the game is to increase the player's wallet value as much as possible without reaching 0.
@@ -15,6 +15,7 @@ The player starts with a wallet with 100 credits. The player can bet any amount 
 3. Win/Lose Conditions
 The player wins if his prediction is correct. Draws and wrong guesses are counted as losses. The game is considered over if the player's wallet reaches 0 and he/she is unable to bid.
 
+Architecture:
 
 
 
