@@ -1,19 +1,21 @@
-<script lang="ts">
-import useSound from 'vue-use-sound'
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { menuSelectSfx } from '@/services/SoundPlayerService'
+import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
-export default {
-  data() {
-    return {
-      showPassword: false,
-      password: null
-    };
-  },
-  methods: {
-    toggleShow() {
-      this.showPassword = !this.showPassword;
-    }
-  }
-};
+
+let passwordInput = ref({
+    showPassword: false,
+    password: null
+})
+
+let errorHeader = ref({
+  message: '',
+})
+
+function togglePasswordShow() {
+    passwordInput.value.showPassword = !passwordInput.value.showPassword
+}
 </script>
 
 <template>
@@ -31,17 +33,23 @@ export default {
             required>
 
             <div class="password-input-wrapper">
-                <input v-if="showPassword" type="text" class="input password-input" v-model="password" placeholder="Password"/>
-                <input v-else type="password" class="input password-input" v-model="password" placeholder="Password">
+                <input v-if="passwordInput.showPassword" type="text" class="input password-input" v-model="passwordInput.password" placeholder="Password"/>
+                <input v-else type="password" class="input password-input" v-model="passwordInput.password" placeholder="Password">
 
-                <button :class="{'toggle-password-button password-shown': showPassword, 'toggle-password-button password-hidden': !showPassword}" @click="toggleShow"></button>
+                <button :class="{'toggle-password-button password-shown': passwordInput.showPassword, 'toggle-password-button password-hidden': !passwordInput.showPassword}" @click="togglePasswordShow"></button>
             </div>
 
-            <button class="button login-button">
+            <errorDialogue
+            class="error_dialogue"
+            v-if="errorHeader.message !== ''"
+            :errorMessage="errorHeader.message"
+            ></errorDialogue>
+
+            <button class="button login-button" @click="menuSelectSfx">
                 Log In
             </button>
 
-            <button class="button register-button">
+            <button class="button register-button" @click="menuSelectSfx">
                 Register
             </button>
         </div>
@@ -63,7 +71,6 @@ export default {
     border-radius: 10px;
     place-items: center;
     grid-template-rows: [welcome-message] auto [username-input] auto [password-input] auto [error-message] auto [login-button] auto [register-button] auto;
-    /* background-color: rgba(255, 255, 255, 0.171) */
 }
 
 .welcome-message {
@@ -105,7 +112,7 @@ export default {
 }
 
 .password-input {
-    margin: 0px;
+    margin-bottom: 20px;
 }
 
 input[type="password"] {
@@ -141,7 +148,7 @@ input[type="password"]::placeholder {
     border: none;
     border-radius: 10px;
     padding: 10px;
-    margin: 10px;
+    margin: 20px 10px 10px 10px;
     text-align: center;
     line-height: 1.5;
     font-size: 1.5em;
@@ -155,7 +162,6 @@ input[type="password"]::placeholder {
 .login-button {
     grid-row: login-button;
     background-color: rgba(0, 48, 0, 80%);
-    margin-top: 40px;
 }
 .register-button {
     grid-row: register-button;
