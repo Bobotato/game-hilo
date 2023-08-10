@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-// import { menuSelectSfx } from '@/services/SoundPlayerService'
+import { AudioPlayer } from '@/services/SoundPlayerService'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
+let audio = new AudioPlayer("", 0.1)
 
 let passwordInput = ref({
     showPassword: false,
@@ -12,6 +13,10 @@ let passwordInput = ref({
 let errorHeader = ref({
     message: '',
 })
+
+function submitRegisterRequest() {
+    audio.menuSelectSfx()
+}
 
 function togglePasswordShow() {
     passwordInput.value.showPassword = !passwordInput.value.showPassword
@@ -40,7 +45,7 @@ function togglePasswordShow() {
         <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
         </errorDialogue>
 
-        <button class="button register-button">
+        <button class="button register-button" @click="submitRegisterRequest">
             Register
         </button>
     </div>

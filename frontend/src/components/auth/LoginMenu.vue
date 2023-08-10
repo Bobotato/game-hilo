@@ -15,6 +15,10 @@ let errorHeader = ref({
     message: '',
 })
 
+function submitLoginRequest() {
+    audio.menuSelectSfx()
+}
+
 function togglePasswordShow() {
     passwordInput.value.showPassword = !passwordInput.value.showPassword
 }
@@ -43,7 +47,7 @@ function togglePasswordShow() {
         <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
         </errorDialogue>
 
-        <button class="button login-button" @click="audio.menuSelectSfx">
+        <button class="button login-button" @click="submitLoginRequest">
             Log In
         </button>
     </div>
