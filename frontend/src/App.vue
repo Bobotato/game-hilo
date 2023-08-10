@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router'
 <template>
   <header>
     <nav class="navigation_tabs">
-        <RouterLink to="/main_menu">Main Menu</RouterLink>
+        <RouterLink to="/mainmenu">Main Menu</RouterLink>
         <RouterLink to="/game">Game</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
     </nav>
@@ -13,7 +13,12 @@ import { RouterView } from 'vue-router'
   <RouterView />
 </template>
 
-<style scoped>
+<style>
+html, body {
+  margin:0;
+  height:100%;
+}
+
 .navigation_tabs {
   background-color: green;
   color: white;

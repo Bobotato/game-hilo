@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { menuSelectSfx } from '@/services/SoundPlayerService'
+// import { menuSelectSfx } from '@/services/SoundPlayerService'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
 
@@ -10,7 +10,7 @@ let passwordInput = ref({
 })
 
 let errorHeader = ref({
-  message: '',
+    message: '',
 })
 
 function togglePasswordShow() {
@@ -19,58 +19,39 @@ function togglePasswordShow() {
 </script>
 
 <template>
-    <div class="login-component">
-        <div class="login-menu">
-            <div class="welcome-message">
-                Welcome to Alex's hi-lo game.
-                Please log-in or register.
-            </div>
-
-            <input autofocus
-            type="text"
-            class="input username-input"
-            placeholder="Username"
-            required>
-
-            <div class="password-input-wrapper">
-                <input v-if="passwordInput.showPassword" type="text" class="input password-input" v-model="passwordInput.password" placeholder="Password"/>
-                <input v-else type="password" class="input password-input" v-model="passwordInput.password" placeholder="Password">
-
-                <button :class="{'toggle-password-button password-shown': passwordInput.showPassword, 'toggle-password-button password-hidden': !passwordInput.showPassword}" @click="togglePasswordShow"></button>
-            </div>
-
-            <errorDialogue
-            class="error_dialogue"
-            v-if="errorHeader.message !== ''"
-            :errorMessage="errorHeader.message"
-            ></errorDialogue>
-
-            <button class="button login-button" @click="menuSelectSfx">
-                Log In
-            </button>
-
-            <button class="button register-button" @click="menuSelectSfx">
-                Register
-            </button>
+    <div class="registration-menu">
+        <div class="welcome-message">
+            Please register your details.
         </div>
+
+        <input autofocus type="text" class="input username-input" placeholder="Username" required>
+
+        <div class="password-input-wrapper">
+            <input v-if="passwordInput.showPassword" type="text" class="input password-input"
+                v-model="passwordInput.password" placeholder="Password" required />
+            <input v-else type="password" class="input password-input" v-model="passwordInput.password"
+                placeholder="Password" required />
+
+            <button
+                :class="{ 'toggle-password-button password-shown': passwordInput.showPassword, 'toggle-password-button password-hidden': !passwordInput.showPassword }"
+                @click="togglePasswordShow"></button>
+        </div>
+
+        <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
+        </errorDialogue>
+
+        <button class="button register-button">
+            Register
+        </button>
     </div>
 </template>
 
 <style scoped>
-.login-component {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-menu {
+.registration-menu {
     display: grid;
-    width: 40%;
     border-radius: 10px;
     place-items: center;
-    grid-template-rows: [welcome-message] auto [username-input] auto [password-input] auto [error-message] auto [login-button] auto [register-button] auto;
+    grid-template-rows: [welcome-message] auto [username-input] auto [password-input] auto [error-message] auto [register-button] auto [login-button] auto;
 }
 
 .welcome-message {
@@ -98,6 +79,10 @@ function togglePasswordShow() {
 
 .input::placeholder {
     color: white;
+}
+
+.input:not(:focus):not(:placeholder-shown):invalid {
+    border: 1px solid red;
 }
 
 .username-input {
@@ -141,10 +126,9 @@ input[type="password"]::placeholder {
     background-image: url('@/assets/icons/EyeIcon.svg');
 }
 
-
 .button {
     height: 50px;
-    width: 30%;
+    width: 250px;
     border: none;
     border-radius: 10px;
     padding: 10px;
@@ -159,10 +143,7 @@ input[type="password"]::placeholder {
 .button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
-.login-button {
-    grid-row: login-button;
-    background-color: rgba(0, 48, 0, 80%);
-}
+
 .register-button {
     grid-row: register-button;
     background-color: rgba(48, 0, 0, 80%);
