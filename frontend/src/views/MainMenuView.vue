@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import AuthMenu from '@/components/auth/AuthMenu.vue'
+import MainMenu from '@/components/mainMenu/MainMenu.vue'
 </script>
 
 <template>
   <div class="bg">
-    <AuthMenu></AuthMenu>
+    <MainMenu></MainMenu>
   </div>
 </template>
 

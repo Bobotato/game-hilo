@@ -1,10 +1,13 @@
 <script lang="ts" setup>
 import loadingCover from '@/components/loading/loadingCover.vue'
+import ReceiveItem from '@/components/game/ReceiveItem.vue'
 </script>
 
 <template>
     <div class="bg">
-        <loadingCover></loadingCover>
+        <loadingCover v-if=false></loadingCover>
+        <ReceiveItem :itemName="`tester`" :item-quantity=1 :item-image-source="`../../assets/images/Fingers.png`">
+        </ReceiveItem>
     </div>
 </template>
 

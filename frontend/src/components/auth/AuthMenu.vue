@@ -4,8 +4,6 @@ import { ref } from 'vue'
 import LoginMenu from "@/components/auth/LoginMenu.vue"
 import RegisterMenu from "@/components/auth/RegisterMenu.vue"
 
-// import { menuSelectSfx } from '@/services/SoundPlayerService'
-
 let isShowingRegisterPage = ref(false)
 
 function toggleRegister() {

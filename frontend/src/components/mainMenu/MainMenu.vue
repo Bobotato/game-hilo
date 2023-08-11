@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+
+let audio = new AudioPlayer("", 0.1)
 
 let playerName = ref("stranger")
 
@@ -20,15 +23,15 @@ function showRuleset() {
             <h2 class="ruleset" v-if="ruleSet.isShowing">{{ ruleSet.text }}</h2>
 
             <div class="button-wrapper">
-            <button class="main-menu-button play-button">Play</button>
-            </div>
-            
-            <div class="button-wrapper">
-            <button class="main-menu-button ruleset-button" @click="showRuleset">Ruleset</button>
+                <button class="main-menu-button play-button">Play</button>
             </div>
 
             <div class="button-wrapper">
-            <button class="main-menu-button leave-button">Leave</button>
+                <button class="main-menu-button ruleset-button" @click="showRuleset">Ruleset</button>
+            </div>
+
+            <div class="button-wrapper">
+                <button class="main-menu-button leave-button">Leave</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { AudioPlayer } from '@/services/SoundPlayerService'
+import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
 let audio = new AudioPlayer("", 0.1)
