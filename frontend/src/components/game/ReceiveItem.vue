@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 interface Props {
     itemName: string
-    itemQuantity: number
+    itemQuantity?: number
     itemImageSource: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
     itemName: "Test Item",
-    itemQuantity: 0,
     itemImageSource: `../../assets/images/TestItem.png`
 })
 
@@ -19,9 +18,11 @@ function getImageUrl() {
 <template>
     <div class="receive-item-wrapper">
         <div class="receive-item-card">
+            <h2 class="item-receive-text">You have received:</h2>
             <div class="item-wrapper">
                 <img class="item-image" :src="getImageUrl()" :alt="props.itemName">
-                <h2 class=" item-desc">{{ props.itemName }}</h2>
+                <h2 class="item-receive-text">{{ props.itemQuantity }}</h2>
+                <h2 class="item-receive-text">{{ props.itemName }}</h2>
             </div>
         </div>
     </div>
@@ -30,17 +31,27 @@ function getImageUrl() {
 <style>
 .receive-item-wrapper {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
 }
 
 .receive-item-card {
-    width: 100px;
-    background-color: rgba(255, 255, 255, 0.35);
+    display: grid;
+    grid-template-rows: [item-receive-text] auto [item-image] auto [item-receive-qty] auto [item-name] auto;
+    align-items: center;
+    justify-content: center;
+    width: 1000px;
+}
+
+.item-receive-text {
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
 }
 
 .item-image {
-    width: 300px;
     height: 300px;
 }
 

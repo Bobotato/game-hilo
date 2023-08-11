@@ -6,7 +6,7 @@ import ReceiveItem from '@/components/game/ReceiveItem.vue'
 <template>
     <div class="bg">
         <loadingCover v-if=false></loadingCover>
-        <ReceiveItem :itemName="`tester`" :item-quantity=1 :item-image-source="`../../assets/images/Fingers.png`">
+        <ReceiveItem :itemName="`tester`" :item-image-source="`../../assets/images/Fingers.png`">
         </ReceiveItem>
     </div>
 </template>
