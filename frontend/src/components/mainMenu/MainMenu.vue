@@ -22,9 +22,11 @@ function showRuleset() {
             <h2 class="welcome-message" v-if="!ruleSet.isShowing">Welcome to the table, {{ playerName }}.</h2>
             <h2 class="ruleset" v-if="ruleSet.isShowing">{{ ruleSet.text }}</h2>
 
-            <div class="button-wrapper">
-                <button class="main-menu-button play-button">Play</button>
-            </div>
+            <RouterLink to="/game">
+                <div class="button-wrapper">
+                    <button class="main-menu-button play-button">Play</button>
+                </div>
+            </RouterLink>
 
             <div class="button-wrapper">
                 <button class="main-menu-button ruleset-button" @click="showRuleset">Ruleset</button>

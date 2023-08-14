@@ -4,6 +4,32 @@ html, body, button, input {
     font-family: 'Special Elite';
   }
 
+h2 {
+    line-height: 150%;
+    font-size: 1.5em;
+    color: white;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.5em;
+  box-shadow: 3px 3px 5px black;
+}
+
+button:hover {
+  box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+.bg {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
 #app {
   font-family: 'Special Elite';
 }
