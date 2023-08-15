@@ -6,9 +6,9 @@ let description = "This game might be slightly spooky, with spooky sounds and di
     <div class="bg">
         <div class="description-card">
             <h2 class="description">{{ description }}</h2>
-            <RouterLink to="/login">
-                <button class="continue-button" @click="$emit('play-audio', 'menu-select')">Continue</button>
-            </RouterLink>
+            <!-- <RouterLink to="/login"> -->
+            <button class="continue-button" @click="$emit('play-audio')">Continue</button>
+            <!-- </RouterLink> -->
         </div>
     </div>
 </template>

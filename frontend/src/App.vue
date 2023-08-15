@@ -2,6 +2,9 @@
 import { RouterView } from 'vue-router'
 
 import AudioController from './components/audioPlayer/AudioController.vue';
+import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+
+let audio = new AudioPlayer("", 0.1)
 </script>
 
 <template>
@@ -13,8 +16,8 @@ import AudioController from './components/audioPlayer/AudioController.vue';
       <RouterLink to="/login">Login</RouterLink>
     </nav>
   </header>
-  <AudioController></AudioController>
-  <RouterView />
+  <AudioController @toggleMute="audio.toggleMuteAudio()"></AudioController>
+  <RouterView @play-audio="audio.menuSelectSfx()" />
 </template>
 
 <style>

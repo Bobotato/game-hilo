@@ -20,6 +20,10 @@ export class AudioPlayer {
     }
   }
 
+  printWorking() {
+    console.log('wwokring')
+  }
+
   menuSelectSfx() {
     this.playAudio(menuSelect)
   }

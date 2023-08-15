@@ -1,15 +1,20 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+import { ref, Ref } from 'vue'
+let isMuted: Ref<boolean> = ref(false)
 
-let audio = ref(new AudioPlayer("", 0.1))
+const emit = defineEmits(['toggleMute'])
+
+function toggleMute() {
+    isMuted.value = !isMuted.value
+    console.log(isMuted.value)
+    emit('toggleMute')
+}
 </script>
 
 <template>
     <div class="mute-button">
-        <button
-            :class="{ 'toggle-mute-button audio-muted': audio.isMuted, 'toggle-mute-button audio-unmuted': !audio.isMuted }"
-            @click="audio.toggleMuteAudio"></button>
+        <button :class="{ 'toggle-mute-button audio-muted': isMuted, 'toggle-mute-button audio-unmuted': !isMuted }"
+            @click="toggleMute"></button>
     </div>
 </template>
 
