@@ -48,6 +48,7 @@ export default {
     padding: 20px;
     font-size: 24px;
     font-weight: bold;
+    box-shadow: rgba(0, 0, 0, 0.55) 0px 3px 8px;
 }
 
 .red {

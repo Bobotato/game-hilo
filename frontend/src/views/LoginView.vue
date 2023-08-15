@@ -2,9 +2,13 @@
 import { onMounted } from 'vue'
 import AuthMenu from '@/components/auth/AuthMenu.vue'
 
-// onMounted(() => {
-//     menuThemeSfx()
-// })
+import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+
+let audio = new AudioPlayer("", 0.1)
+
+onMounted(() => {
+    audio.menuThemeSfx()
+})
 </script>
 
 <template>

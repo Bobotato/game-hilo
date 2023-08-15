@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
-import ReceiveItem from '@/components/game/gameElements/ReceiveItem.vue'
+import GameEvent from '@/components/game/gameElements/GameEvent.vue'
 
 import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
 
@@ -13,11 +13,11 @@ let currentCredits = ref(0)
 
 <template>
     <div class="game">
-        <ReceiveItem v-if=true class=game-events :itemName="`tester`"
+        <GameEvent v-if=true class=game-events :itemName="`tester`"
             :item-image-source="`../../../assets/images/Fingers.png`">
-        </ReceiveItem>
+        </GameEvent>
 
-        <h2 class="inventory-credits">Remaining Fingers: {{ currentCredits }}</h2>
+        <h2 class="inventory-credits">Remaining "Credits": {{ currentCredits }}</h2>
 
         <CardInventory class="inventory-cards"></CardInventory>
     </div>
@@ -51,6 +51,7 @@ let currentCredits = ref(0)
     grid-column: middle;
     justify-self: center;
     align-self: end;
+    margin: 0 0 5vh 0;
 }
 
 .mute-button {

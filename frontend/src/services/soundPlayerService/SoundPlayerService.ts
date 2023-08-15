@@ -1,27 +1,6 @@
 import menuSelect from '@/assets/sounds/menuSelect.mp3'
 import menuTheme from '@/assets/sounds/menuTheme.mp3'
 
-// function playSound(sound: any) {
-//   if (sound) {
-//     const audio = new Audio(sound);
-//     audio.volume = 0.1;
-//     audio.play();
-//   }
-// }
-
-// export function menuSelectSfx() {
-//   playSound(menuSelect)
-// }
-
-// export function menuThemeSfx() {
-//   playSound(menuTheme)
-// }
-
-// export function stopAudio() {
-
-// }
-
-
 export class AudioPlayer {
   audio: any
   volume: number
