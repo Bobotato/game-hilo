@@ -1,19 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onUnmounted } from 'vue';
 import AuthMenu from '@/components/auth/AuthMenu.vue'
 
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+    (e: 'stopAudio'): void
+}>()
 
-let audio = new AudioPlayer("", 0.1)
+emit("playAudio", "menuThemeSfx")
 
-onMounted(() => {
-    audio.menuThemeSfx()
+onUnmounted(() => {
+    console.log("Component unmounted")
+    emit("stopAudio")
 })
 </script>
 
 <template>
     <div class="bg">
-        <AuthMenu></AuthMenu>
+        <AuthMenu @play-audio="$emit('playAudio', $event)"></AuthMenu>
     </div>
 </template>
 

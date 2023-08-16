@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+}>()
+
 let description = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n Use the mute icon on the bottom right to disable sounds."
 </script>
 
@@ -6,9 +10,9 @@ let description = "This game might be slightly spooky, with spooky sounds and di
     <div class="bg">
         <div class="description-card">
             <h2 class="description">{{ description }}</h2>
-            <!-- <RouterLink to="/login"> -->
-            <button class="continue-button" @click="$emit('play-audio')">Continue</button>
-            <!-- </RouterLink> -->
+            <RouterLink to="/login">
+                <button class="continue-button" @click="emit('playAudio', 'menuSelectSfx')">Continue</button>
+            </RouterLink>
         </div>
     </div>
 </template>

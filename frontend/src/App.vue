@@ -16,8 +16,8 @@ let audio = new AudioPlayer("", 0.1)
       <RouterLink to="/login">Login</RouterLink>
     </nav>
   </header>
-  <AudioController @toggleMute="audio.toggleMuteAudio()"></AudioController>
-  <RouterView @play-audio="audio.menuSelectSfx()" />
+  <AudioController @toggle-mute="audio.toggleMuteAudio()"></AudioController>
+  <RouterView @play-audio="audio.playAudio($event)" @stop-audio="audio.stopAudio()" />
 </template>
 
 <style>

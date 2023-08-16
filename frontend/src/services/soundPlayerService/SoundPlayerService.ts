@@ -1,22 +1,43 @@
-import menuSelect from '@/assets/sounds/menuSelect.mp3'
-import menuTheme from '@/assets/sounds/menuTheme.mp3'
+import menuSelect from '@/assets/sounds/foleyAudio/menuSelect.mp3'
+import menuTheme from '@/assets/sounds/bgmAudio/menuTheme.mp3'
 
 export class AudioPlayer {
-  audio: any
+  bgmAudio: any
+  foleyAudio: any
   volume: number
   isMuted: boolean
 
-  constructor(audio: any = "", volume: number = 0.1, isMuted: boolean = false) {
-    this.audio = audio
+  constructor(bgmAudio: any = "", foleyAudio: any = "", volume: number = 0.1, isMuted: boolean = false) {
+    this.bgmAudio = bgmAudio
+    this.foleyAudio = foleyAudio
     this.volume = volume
     this.isMuted = isMuted
   }
 
-  playAudio(sound: any) {
+  playAudio(sound: string) {
+    switch (sound) {
+      case (sound = "menuSelectSfx"):
+        this.playFoleyAudio(menuSelect)
+        break
+      case (sound = "menuThemeSfx"):
+        this.playBGMAudio(menuTheme)
+        break
+    }
+  }
+
+  playBGMAudio(sound: any) {
     if (sound) {
-      this.audio = new Audio(sound);
-      this.audio.volume = this.volume;
-      this.audio.play();
+      this.bgmAudio = new Audio(sound);
+      this.bgmAudio.volume = this.volume;
+      this.bgmAudio.play();
+    }
+  }
+
+  playFoleyAudio(sound: string) {
+    if (sound) {
+      this.foleyAudio = new Audio(sound);
+      this.foleyAudio.volume = this.volume;
+      this.foleyAudio.play();
     }
   }
 
@@ -24,26 +45,22 @@ export class AudioPlayer {
     console.log('wwokring')
   }
 
-  menuSelectSfx() {
-    this.playAudio(menuSelect)
-  }
-
-  menuThemeSfx() {
-    this.playAudio(menuTheme)
-  }
-
   toggleMuteAudio() {
-    if (this.isMuted == false) {
-      this.isMuted = true
-      this.volume = 0
-    }
-    else {
-      this.isMuted = false
-      this.volume = 0.1
-    }
+    this.isMuted = !this.isMuted
+    this.updateMute()
   }
 
   stopAudio() {
-    this.audio.stop()
+    if (this.bgmAudio !== "") {
+      this.bgmAudio.pause()
+    }
+    if (this.foleyAudio !== "") {
+      this.foleyAudio.pause()
+    }
+  }
+
+  updateMute() {
+    this.bgmAudio.muted = this.isMuted;
+    this.foleyAudio.muted = this.isMuted;
   }
 }

@@ -4,10 +4,14 @@ import { ref } from 'vue'
 import LoginMenu from "@/components/auth/LoginMenu.vue"
 import RegisterMenu from "@/components/auth/RegisterMenu.vue"
 
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+}>()
+
 let isShowingRegisterPage = ref(false)
 
 function toggleRegister() {
-    // menuSelectSfx()
+    emit("playAudio", "menuSelectSfx")
     isShowingRegisterPage.value = !isShowingRegisterPage.value
 }
 </script>
