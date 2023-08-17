@@ -1,3 +1,11 @@
+function startGame(currentCard) {
+    if(currentCard == null) {
+        currentCard = drawCard()
+    }
+}
+
+
+
 // def get_bet(game: Game) -> int:    
 //     while True:                   
 //         print(                    

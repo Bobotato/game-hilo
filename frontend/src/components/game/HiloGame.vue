@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
 import ReceiveItem from '@/components/game/gameElements/ReceiveItem.vue'
+import GetBetPrediction from './gameElements/GetBetPrediction.vue';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -24,18 +25,19 @@ function toggleGameMessage() {
 
 <template>
     <div class="game">
-        <div v-if=gameMessage.isShowing class="game-message-card">
+        <!-- <div v-if=gameMessage.isShowing class="game-message-card">
             <h2 class="game-message">{{ gameMessage.message }}</h2>
             <button class="game-message-button" @click=toggleGameMessage()>Ok</button>
-        </div>
-
-        <ReceiveItem v-if=!gameMessage.isShowing class=game-events :itemName="`tester`"
+        </div> -->
+        <GetBetPrediction @play-audio="$emit('playAudio', $event)" currentCard="test" :currentCredits=currentCredits>
+        </GetBetPrediction>
+        <!-- <ReceiveItem v-if=!gameMessage.isShowing class=game-events :itemName="`tester`"
             :item-image-source="`../../../assets/images/Fingers.png`">
         </ReceiveItem>
 
         <h2 class="inventory-credits">Remaining "Credits": {{ currentCredits }}</h2>
 
-        <CardInventory v-if=!gameMessage.isShowing class="inventory-cards"></CardInventory>
+        <CardInventory v-if=!gameMessage.isShowing class="inventory-cards"></CardInventory> -->
     </div>
 </template>
 
@@ -98,10 +100,5 @@ function toggleGameMessage() {
     justify-self: center;
     align-self: end;
     margin: 0 0 5vh 0;
-}
-
-.mute-button {
-    grid-row: game-misc;
-    grid-column: right;
 }
 </style>
