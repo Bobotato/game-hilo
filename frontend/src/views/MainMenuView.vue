@@ -4,7 +4,7 @@ import MainMenu from '@/components/mainMenu/MainMenu.vue'
 
 <template>
   <div class="bg">
-    <MainMenu></MainMenu>
+    <MainMenu @play-audio="$emit('playAudio', $event)"></MainMenu>
   </div>
 </template>
 

@@ -1,5 +1,6 @@
 import menuSelect from '@/assets/sounds/foleyAudio/menuSelect.mp3'
 import menuTheme from '@/assets/sounds/bgmAudio/menuTheme.mp3'
+import gameTheme from '@/assets/sounds/bgmAudio/gameTheme.mp3'
 
 export class AudioPlayer {
   bgmAudio: any
@@ -7,7 +8,7 @@ export class AudioPlayer {
   volume: number
   isMuted: boolean
 
-  constructor(bgmAudio: any = "", foleyAudio: any = "", volume: number = 0.1, isMuted: boolean = false) {
+  constructor(bgmAudio: any = null, foleyAudio: any = null, volume: number = 0.1, isMuted: boolean = false) {
     this.bgmAudio = bgmAudio
     this.foleyAudio = foleyAudio
     this.volume = volume
@@ -22,6 +23,9 @@ export class AudioPlayer {
       case (sound = "menuThemeSfx"):
         this.playBGMAudio(menuTheme)
         break
+      case (sound = "gameThemeSfx"):
+        this.playBGMAudio(gameTheme)
+        break
     }
   }
 
@@ -29,6 +33,8 @@ export class AudioPlayer {
     if (sound) {
       this.bgmAudio = new Audio(sound);
       this.bgmAudio.volume = this.volume;
+      this.bgmAudio.muted = this.isMuted;
+      this.bgmAudio.loop = true
       this.bgmAudio.play();
     }
   }
@@ -37,6 +43,7 @@ export class AudioPlayer {
     if (sound) {
       this.foleyAudio = new Audio(sound);
       this.foleyAudio.volume = this.volume;
+      this.foleyAudio.muted = this.isMuted;
       this.foleyAudio.play();
     }
   }
@@ -51,16 +58,20 @@ export class AudioPlayer {
   }
 
   stopAudio() {
-    if (this.bgmAudio !== "") {
+    if (this.bgmAudio !== null) {
       this.bgmAudio.pause()
     }
-    if (this.foleyAudio !== "") {
+    if (this.foleyAudio !== null) {
       this.foleyAudio.pause()
     }
   }
 
   updateMute() {
-    this.bgmAudio.muted = this.isMuted;
-    this.foleyAudio.muted = this.isMuted;
+    if (this.bgmAudio !== null) {
+      this.bgmAudio.muted = this.isMuted;
+    }
+    if (this.foleyAudio !== null) {
+      this.foleyAudio.muted = this.isMuted;
+    }
   }
 }

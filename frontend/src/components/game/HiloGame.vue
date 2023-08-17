@@ -2,20 +2,16 @@
 import { ref } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
-import GameEvent from '@/components/game/gameElements/GameEvent.vue'
-
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
-
-let audio = new AudioPlayer("", 0.1)
+import ReceiveItem from '@/components/game/gameElements/ReceiveItem.vue'
 
 let currentCredits = ref(0)
 </script>
 
 <template>
     <div class="game">
-        <GameEvent v-if=true class=game-events :itemName="`tester`"
+        <ReceiveItem v-if=true class=game-events :itemName="`tester`"
             :item-image-source="`../../../assets/images/Fingers.png`">
-        </GameEvent>
+        </ReceiveItem>
 
         <h2 class="inventory-credits">Remaining "Credits": {{ currentCredits }}</h2>
 
@@ -30,7 +26,6 @@ let currentCredits = ref(0)
     height: 100vh;
     grid-template-rows: [game-events] auto [game-misc] auto;
     grid-template-columns: [left] 1fr [middle] 1fr [right] 1fr;
-    /* background-color: rgba(122, 122, 122, 0.292); */
 }
 
 .game-events {

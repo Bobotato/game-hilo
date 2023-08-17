@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
 
-let audio = new AudioPlayer("", 0.1)
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+}>()
 
 let playerName = ref("stranger")
 
@@ -12,6 +13,7 @@ let ruleSet = ref({
 })
 
 function showRuleset() {
+    emit("playAudio", "menuSelectSfx")
     ruleSet.value.isShowing = !ruleSet.value.isShowing
 }
 </script>
@@ -33,7 +35,9 @@ function showRuleset() {
             </div>
 
             <div class="button-wrapper">
-                <button class="main-menu-button leave-button">Leave</button>
+                <RouterLink to="/login">
+                    <button class="main-menu-button leave-button">Leave</button>
+                </RouterLink>
             </div>
         </div>
     </div>

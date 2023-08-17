@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/game',
       name: 'game',
-      component: GameView
+      component: () => import('../views/GameView.vue')
     },
     {
       path: '/login',
@@ -24,7 +24,7 @@ const router = createRouter({
     {
       path: '/mainmenu',
       name: 'mainmenu',
-      component: MainMenuView
+      component: () => import('../views/MainMenuView.vue')
     },
   ]
 })
