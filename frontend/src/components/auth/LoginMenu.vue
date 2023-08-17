@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
-let audio = new AudioPlayer("", 0.1)
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+}>()
 
 
 let passwordInput = ref({
@@ -16,7 +17,7 @@ let errorHeader = ref({
 })
 
 function submitLoginRequest() {
-    audio.menuSelectSfx()
+    emit("playAudio", "menuSelectSfx")
 }
 
 function togglePasswordShow() {
@@ -46,10 +47,11 @@ function togglePasswordShow() {
 
         <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
         </errorDialogue>
-
-        <button class="button login-button" @click="submitLoginRequest">
-            Log In
-        </button>
+        <RouterLink to="/mainmenu">
+            <button class="button login-button" @click="submitLoginRequest">
+                Log In
+            </button>
+        </RouterLink>
     </div>
 </template>
 

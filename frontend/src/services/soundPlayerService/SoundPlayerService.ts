@@ -61,9 +61,6 @@ export class AudioPlayer {
     if (this.bgmAudio !== null) {
       this.bgmAudio.pause()
     }
-    if (this.foleyAudio !== null) {
-      this.foleyAudio.pause()
-    }
   }
 
   updateMute() {

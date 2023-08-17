@@ -45,8 +45,6 @@ function showRuleset() {
 
 <style scoped>
 h2 {
-    line-height: 150%;
-    font-size: 1.5em;
     white-space: pre-wrap;
     text-align: center;
     color: white;
@@ -79,7 +77,7 @@ h2 {
 
 .main-menu-button {
     height: 50px;
-    width: 75%;
+    width: 300px;
     border: none;
     border-radius: 10px;
     padding: 10px;

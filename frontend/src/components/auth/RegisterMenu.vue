@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
+import { ref, Ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
 
-let audio = new AudioPlayer("", 0.1)
+const emit = defineEmits<{
+    (e: 'playAudio', sound: string): void
+}>()
+
 
 let passwordInput = ref({
     showPassword: false,
@@ -15,7 +17,7 @@ let errorHeader = ref({
 })
 
 function submitRegisterRequest() {
-    audio.menuSelectSfx()
+    emit("playAudio", "menuSelectSfx")
 }
 
 function togglePasswordShow() {

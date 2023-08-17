@@ -19,7 +19,7 @@ onUnmounted(() => {
 <template>
     <div class="bg">
         <loadingCover v-if=false></loadingCover>
-        <HiloGame></HiloGame>
+        <HiloGame @play-audio="$emit('playAudio', $event)"></HiloGame>
     </div>
 </template>
 

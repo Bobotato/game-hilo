@@ -19,12 +19,12 @@ function toggleRegister() {
 <template>
     <div class="auth-component">
         <div class="auth-menu">
-            <RegisterMenu v-if="isShowingRegisterPage"></RegisterMenu>
+            <RegisterMenu v-if="isShowingRegisterPage" @play-audio="$emit('playAudio', $event)"></RegisterMenu>
             <button class="button goto-register-button" v-if="!isShowingRegisterPage" @click="toggleRegister">
                 Register
             </button>
 
-            <LoginMenu v-if="!isShowingRegisterPage"></LoginMenu>
+            <LoginMenu v-if="!isShowingRegisterPage" @play-audio="$emit('playAudio', $event)"></LoginMenu>
             <button class="button goto-login-button" v-if="isShowingRegisterPage" @click="toggleRegister">
                 Back to Login
             </button>
