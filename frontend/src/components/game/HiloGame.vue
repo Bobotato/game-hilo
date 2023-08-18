@@ -10,7 +10,7 @@ const emit = defineEmits<{
 }>()
 
 
-let currentCredits = ref(0)
+let currentCredits = ref(10)
 
 let gameMessage = ref({
     message: `Welcome back to the game. \n You have ${currentCredits.value} "credits".`,

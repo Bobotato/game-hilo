@@ -1,4 +1,5 @@
 import menuSelect from '@/assets/sounds/foleyAudio/menuSelect.mp3'
+import errorBuzzer from '@/assets/sounds/foleyAudio/errorBuzzer.mp3'
 import menuTheme from '@/assets/sounds/bgmAudio/menuTheme.mp3'
 import gameTheme from '@/assets/sounds/bgmAudio/gameTheme.mp3'
 
@@ -25,6 +26,9 @@ export class AudioPlayer {
         break
       case (sound = "gameThemeSfx"):
         this.playBGMAudio(gameTheme)
+        break
+      case (sound = "errorBuzzer"):
+        this.playFoleyAudio(errorBuzzer)
         break
     }
   }

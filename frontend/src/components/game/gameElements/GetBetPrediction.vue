@@ -42,7 +42,7 @@ function selectPredictionButton(choice: Prediction) {
 
 function checkBetandPrediction() {
     if (prediction.value === Prediction.None && bet.value === 0) {
-        errorHeader.value = "You have not chosen a prediction and bet."
+        errorHeader.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
     } else if (bet.value > props.currentCredits) {
         errorHeader.value = "You cannot bet more than you have."
@@ -57,14 +57,14 @@ function checkBetandPrediction() {
 }
 
 function submitBetPrediction() {
-    emit('playAudio', 'menuSelectSfx')
-
     try {
         checkBetandPrediction()
+        emit('playAudio', 'menuSelectSfx')
         emit('submitBet', bet.value)
         emit('submitPrediction', prediction.value)
     } catch (error) {
         console.log(error)
+        emit('playAudio', 'errorBuzzer')
     }
 }
 </script>
@@ -94,7 +94,7 @@ function submitBetPrediction() {
                 </button>
             </div>
 
-            <input class="bet-input" type="number" min=0 :max=props.currentCredits placeholder=Bet required />
+            <input class="bet-input" type="number" min=0 :max=props.currentCredits placeholder=Bet v-model="bet" required />
 
             <errorDialogue class="error-dialogue" v-if="errorHeader !== ''" :errorMessage="errorHeader">
             </errorDialogue>
