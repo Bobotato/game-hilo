@@ -36,7 +36,7 @@ function showRuleset() {
 
             <div class="button-wrapper">
                 <RouterLink to="/login">
-                    <button class="main-menu-button leave-button" @click="emit('playAudio', 'menuSelectSfx')">Leave</button>
+                    <button class="main-menu-button leave-button" @click="emit('playAudio', 'menuReturnSfx')">Leave</button>
                 </RouterLink>
             </div>
         </div>

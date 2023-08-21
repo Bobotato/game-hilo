@@ -1,5 +1,5 @@
-import { RANKS } from '@/classes/PokerCard'
-import { SUITS } from '@/classes/PokerCard'
+import { Ranks } from '@/classes/PokerCard'
+import { Suits } from '@/classes/PokerCard'
 import { Card } from '@/classes/PokerCard'
 
 export class Deck {

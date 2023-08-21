@@ -36,7 +36,7 @@ let currentInventoryMessage: string = `Your current card is ${props.currentCard}
 let betPredictionMessage: string = `Choose if the next card will be higher or lower, \n and how much you're willing to bet.`
 
 function selectPredictionButton(choice: Prediction) {
-    emit('playAudio', 'menuSelectSfx')
+    emit('playAudio', 'choiceSelectSfx')
     prediction.value = choice
 }
 
@@ -94,7 +94,7 @@ function submitBetPrediction() {
                 </button>
             </div>
 
-            <input class="bet-input" type="number" min=0 :max=props.currentCredits placeholder=Bet v-model="bet" required />
+            <input class="bet-input" type="number" min=0 :max=props.currentCredits v-model="bet" required />
 
             <errorDialogue class="error-dialogue" v-if="errorHeader !== ''" :errorMessage="errorHeader">
             </errorDialogue>
@@ -192,6 +192,11 @@ function submitBetPrediction() {
 
 .bet-input::placeholder {
     color: white;
+}
+
+.bet-input:focus {
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+    cursor: text;
 }
 
 .bet-input:not(:focus):not(:placeholder-shown):invalid {

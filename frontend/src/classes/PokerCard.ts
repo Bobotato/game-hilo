@@ -1,19 +1,11 @@
-export const SUITS = ["spades", "diamonds", "clubs", "hearts"];
-export const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
-
+export enum Suits { "Spades", "Diamonds", "Clubs", "Hearts" };
+export enum Ranks { "A", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "J", "Q", "K" };
 
 export class Card {
-    suit: string
-    rank: string
+    suit: Suits
+    rank: Ranks
 
-    constructor(suit: string, rank: string) {
-        if (!SUITS.includes(suit)) {
-            throw new Error("Invalid suit");
-        }
-        if (!RANKS.includes(rank)) {
-            throw new Error("Invalid rank");
-        }
-
+    constructor(suit: Suits, rank: Ranks) {
         this.suit = suit;
         this.rank = rank;
     }

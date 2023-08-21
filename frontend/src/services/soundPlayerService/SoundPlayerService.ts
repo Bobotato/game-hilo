@@ -2,6 +2,9 @@ import menuSelect from '@/assets/sounds/foleyAudio/menuSelect.mp3'
 import errorBuzzer from '@/assets/sounds/foleyAudio/errorBuzzer.mp3'
 import menuTheme from '@/assets/sounds/bgmAudio/menuTheme.mp3'
 import gameTheme from '@/assets/sounds/bgmAudio/gameTheme.mp3'
+import enterConfirm from '@/assets/sounds/foleyAudio/enterConfirm.mp3'
+import choiceSelect from '@/assets/sounds/foleyAudio/choiceSelect.mp3'
+import menuReturn from '@/assets/sounds/foleyAudio/menuReturn.mp3'
 
 export class AudioPlayer {
   bgmAudio: any
@@ -29,6 +32,15 @@ export class AudioPlayer {
         break
       case (sound = "errorBuzzer"):
         this.playFoleyAudio(errorBuzzer)
+        break
+      case (sound = "enterConfirmSfx"):
+        this.playFoleyAudio(enterConfirm)
+        break
+      case (sound = "choiceSelectSfx"):
+        this.playFoleyAudio(choiceSelect)
+        break
+      case (sound = "menuReturnSfx"):
+        this.playFoleyAudio(menuReturn)
         break
     }
   }

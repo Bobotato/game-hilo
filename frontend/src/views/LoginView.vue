@@ -7,7 +7,10 @@ const emit = defineEmits<{
     (e: 'stopAudio'): void
 }>()
 
-emit("playAudio", "menuThemeSfx")
+setTimeout(function () {
+    emit("playAudio", "menuThemeSfx")
+}, 5000);
+
 
 onUnmounted(() => {
     console.log("Component unmounted")

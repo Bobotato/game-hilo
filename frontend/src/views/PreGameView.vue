@@ -1,7 +1,13 @@
 <script lang="ts" setup>
+import { onUnmounted } from 'vue';
+
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
+
+onUnmounted(() => {
+    emit('playAudio', 'enterConfirmSfx')
+})
 
 let description = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n Use the mute icon on the bottom right to disable sounds."
 </script>
@@ -57,5 +63,15 @@ let description = "This game might be slightly spooky, with spooky sounds and di
 
 .continue-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

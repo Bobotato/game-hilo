@@ -11,7 +11,7 @@ const emit = defineEmits<{
 let isShowingRegisterPage = ref(false)
 
 function toggleRegister() {
-    emit("playAudio", "menuSelectSfx")
+    emit("playAudio", "menuReturnSfx")
     isShowingRegisterPage.value = !isShowingRegisterPage.value
 }
 </script>
