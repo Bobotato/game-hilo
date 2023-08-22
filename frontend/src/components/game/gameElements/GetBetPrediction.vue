@@ -2,12 +2,15 @@
 import { ref, Ref } from 'vue'
 
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
+
+import { Card } from '@/classes/PokerCard';
+
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
 
 interface Props {
-    currentCard: string
+    currentCard: Card
     currentCredits: number
 }
 
@@ -77,7 +80,7 @@ function submitBetPrediction() {
                 {{ currentInventoryMessage }}
             </div>
 
-            <PokerCard class="current-card"></PokerCard>
+            <PokerCard class="current-card" :card=props.currentCard></PokerCard>
 
             <div class="bet-prediction-message">
                 {{ betPredictionMessage }}

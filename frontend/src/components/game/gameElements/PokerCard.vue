@@ -1,24 +1,22 @@
 <script lang="ts" setup>
-import { Ranks, Suits, Card } from '@/classes/PokerCard'
+import { Suits, Card } from '@/classes/PokerCard'
 
 
 interface Props {
-    card?: Card
+    card: Card
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    card: () => new Card(Suits.Hearts, Ranks.K)
-})
+const props = defineProps<Props>()
 
 function convertSymbol(suit: Suits): string {
     switch (suit) {
-        case 0:
+        case 'Spades':
             return '♠';
-        case 1:
+        case 'Diamonds':
             return '♦';
-        case 2:
+        case 'Clubs':
             return '♣';
-        case 3:
+        case 'Hearts':
             return '♥';
         default:
             return '';
@@ -26,21 +24,17 @@ function convertSymbol(suit: Suits): string {
 }
 
 function isRed(suit: Suits): boolean {
-    if (suit == 1 || suit == 3) {
-        return true
-    } else {
-        return false
-    }
+    return (suit == "Hearts" || suit == "Diamonds")
 }
 </script>
 <template>
     <div class="card">
         <div :class="{ 'rank red': isRed(props.card.suit), 'rank': isRed(props.card.suit) == false }">{{
-            Ranks[props.card.rank] }}</div>
+            props.card.rank }}</div>
         <div :class="{ 'suit red': isRed(props.card.suit), 'suit': isRed(props.card.suit) == false }">{{
             convertSymbol(props.card.suit) }}</div>
         <div :class="{ 'rank-bottom red': isRed(props.card.suit), 'rank-bottom': isRed(props.card.suit) == false }">{{
-            Ranks[props.card.rank] }}</div>
+            props.card.rank }}</div>
     </div>
 </template>
   

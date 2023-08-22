@@ -1,18 +1,22 @@
-import { Ranks } from '@/classes/PokerCard'
-import { Suits } from '@/classes/PokerCard'
+import { CardRanks } from '@/classes/PokerCard'
+import { CardSuits } from '@/classes/PokerCard'
 import { Card } from '@/classes/PokerCard'
 
 export class Deck {
     cards: Array<Card>
 
-    constructor(cards: Array<Card>) {
-        this.cards = cards;
+    constructor(cards: Array<Card>, buildDeck: boolean) {
+        this.cards = cards
+
+        if (buildDeck) {
+            this.refreshDeck()
+        }
     }
 
-    buildDeck() {
-        for (let i = 0; i < Ranks.length; i++) {
-            for (let x = 0; x < Ranks.length; x++) {
-                let card = { Value: Ranks[x], Suit: Suits[i] };
+    refreshDeck() {
+        for (let i = 0; i < CardRanks.length; i++) {
+            for (let j = 0; j < CardSuits.length; j++) {
+                const card = new Card(CardSuits[i], CardRanks[j]);
                 this.cards.push(card);
             }
         }

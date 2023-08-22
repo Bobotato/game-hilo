@@ -8,7 +8,7 @@ let isEmpty = ref(false)
 <template>
     <div class=inventory v-if="!isEmpty">
         <h2 class=inventory-label>Your card:</h2>
-        <PokerCard rank="10" suit="hearts"></PokerCard>
+        <PokerCard></PokerCard>
     </div>
 </template>
 
