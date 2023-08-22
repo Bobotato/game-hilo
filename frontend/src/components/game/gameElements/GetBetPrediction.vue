@@ -9,6 +9,8 @@ import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
 
+import { Prediction } from '@/composables/gameElements/getBetPrediction';
+
 interface Props {
     currentCard: Card
     currentCredits: number
@@ -23,12 +25,6 @@ const emit = defineEmits<{
 }>()
 
 let bet: Ref<number> = ref(0)
-
-enum Prediction {
-    None = 0,
-    Higher = 1,
-    Lower = 2
-}
 
 let prediction: Ref<Prediction> = ref(Prediction.None)
 
@@ -47,12 +43,15 @@ function checkBetandPrediction() {
     if (prediction.value === Prediction.None && bet.value === 0) {
         errorHeader.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
+
     } else if (bet.value > props.currentCredits) {
         errorHeader.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
+
     } else if (bet.value === 0) {
         errorHeader.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
+
     } else if (prediction.value === Prediction.None) {
         errorHeader.value = "You have not chosen a prediction."
         throw new BetPredictionError("NilPredictionError")
@@ -230,4 +229,4 @@ input[type=number] {
     margin: 25px 0 0 0;
     background-color: rgba(0, 48, 0, 80%);
 }
-</style>
+</style>@/composables/getBetPrediction

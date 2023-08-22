@@ -29,12 +29,14 @@
   },
   "include": [
     "src/audio.d.ts",
+    "src/**/**/*.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
-, "audio.d.ts"  ],
+    "tests/**/*.tsx",
+    "audio.d.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

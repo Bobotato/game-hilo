@@ -9,7 +9,7 @@ const emit = defineEmits<{
 
 setTimeout(function () {
     emit("playAudio", "menuThemeSfx")
-}, 5000);
+}, 4000);
 
 
 onUnmounted(() => {

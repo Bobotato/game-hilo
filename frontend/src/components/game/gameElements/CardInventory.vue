@@ -2,13 +2,22 @@
 import { ref } from 'vue'
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
+import { Card } from '@/classes/PokerCard'
+
+
+interface Props {
+    card: Card
+}
+
+const props = defineProps<Props>()
+
 let isEmpty = ref(false)
 </script>
 
 <template>
     <div class=inventory v-if="!isEmpty">
         <h2 class=inventory-label>Your card:</h2>
-        <PokerCard></PokerCard>
+        <PokerCard :card=props.card></PokerCard>
     </div>
 </template>
 

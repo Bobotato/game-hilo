@@ -1,4 +1,4 @@
-export const CardRanks = ["A", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "J", "Q", "K"] as const;
+export const CardRanks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"] as const;
 export type Ranks = typeof CardRanks[number]
 
 export const CardSuits = ["Spades", "Diamonds", "Clubs", "Hearts"] as const;
@@ -11,5 +11,9 @@ export class Card {
     constructor(suit: Suits, rank: Ranks) {
         this.suit = suit;
         this.rank = rank;
+    }
+
+    toString() {
+        return `${this.rank} of ${this.suit}`
     }
 }
