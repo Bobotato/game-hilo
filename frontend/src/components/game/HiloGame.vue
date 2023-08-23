@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
@@ -15,9 +15,26 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-let currentCard = ref(new Card(CardSuits[0], CardRanks[0]))
+interface GameDetails {
+    currentCredits: number
+    currentCard: Card
+    deck: Deck
+}
 
-let currentCredits = ref(10)
+let gameDetails: Ref<GameDetails> = ref({
+    currentCredits: 10,
+    currentCard: new Card(CardSuits[0], CardRanks[0]),
+    deck: new Deck(false, false),
+})
+
+enum GameStates {
+    "welcome",
+    "deck",
+    "betPrediction",
+    "result"
+}
+
+let isShowing = ref(GameStates.welcome)
 
 let betPredictionStatus = ref({
     bet: 0,
@@ -25,49 +42,46 @@ let betPredictionStatus = ref({
     isShowing: false
 })
 
-const newPlayerMessage = ref({
-    message: "Welcome to the game. \n Let's get you started.",
-    isShowing: true
-})
+// function changeCurrentlyShowingComponent(component: string) {
+//     if (isShowing != component) {
+//         gameDetails.value.isShowing = component
+//     } else {
+//         gameDetails.value.isShowing = component
+//     }
+// }
 
-let drawDeck = ref({
-    deck: new Deck(false, false),
-    isShowing: false
-})
+// function updateBet(bet: number) {
+//     betPredictionStatus.value.bet = bet
+// }
 
-function toggleBetPredictionMenu() {
-    betPredictionStatus.value.isShowing = !betPredictionStatus.value.isShowing
-}
-
-function toggleDrawDeck() {
-    drawDeck.value.isShowing = !drawDeck.value.isShowing
-}
-
-
-function updateBet(bet: number) {
-    betPredictionStatus.value.bet = bet
-}
-
-function updatePrediction(prediction: Prediction) {
-    betPredictionStatus.value.bet = prediction
-}
+// function updatePrediction(prediction: Prediction) {
+//     betPredictionStatus.value.bet = prediction
+// }
 
 function startNewGame() {
     let deck = new Deck(true, true)
-    drawDeck.value.deck = deck
+    gameDetails.value.deck = deck
     console.log(deck.toString())
     console.log("Started game")
-    toggleDrawDeck()
+    startRound(deck)
+}
+
+function startRound(deck: Deck) {
+    drawCard(deck)
 }
 
 function drawCard(deck: Deck) {
-    let drawnCard = deck.dealCard()
-    toggleDrawDeck()
-    console.log(drawnCard)
-    if (drawnCard) {
-        currentCard.value = drawnCard
-        console.log(currentCard.value)
-    }
+    isShowing.value = GameStates.deck
+    // let drawnCard = deck.dealCard()
+    // console.log(drawnCard)
+    // if (drawnCard) {
+    //     gameDetails.value.currentCard = drawnCard
+    //     console.log(`Drew ${drawnCard}`)
+    // }
+}
+
+function takeBetPrediction() {
+    isShowing.value = "betPrediction"
 }
 
 function compareCards(drawnCard: Card, currentCard: Card) {
@@ -97,19 +111,26 @@ function computeRoundResult(bet: number, prediction: Prediction) {
 </script>
 
 <template>
-    <div class="game">
-        <StartMessage @start-game="startNewGame()" @play-audio="$emit('playAudio', $event)"></StartMessage>
+    <StartMessage class=start-message-component v-if="isShowing === GameStates.welcome" @start-game="startNewGame()"
+        @play-audio="$emit('playAudio', $event)">
+    </StartMessage>
 
-        <DrawDeck v-if=drawDeck.isShowing @play-audio="$emit('playAudio', $event)" @draw-card="drawCard(drawDeck.deck)">
-        </DrawDeck>
+    <DrawDeck class=draw-deck-component v-else-if="isShowing === GameStates.deck" @play-audio="$emit('playAudio', $event)"
+        @drawCard="drawCard(gameDetails.deck)">
+    </DrawDeck>
 
-        <GetBetPrediction v-if=betPredictionStatus.isShowing @submit-bet-prediction="toggleBetPredictionMenu"
-            @play-audio=" $emit('playAudio', $event)" :currentCard=currentCard :currentCredits=currentCredits>
-        </GetBetPrediction>
+    <GetBetPrediction v-else-if="isShowing === GameStates.betPrediction" @submit-bet-prediction="toggleBetPredictionMenu"
+        @play-audio=" $emit('playAudio', $event)" :currentCard=gameDetails.currentCard
+        :currentCredits=gameDetails.currentCredits>
+    </GetBetPrediction>
 
-        <h2 class="inventory-credits">Remaining "Credits": {{ currentCredits }}</h2>
 
-        <CardInventory v-if=false class="inventory-cards" :card=currentCard>
+
+    <div class=game v-if="gameDetails.isShowing === 'game'">
+
+        <h2 class="inventory-credits">Remaining "Credits": {{ gameDetails.currentCredits }}</h2>
+
+        <CardInventory v-if=true class="inventory-cards" :card=gameDetails.currentCard>
         </CardInventory>
     </div>
 </template>
@@ -121,32 +142,6 @@ function computeRoundResult(bet: number, prediction: Prediction) {
     height: 100vh;
     grid-template-rows: [game-events] auto [game-misc] auto;
     grid-template-columns: [left] 1fr [middle] 1fr [right] 1fr;
-}
-
-.bg-filter {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    backdrop-filter: blur(5px);
-}
-
-.game-message-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30vh;
-    grid-row: game-events;
-    grid-column: middle;
-}
-
-.game-message {
-    white-space: pre-wrap;
-    line-height: 2em;
-    text-align: center;
 }
 
 

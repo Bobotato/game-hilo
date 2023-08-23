@@ -28,15 +28,15 @@ function emitDrawCard() {
 
 <style scoped>
 .deck {
-    width: 20vw;
-    height: 40vh;
+    width: 300px;
+    height: 400px;
 }
 
 .deck-button {
     position: absolute;
     background-color: transparent;
-    width: 15vw;
-    height: 35vh;
+    width: 300px;
+    height: 400px;
 }
 
 .deck-button:hover {
@@ -48,8 +48,8 @@ function emitDrawCard() {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     backdrop-filter: blur(5px);
 }
 </style>
