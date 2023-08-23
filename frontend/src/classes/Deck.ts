@@ -5,11 +5,11 @@ import { Card } from '@/classes/PokerCard'
 export class Deck {
     cards: Array<Card>
 
-    constructor(buildDeck: boolean, shuffleDeck: boolean) {
+    constructor(populateDeck: boolean, shuffleDeck: boolean) {
         this.cards = []
 
-        if (buildDeck) {
-            this.refreshDeck()
+        if (populateDeck) {
+            this.generateDeck()
         }
         if (shuffleDeck) {
             this.shuffleDeck()
@@ -20,7 +20,7 @@ export class Deck {
         return `${this.cards}`
     }
 
-    refreshDeck() {
+    generateDeck() {
         for (let i = 0; i < CardSuits.length; i++) {
             for (let j = 0; j < CardRanks.length; j++) {
                 const card = new Card(CardSuits[i], CardRanks[j]);
@@ -38,10 +38,16 @@ export class Deck {
         }
     }
 
-    dealCard() {
-        if (this.cards.length != 0) {
+    dealCard(): Card | undefined {
+         if (!this.isEmpty()) {
             const card = this.cards.pop()
-            return card
+            if (card instanceof Card) {
+                return card
+            }
         }
+    }
+
+    isEmpty(): boolean {
+        return this.cards.length === 0
     }
 }

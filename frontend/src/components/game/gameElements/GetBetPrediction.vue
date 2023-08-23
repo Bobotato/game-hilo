@@ -19,8 +19,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'submitBet', bet: number): void
-    (e: 'submitPrediction', prediction: Prediction): void
+    (e: 'submitBetPrediction', bet: number, prediction: Prediction): void
     (e: 'playAudio', sound: string): void
 }>()
 
@@ -62,8 +61,7 @@ function submitBetPrediction() {
     try {
         checkBetandPrediction()
         emit('playAudio', 'menuSelectSfx')
-        emit('submitBet', bet.value)
-        emit('submitPrediction', prediction.value)
+        emit('submitBetPrediction', bet.value, prediction.value)
     } catch (error) {
         console.log(error)
         emit('playAudio', 'errorBuzzer')
@@ -229,4 +227,4 @@ input[type=number] {
     margin: 25px 0 0 0;
     background-color: rgba(0, 48, 0, 80%);
 }
-</style>@/composables/getBetPrediction
+</style>
