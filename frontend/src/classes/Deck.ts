@@ -39,6 +39,9 @@ export class Deck {
     }
 
     dealCard() {
-        return this.cards.pop()
+        if (this.cards.length != 0) {
+            const card = this.cards.pop()
+            return card
+        }
     }
 }

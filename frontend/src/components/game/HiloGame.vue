@@ -2,8 +2,9 @@
 import { ref } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
-import ReceiveItem from '@/components/game/gameElements/ReceiveItem.vue'
-import GetBetPrediction from './gameElements/GetBetPrediction.vue';
+import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
+import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
+import StartMessage from '@/components/game/gameElements/StartMessage.vue';
 
 import { Card, CardRanks, CardSuits } from '@/classes/PokerCard';
 import { Deck } from '@/classes/Deck'
@@ -14,7 +15,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-let currentCard = ref()
+let currentCard = ref(new Card(CardSuits[0], CardRanks[0]))
 
 let currentCredits = ref(10)
 
@@ -29,28 +30,19 @@ const newPlayerMessage = ref({
     isShowing: true
 })
 
-let gameMessage = ref({
-    message: `Welcome back to the game. \n You have ${currentCredits.value} "credits".`,
-    isShowing: true
+let drawDeck = ref({
+    deck: new Deck(false, false),
+    isShowing: false
 })
-
-let receiveItemMenu = ref({
-    isShowing: true
-})
-
-function toggleGameMessage() {
-    gameMessage.value.isShowing = !gameMessage.value.isShowing
-    emit('playAudio', 'menuSelectSfx')
-}
-
-function toggleReceiveItemMenu() {
-    receiveItemMenu.value.isShowing = !receiveItemMenu.value.isShowing
-    emit('playAudio', 'menuSelectSfx')
-}
 
 function toggleBetPredictionMenu() {
     betPredictionStatus.value.isShowing = !betPredictionStatus.value.isShowing
 }
+
+function toggleDrawDeck() {
+    drawDeck.value.isShowing = !drawDeck.value.isShowing
+}
+
 
 function updateBet(bet: number) {
     betPredictionStatus.value.bet = bet
@@ -60,15 +52,22 @@ function updatePrediction(prediction: Prediction) {
     betPredictionStatus.value.bet = prediction
 }
 
-function startGame() {
-    toggleGameMessage()
+function startNewGame() {
     let deck = new Deck(true, true)
+    drawDeck.value.deck = deck
     console.log(deck.toString())
-
-    if (currentCard.value == null) {
-        currentCard.value = deck.dealCard()
-    }
     console.log("Started game")
+    toggleDrawDeck()
+}
+
+function drawCard(deck: Deck) {
+    let drawnCard = deck.dealCard()
+    toggleDrawDeck()
+    console.log(drawnCard)
+    if (drawnCard) {
+        currentCard.value = drawnCard
+        console.log(currentCard.value)
+    }
 }
 
 function compareCards(drawnCard: Card, currentCard: Card) {
@@ -95,16 +94,14 @@ function computeRoundResult(bet: number, prediction: Prediction) {
     console.log("Computing result")
     isWin()
 }
-
-
 </script>
 
 <template>
     <div class="game">
-        <div v-if=gameMessage.isShowing class="game-message-card">
-            <h2 class="game-message">{{ gameMessage.message }}</h2>
-            <button class="game-message-button" @click=startGame()>Start Game</button>
-        </div>
+        <StartMessage @start-game="startNewGame()" @play-audio="$emit('playAudio', $event)"></StartMessage>
+
+        <DrawDeck v-if=drawDeck.isShowing @play-audio="$emit('playAudio', $event)" @draw-card="drawCard(drawDeck.deck)">
+        </DrawDeck>
 
         <GetBetPrediction v-if=betPredictionStatus.isShowing @submit-bet-prediction="toggleBetPredictionMenu"
             @play-audio=" $emit('playAudio', $event)" :currentCard=currentCard :currentCredits=currentCredits>
@@ -112,17 +109,28 @@ function computeRoundResult(bet: number, prediction: Prediction) {
 
         <h2 class="inventory-credits">Remaining "Credits": {{ currentCredits }}</h2>
 
-        <CardInventory v-if=!gameMessage.isShowing class="inventory-cards" :card=currentCard></CardInventory>
+        <CardInventory v-if=false class="inventory-cards" :card=currentCard>
+        </CardInventory>
     </div>
 </template>
 
-<style>
+<style scoped>
 .game {
     display: grid;
     width: 100vw;
     height: 100vh;
     grid-template-rows: [game-events] auto [game-misc] auto;
     grid-template-columns: [left] 1fr [middle] 1fr [right] 1fr;
+}
+
+.bg-filter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    backdrop-filter: blur(5px);
 }
 
 .game-message-card {
@@ -139,20 +147,6 @@ function computeRoundResult(bet: number, prediction: Prediction) {
     white-space: pre-wrap;
     line-height: 2em;
     text-align: center;
-}
-
-.game-message-button {
-    height: 50px;
-    width: 250px;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    text-align: center;
-    line-height: 1.5;
-    font-size: 1.5em;
-    color: white;
-    box-shadow: 3px 3px 5px black;
-    background-color: rgba(48, 0, 0);
 }
 
 
