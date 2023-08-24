@@ -1,4 +1,4 @@
-import { apiClient } from '@/services/apiAuthService/axiosClient'
+import { apiClient } from '@/services/apiService/axiosClient'
 import {
   APIServerDownError,
   AuthenticationError,
@@ -7,6 +7,31 @@ import {
 } from '@/services/apiAuthService/errors'
 import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
+
+interface Credentials {
+  username: string
+  password: string
+}
+
+export async function attemptLogin(credentials: Credentials) {
+  try {
+    const response = await apiClient.post('/user/authenticate')
+    return response
+  } catch (error: any) {
+    console.log(error)
+  }
+}
+
+export async function attemptRegister(credentials: Credentials) {
+  try {
+    const response = await apiClient.post('/user/register')
+    return response
+  } catch (error: any) {
+    console.log(error)
+  }
+}
+
+
 
 // export interface CurrentWeatherForm {
 //   searchCity: string

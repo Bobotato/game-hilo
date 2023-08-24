@@ -19,15 +19,23 @@ const emit = defineEmits<{
 interface GameDetails {
     currentCredits: number
     currentCard: Card
-    drawnCard: Card
     deck: Deck
 }
 
 let gameDetails: Ref<GameDetails> = ref({
     currentCredits: 10,
     currentCard: new Card(CardSuits[0], CardRanks[0]),
-    drawnCard: new Card(CardSuits[0], CardRanks[0]),
     deck: new Deck(false, false),
+})
+
+interface RoundResult {
+    drawnCard: Card
+    win: boolean
+}
+
+let roundResult: Ref<RoundResult> = ref({
+    drawnCard: new Card(CardSuits[0], CardRanks[0]),
+    win: false
 })
 
 enum GameStates {
@@ -124,7 +132,8 @@ function awardBet(bet: number) {
         :currentCredits=gameDetails.currentCredits>
     </GetBetPrediction>
 
-    <GameResult v-else-if="isShowing === GameStates.result" :drawnCard=gameDetails.drawnCard :isWin=true></GameResult>
+    <GameResult v-else-if="isShowing === GameStates.result" :drawnCard=roundResult.drawnCard :isWin=roundResult.win>
+    </GameResult>
 
 
 
