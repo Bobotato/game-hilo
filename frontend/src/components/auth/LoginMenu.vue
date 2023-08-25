@@ -1,11 +1,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
+import { tryLogin } from '@/composables/auth/loginMenu'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
+
+let credentials = ref({
+    username: "string",
+    password: "password"
+})
 
 let passwordInput = ref({
     showPassword: false,
@@ -17,6 +23,7 @@ let errorHeader = ref({
 })
 
 function submitLoginRequest() {
+    tryLogin(credentials)
     emit("playAudio", "menuSelectSfx")
 }
 
@@ -47,11 +54,10 @@ function togglePasswordShow() {
 
         <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
         </errorDialogue>
-        <RouterLink to="/mainmenu">
-            <button class="button login-button" @click="submitLoginRequest">
-                Log In
-            </button>
-        </RouterLink>
+
+        <button class="button login-button" @click="submitLoginRequest">
+            Log In
+        </button>
     </div>
 </template>
 
