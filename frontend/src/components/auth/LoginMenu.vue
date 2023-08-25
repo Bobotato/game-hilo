@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import { tryLogin } from '@/composables/auth/loginMenu'
+import { tryLogin, tryRegister } from '@/composables/auth/authMenu'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -169,4 +169,4 @@ input[type="password"]::placeholder {
     grid-row: register-button;
     background-color: rgba(48, 0, 0, 80%);
 }
-</style>
+</style>@/composables/auth/authMenu

@@ -15,7 +15,10 @@ interface Credentials {
 
 export async function attemptLogin(credentials: Credentials) {
   try {
-    const response = await apiClient.post('/user/authenticate')
+    const response = await apiClient.post('/user/authenticate', {
+      username: credentials.username,
+      password: credentials.password
+    })
     return response
   } catch (error: any) {
     console.log(error)
