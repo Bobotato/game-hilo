@@ -1,7 +1,7 @@
 import { apiClient } from '@/services/apiService/axiosClient'
 import {
   APIServerDownError,
-  AuthenticationError,
+  InvalidCredentialsError,
   APIResponseMalformedError,
   UsernameAlreadyExistsError
 } from '@/services/apiService/errors'
@@ -15,7 +15,7 @@ export interface Credentials {
   password: string
 }
 
-export async function attemptLogin(credentials: Credentials): Promise<LoginResponse> {
+export async function postLogin(credentials: Credentials): Promise<LoginResponse> {
   try {
     const requestBody = {
       username: credentials.username,
@@ -36,7 +36,7 @@ export async function attemptLogin(credentials: Credentials): Promise<LoginRespo
     if (error instanceof AxiosError && error.response) {
       switch (error.response.status) {
         case 403:
-          throw new AuthenticationError('Credentials are invalid')
+          throw new InvalidCredentialsError('Credentials are invalid')
         case 500:
           throw new APIServerDownError('API Server down')
         default:
@@ -50,7 +50,7 @@ export async function attemptLogin(credentials: Credentials): Promise<LoginRespo
   }
 }
 
-export async function attemptRegister(credentials: Credentials): Promise<RegisterResponse> {
+export async function postRegister(credentials: Credentials): Promise<RegisterResponse> {
   try {
     const requestBody = {
       username: credentials.username,

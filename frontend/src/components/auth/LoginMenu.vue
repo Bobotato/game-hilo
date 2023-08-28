@@ -1,29 +1,53 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import { tryLogin } from '@/composables/auth/login'
+import { login } from '@/composables/auth/login'
+import {
+    APIServerDownError,
+    InvalidCredentialsError
+} from '@/services/apiService/errors'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-let passwordInput = ref({
-    showPassword: false,
-    password: null
-})
+const { getCredentialsForm, tryLogin } = login()
 
-let errorHeader = ref({
-    message: '',
-})
+let showPassword: Ref<boolean> = ref(false)
 
-async function submitLoginRequest() {
-    const result = await tryLogin(credentials)
-    emit("playAudio", "menuSelectSfx")
-    return result
+let isLoading: Ref<boolean> = ref(false)
+
+let errorMessage: Ref<string> = ref("")
+
+async function handleLogin() {
+    try {
+        emit("playAudio", "menuSelectSfx")
+        isLoading.value = true
+        errorMessage.value = ""
+        const result = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
+        console.log(result)
+    } catch (error: any) {
+        switch (error.constructor) {
+            case InvalidCredentialsError:
+                errorMessage.value = 'The credentials provided were invalid. Please try again.'
+                console.log(error.message)
+                break
+            case APIServerDownError:
+                errorMessage.value = 'The auth server is down, please try again later.'
+                console.log(error.message)
+                break
+            default:
+                errorMessage.value = `Something went wrong, please try again later. The error is: ${error}`
+                console.log(error.message)
+                break
+        }
+    } finally {
+        isLoading.value = false
+    }
 }
 
 function togglePasswordShow() {
-    passwordInput.value.showPassword = !passwordInput.value.showPassword
+    showPassword.value = !showPassword.value
 }
 </script>
 
@@ -34,25 +58,28 @@ function togglePasswordShow() {
             Please log-in or register.
         </div>
 
-        <input autofocus type="text" class="input username-input" placeholder="Username" required>
+        <form class="login-fields" @submit.prevent="handleLogin">
+            <input autofocus type="text" class="input username-input" placeholder="Username" required>
 
-        <div class="password-input-wrapper">
-            <input v-if="passwordInput.showPassword" type="text" class="input password-input"
-                v-model="passwordInput.password" placeholder="Password" required />
-            <input v-else type="password" class="input password-input" v-model="passwordInput.password"
-                placeholder="Password" required />
+            <div class="password-input-wrapper">
+                <input v-if="showPassword" type="text" class="input password-input" v-model="getCredentialsForm.password"
+                    placeholder="Password" required />
+                <input v-else type="password" class="input password-input" v-model="getCredentialsForm.password"
+                    placeholder="Password" required />
 
-            <button
-                :class="{ 'toggle-password-button password-shown': passwordInput.showPassword, 'toggle-password-button password-hidden': !passwordInput.showPassword }"
-                @click="togglePasswordShow"></button>
-        </div>
+                <button
+                    :class="{ 'toggle-password-button password-shown': showPassword, 'toggle-password-button password-hidden': !showPassword }"
+                    @click="togglePasswordShow"></button>
+            </div>
 
-        <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
-        </errorDialogue>
+            <errorDialogue class="error_dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
+            </errorDialogue>
 
-        <button class="button login-button" @click="submitLoginRequest">
-            Log In
-        </button>
+            <button class="button login-button" :disabled=isLoading @click="handleLogin()">
+                Log In
+            </button>
+        </form>
+
     </div>
 </template>
 
@@ -72,6 +99,12 @@ function togglePasswordShow() {
     text-align: center;
     color: white;
     margin: 30px 20px;
+}
+
+.login-fields {
+    display: grid;
+    grid-template-rows: [username-input] auto [password-input] auto [error-message] auto [register-button] auto;
+    place-items: center;
 }
 
 .input {

@@ -1,35 +1,53 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import { tryRegister } from '@/composables/auth/register';
+import { register } from '@/composables/auth/register';
+import {
+    APIServerDownError,
+    UsernameAlreadyExistsError
+} from '@/services/apiService/errors'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
+const { getCredentialsForm, tryRegister } = register()
 
-let credentialInput = ref({
-    username: "",
-    password: "",
-    showPassword: false
+let showPassword: Ref<boolean> = ref(false)
 
-})
+let isLoading: Ref<boolean> = ref(false)
 
 let errorMessage: Ref<string> = ref("")
 
-async function submitRegisterRequest() {
+async function handleRegister() {
     try {
         emit("playAudio", "menuSelectSfx")
-        const credentials = { username: credentialInput.value.username, password: credentialInput.value.password }
-        const result = await tryRegister(credentials)
+        isLoading.value = true
+        errorMessage.value = ""
+        const result = await tryRegister({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(result)
     } catch (error: any) {
-        console.log("error at top")
+        switch (error.constructor) {
+            case UsernameAlreadyExistsError:
+                errorMessage.value = 'There is already a user with this username. Please try again.'
+                console.log(error.message)
+                break
+            case APIServerDownError:
+                errorMessage.value = 'The auth server is down, please try again later.'
+                console.log(error.message)
+                break
+            default:
+                errorMessage.value = `Something went wrong, please try again later. The error is: ${error}`
+                console.log(error.message)
+                break
+        }
+    } finally {
+        isLoading.value = false
     }
 }
 
 function togglePasswordShow() {
-    credentialInput.value.showPassword = !credentialInput.value.showPassword
+    showPassword.value = !showPassword.value
 }
 </script>
 
@@ -39,26 +57,29 @@ function togglePasswordShow() {
             Please register your details.
         </div>
 
-        <input autofocus type="text" class="input username-input" placeholder="Username" v-model="credentialInput.username"
-            required>
+        <form class="registration-fields" @submit.prevent="handleRegister">
+            <input autofocus type="text" class="input username-input" placeholder="Username"
+                v-model="getCredentialsForm.username" required>
 
-        <div class="password-input-wrapper">
-            <input v-if="credentialInput.showPassword" type="text" class="input password-input"
-                v-model="credentialInput.password" placeholder="Password" required />
-            <input v-else type="password" class="input password-input" v-model="credentialInput.password"
-                placeholder="Password" required />
+            <div class="password-input-wrapper">
+                <input v-if="showPassword" type="text" class="input password-input" v-model="getCredentialsForm.password"
+                    placeholder="Password" required />
+                <input v-else type="password" class="input password-input" v-model="getCredentialsForm.password"
+                    placeholder="Password" required />
 
-            <button
-                :class="{ 'toggle-password-button password-shown': credentialInput.showPassword, 'toggle-password-button password-hidden': !credentialInput.showPassword }"
-                @click="togglePasswordShow"></button>
-        </div>
+                <button
+                    :class="{ 'toggle-password-button password-shown': showPassword, 'toggle-password-button password-hidden': !showPassword }"
+                    @click="togglePasswordShow"></button>
+            </div>
 
-        <errorDialogue class="error_dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
-        </errorDialogue>
+            <errorDialogue class="error-dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
+            </errorDialogue>
 
-        <button class="button register-button" @click="submitRegisterRequest">
-            Register
-        </button>
+            <button class="button register-button" type="submit" :disabled=isLoading @click="handleRegister()">
+                Register
+            </button>
+        </form>
+
     </div>
 </template>
 
@@ -67,7 +88,7 @@ function togglePasswordShow() {
     display: grid;
     border-radius: 10px;
     place-items: center;
-    grid-template-rows: [welcome-message] auto [username-input] auto [password-input] auto [error-message] auto [register-button] auto [login-button] auto;
+    grid-template-rows: [welcome-message] auto [registration-fields] auto;
 }
 
 .welcome-message {
@@ -78,6 +99,12 @@ function togglePasswordShow() {
     text-align: center;
     color: white;
     margin: 30px 20px;
+}
+
+.registration-fields {
+    display: grid;
+    grid-template-rows: [username-input] auto [password-input] auto [error-message] auto [register-button] auto;
+    place-items: center;
 }
 
 .input {
@@ -160,8 +187,12 @@ input[type="password"]::placeholder {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 
+.error-dialogue {
+    text-align: left;
+}
+
 .register-button {
     grid-row: register-button;
     background-color: rgba(48, 0, 0, 80%);
 }
-</style>@/composables/auth/login
+</style>

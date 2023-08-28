@@ -5,10 +5,10 @@ export class APIError extends Error {
   }
 }
 
-export class AuthenticationError extends APIError {
+export class InvalidCredentialsError extends APIError {
   constructor(message: string) {
     super(message)
-    this.name = 'AuthenticationError'
+    this.name = 'InvalidCredentialsError'
   }
 }
 
