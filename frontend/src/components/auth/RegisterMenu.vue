@@ -17,11 +17,12 @@ let credentialInput = ref({
 
 let errorMessage: Ref<string> = ref("")
 
-function submitRegisterRequest() {
+async function submitRegisterRequest() {
     try {
         emit("playAudio", "menuSelectSfx")
         const credentials = { username: credentialInput.value.username, password: credentialInput.value.password }
-        tryRegister(credentials)
+        const result = await tryRegister(credentials)
+        console.log(result)
     } catch (error: any) {
         console.log("error at top")
     }

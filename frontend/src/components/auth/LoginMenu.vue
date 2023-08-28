@@ -16,9 +16,10 @@ let errorHeader = ref({
     message: '',
 })
 
-function submitLoginRequest() {
-    tryLogin(credentials)
+async function submitLoginRequest() {
+    const result = await tryLogin(credentials)
     emit("playAudio", "menuSelectSfx")
+    return result
 }
 
 function togglePasswordShow() {
