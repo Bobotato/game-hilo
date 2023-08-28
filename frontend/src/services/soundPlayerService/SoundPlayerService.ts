@@ -64,10 +64,6 @@ export class AudioPlayer {
     }
   }
 
-  printWorking() {
-    console.log('wwokring')
-  }
-
   toggleMuteAudio() {
     this.isMuted = !this.isMuted
     this.updateMute()

@@ -1,27 +1,34 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
+import { tryRegister } from '@/composables/auth/register';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
 
-let passwordInput = ref({
-    showPassword: false,
-    password: null
+let credentialInput = ref({
+    username: "",
+    password: "",
+    showPassword: false
+
 })
 
-let errorHeader = ref({
-    message: '',
-})
+let errorMessage: Ref<string> = ref("")
 
 function submitRegisterRequest() {
-    emit("playAudio", "menuSelectSfx")
+    try {
+        emit("playAudio", "menuSelectSfx")
+        const credentials = { username: credentialInput.value.username, password: credentialInput.value.password }
+        tryRegister(credentials)
+    } catch (error: any) {
+        console.log("error at top")
+    }
 }
 
 function togglePasswordShow() {
-    passwordInput.value.showPassword = !passwordInput.value.showPassword
+    credentialInput.value.showPassword = !credentialInput.value.showPassword
 }
 </script>
 
@@ -31,20 +38,21 @@ function togglePasswordShow() {
             Please register your details.
         </div>
 
-        <input autofocus type="text" class="input username-input" placeholder="Username" required>
+        <input autofocus type="text" class="input username-input" placeholder="Username" v-model="credentialInput.username"
+            required>
 
         <div class="password-input-wrapper">
-            <input v-if="passwordInput.showPassword" type="text" class="input password-input"
-                v-model="passwordInput.password" placeholder="Password" required />
-            <input v-else type="password" class="input password-input" v-model="passwordInput.password"
+            <input v-if="credentialInput.showPassword" type="text" class="input password-input"
+                v-model="credentialInput.password" placeholder="Password" required />
+            <input v-else type="password" class="input password-input" v-model="credentialInput.password"
                 placeholder="Password" required />
 
             <button
-                :class="{ 'toggle-password-button password-shown': passwordInput.showPassword, 'toggle-password-button password-hidden': !passwordInput.showPassword }"
+                :class="{ 'toggle-password-button password-shown': credentialInput.showPassword, 'toggle-password-button password-hidden': !credentialInput.showPassword }"
                 @click="togglePasswordShow"></button>
         </div>
 
-        <errorDialogue class="error_dialogue" v-if="errorHeader.message !== ''" :errorMessage="errorHeader.message">
+        <errorDialogue class="error_dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
         </errorDialogue>
 
         <button class="button register-button" @click="submitRegisterRequest">
@@ -155,4 +163,4 @@ input[type="password"]::placeholder {
     grid-row: register-button;
     background-color: rgba(48, 0, 0, 80%);
 }
-</style>
+</style>@/composables/auth/login

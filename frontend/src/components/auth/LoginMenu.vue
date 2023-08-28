@@ -1,17 +1,11 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import { tryLogin, tryRegister } from '@/composables/auth/authMenu'
+import { tryLogin } from '@/composables/auth/login'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
-
-
-let credentials = ref({
-    username: "string",
-    password: "password"
-})
 
 let passwordInput = ref({
     showPassword: false,
@@ -169,4 +163,4 @@ input[type="password"]::placeholder {
     grid-row: register-button;
     background-color: rgba(48, 0, 0, 80%);
 }
-</style>@/composables/auth/authMenu
+</style>@/composables/auth/authMenu@/composables/auth/login
