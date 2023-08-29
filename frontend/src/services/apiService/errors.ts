@@ -32,3 +32,18 @@ export class APIServerDownError extends APIError {
     this.name = 'APIServerDownError'
   }
 }
+
+export class UnauthorisedError extends APIError {
+  constructor(message: string) {
+    super(message)
+    this.name = 'UnauthorisedError'
+  }
+}
+
+export class NoSuchGameError extends APIError {
+  constructor(message: string) {
+    super(message)
+    this.name = 'NoSuchGameError'
+  }
+}
+
