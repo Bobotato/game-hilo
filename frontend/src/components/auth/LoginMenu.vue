@@ -24,8 +24,8 @@ async function handleLogin() {
         emit("playAudio", "menuSelectSfx")
         isLoading.value = true
         errorMessage.value = ""
-        const result = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
-        console.log(result)
+        const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
+        console.log(loginResponse)
     } catch (error: any) {
         switch (error.constructor) {
             case InvalidCredentialsError:
@@ -59,7 +59,8 @@ function togglePasswordShow() {
         </div>
 
         <form class="login-fields" @submit.prevent="handleLogin">
-            <input autofocus type="text" class="input username-input" placeholder="Username" required>
+            <input autofocus type="text" class="input username-input" placeholder="Username"
+                v-model="getCredentialsForm.username" required>
 
             <div class="password-input-wrapper">
                 <input v-if="showPassword" type="text" class="input password-input" v-model="getCredentialsForm.password"
@@ -69,13 +70,13 @@ function togglePasswordShow() {
 
                 <button
                     :class="{ 'toggle-password-button password-shown': showPassword, 'toggle-password-button password-hidden': !showPassword }"
-                    @click="togglePasswordShow"></button>
+                    @click="togglePasswordShow" type="button"></button>
             </div>
 
             <errorDialogue class="error_dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
             </errorDialogue>
 
-            <button class="button login-button" :disabled=isLoading @click="handleLogin()">
+            <button class="button login-button" type="submit" :disabled=isLoading>
                 Log In
             </button>
         </form>
