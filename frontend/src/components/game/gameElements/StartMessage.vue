@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
-    (e: 'changeActiveGameState', state: string): void
+    (e: 'changeActiveGameState'): void
 }>()
 
 interface Message {
@@ -18,7 +18,7 @@ let message: Ref<Message> = ref({
 
 function emitChangeGameState() {
     emit('playAudio', 'menuSelectSfx')
-    emit('changeActiveGameState', "welcome-screen-component")
+    emit('changeActiveGameState')
 }
 </script>
 

@@ -17,7 +17,6 @@ export interface Token {
 
 export async function getInfo(token: Token): Promise<InfoResponse> {
     try {
-        console.log(token)
         const requestBody = {
             access_token: token.access_token
         };

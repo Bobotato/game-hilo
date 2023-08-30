@@ -28,7 +28,7 @@ async function handleLogin() {
         errorMessage.value = ""
         const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(loginResponse)
-        router.push({ path: '/game' })
+        router.push({ path: '/mainmenu' })
     } catch (error: any) {
         switch (error.constructor) {
             case InvalidCredentialsError:

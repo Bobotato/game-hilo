@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, Ref } from 'vue'
+import { ref, Ref, onMounted } from 'vue'
 
 import CardInventory from '@/components/game/gameElements/CardInventory.vue'
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
@@ -14,17 +14,17 @@ import { Token } from '@/services/apiService/game/game';
 
 import { useRoundInfoComposable, useRoundResultComposable } from '@/composables/hiloGame'
 import { BetPredictionError } from '@/errors/gameErrors';
+import { UnauthorisedError } from '@/services/apiService/errors';
+import { RoundInfo } from '@/types/gameElements/gameElementTypes';
 
-let { roundInfo, getRoundInfo } = useRoundInfoComposable()
-let { roundResult, getRoundResult } = useRoundResultComposable()
-
+let { roundInfo, updateRoundInfo } = useRoundInfoComposable()
+let { roundResult, updateRoundResult } = useRoundResultComposable()
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJleHAiOjE2OTMzODk3MzN9.9_yDwrXvzZLUTY4KwSY_lfShHxTC6VCOnqdHabYRzIw" }
-
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM0MjYwNTB9.20vEIEmiRYhahCBtbV19OuKgk3k87eg6DLNV8urlu1k" }
 enum GameStates {
     "start",
     "welcome",
@@ -32,6 +32,11 @@ enum GameStates {
     "betPrediction",
     "result"
 }
+
+let errorMessage = ref({
+    message: "",
+    isShowing: false
+})
 
 let isShowing = ref(GameStates.start)
 
@@ -43,26 +48,26 @@ let betPredictionStatus = ref({
 
 async function handleGetRoundInfo(token: Token) {
     try {
-        const roundInfo = await getRoundInfo(token)
-        return roundInfo
-    } catch (error) {
+        await updateRoundInfo(token)
+    } catch (error: any) {
         console.log(error)
+        switch (error.constructor) {
+            case UnauthorisedError:
+                errorMessage.value.message = 'There is an issue with the login token. Please login again.'
+                console.log(error.message)
+                break
+        }
     }
 }
 
-async function handleGetRoundResult(bet: Bet, prediction: Prediction) {
-    try {
-        return await getRoundResult(token, bet, prediction)
-    } catch (error) {
-        console.log(error)
-    }
-}
+onMounted(() => {
+    handleGetRoundInfo(token)
+})
 
 async function startRound(token: Token) {
     try {
         isShowing.value = GameStates.welcome
-        const result = await handleGetRoundInfo(token)
-        console.log(result)
+        await handleGetRoundInfo(token)
     } catch (error) {
         console.log(error)
     }
@@ -121,8 +126,9 @@ function submitBetPrediction(bet: number, prediction: Prediction) {
             @play-audio="$emit('playAudio', $event)" @change-active-game-state="startRound(token)">
         </StartMessage>
 
-        <!-- <WelcomeScreen class="welcome-screen-component" v-if="isShowing === GameStates.welcome" :roundInfo=roundInfo>
-    </WelcomeScreen> -->
+        <WelcomeScreen class="welcome-screen-component" v-if="isShowing === GameStates.welcome" :name=roundInfo.player.name
+            :credits=roundInfo.player.credits>
+        </WelcomeScreen>
 
         <DrawDeck class=draw-deck-component v-else-if="isShowing === GameStates.deck" :currentCard=roundInfo.current_card
             @play-audio="$emit('playAudio', $event)">
@@ -150,7 +156,6 @@ function submitBetPrediction(bet: number, prediction: Prediction) {
     width: 100vw;
     height: 100vh;
     place-items: center;
-    background-color: rgba(255, 192, 203, 0.197);
 }
 
 .gamestate {

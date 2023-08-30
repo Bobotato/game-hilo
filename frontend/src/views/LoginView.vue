@@ -13,7 +13,6 @@ setTimeout(function () {
 
 
 onUnmounted(() => {
-    console.log("Component unmounted")
     emit("stopAudio")
 })
 </script>

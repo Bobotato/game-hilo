@@ -29,7 +29,7 @@ async function handleRegister() {
         errorMessage.value = ""
         const registerResponse = await tryRegister({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(registerResponse)
-        router.push({ path: '/game' })
+        router.push({ path: '/mainmenu' })
     } catch (error: any) {
         switch (error.constructor) {
             case UsernameAlreadyExistsError:

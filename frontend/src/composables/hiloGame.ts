@@ -8,31 +8,31 @@ import { Token } from '@/services/apiService/game/game'
 export function useRoundInfoComposable() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)
 
-    async function getRoundInfo(token: Token) {
+    async function updateRoundInfo(token: Token) {
         try {
-            const roundInfo = await getInfo(token)
-            return roundInfo as RoundInfo
+            roundInfo.value = await getInfo(token)
+            return roundInfo
         } catch (error: any) {
             console.log(`RoundInfo retrieval failed with error ${error}`)
             throw error
         }
     }
 
-    return { roundInfo, getRoundInfo }
+    return { roundInfo, updateRoundInfo }
 }
 
 export function useRoundResultComposable() {
     const roundResult: Ref<RoundResult> = ref({} as RoundResult)
 
-    async function getRoundResult(token: Token, bet: Bet, prediction: Prediction) {
+    async function updateRoundResult(token: Token, bet: Bet, prediction: Prediction) {
         try {
-            const roundResult = await getResult(token, bet, prediction)
-            return roundResult as RoundResult
+            roundResult.value = await getResult(token, bet, prediction)
+            return roundResult
         } catch (error: any) {
             console.log(`RoundInfo retrieval failed with error ${error}`)
             throw error
         }
     }
 
-    return { roundResult, getRoundResult }
+    return { roundResult, updateRoundResult }
 }
