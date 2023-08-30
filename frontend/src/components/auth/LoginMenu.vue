@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
+import { router } from '@/router/index'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
+import loadingCover from '@/components/loading/loadingCover.vue';
 import { login } from '@/composables/auth/login'
 import {
     APIServerDownError,
@@ -26,6 +28,7 @@ async function handleLogin() {
         errorMessage.value = ""
         const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(loginResponse)
+        router.push({ path: '/game' })
     } catch (error: any) {
         switch (error.constructor) {
             case InvalidCredentialsError:
@@ -58,7 +61,7 @@ function togglePasswordShow() {
             Please log-in or register.
         </div>
 
-        <form class="login-fields" @submit.prevent="handleLogin">
+        <form class="login-fields" @submit.prevent="handleLogin()">
             <input autofocus type="text" class="input username-input" placeholder="Username"
                 v-model="getCredentialsForm.username" required>
 
@@ -82,9 +85,15 @@ function togglePasswordShow() {
         </form>
 
     </div>
+
+    <loadingCover class=loading-cover v-if=isLoading></loadingCover>
 </template>
 
 <style scoped>
+.loading-cover {
+    z-index: 999;
+}
+
 .login-menu {
     display: grid;
     border-radius: 10px;

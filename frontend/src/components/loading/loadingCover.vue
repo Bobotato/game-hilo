@@ -14,7 +14,7 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background: black;
+    background: rgba(0, 0, 0, 0.8);
 }
 
 .loading-message {

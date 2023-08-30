@@ -35,7 +35,7 @@ export async function postLogin(credentials: Credentials): Promise<LoginResponse
   } catch (error: any) {
     if (error instanceof AxiosError && error.response) {
       switch (error.response.status) {
-        case 403:
+        case 401:
           throw new InvalidCredentialsError('Credentials are invalid')
         case 500:
           throw new APIServerDownError('API Server down')

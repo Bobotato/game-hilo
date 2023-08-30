@@ -1,3 +1,5 @@
+import { Card, Player } from "./gameElements/gameElementTypes"
+
 export interface RegisterResponse {
     access_token: string
 }
@@ -7,12 +9,12 @@ export interface LoginResponse {
 }
 
 export interface InfoResponse {
-    player: string,
-    current_card: string
+    player: Player,
+    current_card: Card
 }
 
 export interface ResultResponse {
-    drawn_card: string,
+    drawn_card: Card,
     win: boolean,
     is_player_bankrupt: boolean,
     is_deck_empty: boolean

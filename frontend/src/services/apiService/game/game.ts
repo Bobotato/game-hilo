@@ -9,23 +9,17 @@ import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
 import { InfoResponse, ResultResponse } from '@/types/apiResponseTypes'
+import { Bet, Prediction } from '@/types/gameElements/gameElementTypes'
 
-interface Token {
-    token: string
-}
-
-interface Bet {
-    bet: number
-}
-
-interface Prediction {
-    prediction: number
+export interface Token {
+    access_token: string
 }
 
 export async function getInfo(token: Token): Promise<InfoResponse> {
     try {
+        console.log(token)
         const requestBody = {
-            access_token: token
+            access_token: token.access_token
         };
 
         const response = await apiClient.post('/game/info',
@@ -59,7 +53,7 @@ export async function getInfo(token: Token): Promise<InfoResponse> {
 export async function getResult(token: Token, bet: Bet, prediction: Prediction): Promise<ResultResponse> {
     try {
         const requestBody = {
-            access_token: token
+            access_token: token.access_token
         };
 
         const response = await apiClient.post('/game/result',

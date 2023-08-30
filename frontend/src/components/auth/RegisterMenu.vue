@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
+import { router } from '@/router/index'
+
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
+import loadingCover from '@/components/loading/loadingCover.vue';
 import { register } from '@/composables/auth/register';
 import {
     APIServerDownError,
@@ -26,6 +29,7 @@ async function handleRegister() {
         errorMessage.value = ""
         const registerResponse = await tryRegister({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(registerResponse)
+        router.push({ path: '/game' })
     } catch (error: any) {
         switch (error.constructor) {
             case UsernameAlreadyExistsError:
@@ -81,9 +85,14 @@ function togglePasswordShow() {
         </form>
 
     </div>
+    <loadingCover class=loading-cover v-if=isLoading></loadingCover>
 </template>
 
 <style scoped>
+.loading-cover {
+    z-index: 999;
+}
+
 .registration-menu {
     display: grid;
     border-radius: 10px;

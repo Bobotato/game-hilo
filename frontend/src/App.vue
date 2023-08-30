@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import loadingCover from './components/loading/loadingCover.vue';
 
 import AudioController from './components/audioPlayer/AudioController.vue';
 import { AudioPlayer } from '@/services/soundPlayerService/SoundPlayerService'
@@ -18,8 +17,7 @@ let audio = new AudioPlayer()
     </nav>
   </header>
   <AudioController @toggle-mute="audio.toggleMuteAudio()"></AudioController>
-  <RouterView @play-audio="audio.playAudio($event)" @stop-audio="audio.stopAudio()" />
-  <loadingCover class=loading-cover></loadingCover>
+  <RouterView @play-audio="audio.playAudio($event)" @stop-audio="audio.stopAudio()"/>
 </template>
 
 <style>

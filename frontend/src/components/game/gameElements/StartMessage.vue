@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
-    (e: 'startGame'): void
+    (e: 'changeActiveGameState', state: string): void
 }>()
 
 interface Message {
@@ -16,21 +16,16 @@ let message: Ref<Message> = ref({
     isShowing: true
 })
 
-function emitStartGame() {
-    toggleMessage()
-    emit('startGame')
-}
-
-function toggleMessage() {
+function emitChangeGameState() {
     emit('playAudio', 'menuSelectSfx')
-    message.value.isShowing = !message.value.isShowing
+    emit('changeActiveGameState', "welcome-screen-component")
 }
 </script>
 
 <template>
     <div class="bg-filter" v-if=message.isShowing>
         <h2 class="game-message">{{ message.message }}</h2>
-        <button class="acknowledge-button" @click.once=(emitStartGame)>Start Game</button>
+        <button class="acknowledge-button" @click.once=emitChangeGameState>Start Game</button>
     </div>
 </template>
 

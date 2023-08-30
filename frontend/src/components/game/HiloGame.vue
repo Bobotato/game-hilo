@@ -6,46 +6,34 @@ import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
 import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
 import StartMessage from '@/components/game/gameElements/StartMessage.vue';
 import GameResult from '@/components/game/gameElements/GameResult.vue';
+import WelcomeScreen from '@/components/game/gameElements/WelcomeScreen.vue'
 
-import { Card, CardRanks, CardSuits } from '@/classes/PokerCard';
 import { Deck } from '@/classes/Deck'
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
+import { Token } from '@/services/apiService/game/game';
+
+import { useRoundInfoComposable, useRoundResultComposable } from '@/composables/hiloGame'
+import { BetPredictionError } from '@/errors/gameErrors';
+
+let { roundInfo, getRoundInfo } = useRoundInfoComposable()
+let { roundResult, getRoundResult } = useRoundResultComposable()
 
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-interface GameDetails {
-    currentCredits: number
-    currentCard: Card
-    deck: Deck
-}
-
-let gameDetails: Ref<GameDetails> = ref({
-    currentCredits: 10,
-    currentCard: new Card(CardSuits[0], CardRanks[0]),
-    deck: new Deck(false, false),
-})
-
-interface RoundResult {
-    drawnCard: Card
-    win: boolean
-}
-
-let roundResult: Ref<RoundResult> = ref({
-    drawnCard: new Card(CardSuits[0], CardRanks[0]),
-    win: false
-})
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJleHAiOjE2OTMzODk3MzN9.9_yDwrXvzZLUTY4KwSY_lfShHxTC6VCOnqdHabYRzIw" }
 
 enum GameStates {
+    "start",
     "welcome",
     "deck",
     "betPrediction",
     "result"
 }
 
-let isShowing = ref(GameStates.welcome)
+let isShowing = ref(GameStates.start)
 
 let betPredictionStatus = ref({
     bet: 0,
@@ -53,97 +41,107 @@ let betPredictionStatus = ref({
     isShowing: false
 })
 
-function startNewGame() {
-    let deck = new Deck(true, true)
-    gameDetails.value.deck = deck
-    console.log(deck.toString())
-    console.log("Started game")
-    startRound(deck)
-}
-
-function startRound(deck: Deck) {
-    isShowing.value = GameStates.deck
-}
-
-function drawCard(deck: Deck) {
-    let drawnCard = deck.dealCard()
-    console.log(drawnCard)
-    if (drawnCard) {
-        gameDetails.value.currentCard = drawnCard
-        console.log(`Drew ${drawnCard}`)
-    }
-    isShowing.value = GameStates.betPrediction
-}
-
-function compareCards(drawnCard: Card, currentCard: Card) {
-    if (CardRanks.indexOf(drawnCard.rank) < CardRanks.indexOf(currentCard.rank)) {
-        return true
-    } else if (CardRanks.indexOf(drawnCard.rank) > CardRanks.indexOf(currentCard.rank)) {
-        return false
-    } else if (drawnCard.rank === currentCard.rank) {
-        if (CardSuits.indexOf(drawnCard.suit) < CardSuits.indexOf(currentCard.suit)) {
-            return true
-        } else if (CardSuits.indexOf(drawnCard.suit) > CardSuits.indexOf(currentCard.suit)) {
-            return false
-        }
+async function handleGetRoundInfo(token: Token) {
+    try {
+        const roundInfo = await getRoundInfo(token)
+        return roundInfo
+    } catch (error) {
+        console.log(error)
     }
 }
 
-function computeRoundResult(prediction: Prediction, currentCard: Card) {
-    console.log("Computing result")
-    let drawnCard = gameDetails.value.deck.dealCard()
-    console.log(drawnCard)
-    if (drawnCard instanceof Card) {
-        let result = compareCards(currentCard, drawnCard)
-        if (prediction === Prediction.Higher) {
-            return result
-        } else {
-            return !result
-        }
+async function handleGetRoundResult(bet: Bet, prediction: Prediction) {
+    try {
+        return await getRoundResult(token, bet, prediction)
+    } catch (error) {
+        console.log(error)
     }
 }
+
+async function startRound(token: Token) {
+    try {
+        isShowing.value = GameStates.welcome
+        const result = await handleGetRoundInfo(token)
+        console.log(result)
+    } catch (error) {
+        console.log(error)
+    }
+}
+// function drawCard(deck: Deck) {
+//     let drawnCard = deck.dealCard()
+//     console.log(drawnCard)
+//     if (drawnCard) {
+//         gameDetails.value.currentCard = drawnCard
+//         console.log(`Drew ${drawnCard}`)
+//     }
+//     isShowing.value = GameStates.betPrediction
+// }
+
+// function compareCards(drawnCard: Card, currentCard: Card) {
+//     if (CardRanks.indexOf(drawnCard.rank) < CardRanks.indexOf(currentCard.rank)) {
+//         return true
+//     } else if (CardRanks.indexOf(drawnCard.rank) > CardRanks.indexOf(currentCard.rank)) {
+//         return false
+//     } else if (drawnCard.rank === currentCard.rank) {
+//         if (CardSuits.indexOf(drawnCard.suit) < CardSuits.indexOf(currentCard.suit)) {
+//             return true
+//         } else if (CardSuits.indexOf(drawnCard.suit) > CardSuits.indexOf(currentCard.suit)) {
+//             return false
+//         }
+//     }
+// }
+
+// function computeRoundResult(prediction: Prediction, currentCard: Card) {
+//     console.log("Computing result")
+//     let drawnCard = gameDetails.value.deck.dealCard()
+//     console.log(drawnCard)
+//     if (drawnCard instanceof Card) {
+//         let result = compareCards(currentCard, drawnCard)
+//         if (prediction === Prediction.Higher) {
+//             return result
+//         } else {
+//             return !result
+//         }
+//     }
+// }
 
 function submitBetPrediction(bet: number, prediction: Prediction) {
     betPredictionStatus.value.bet = bet
     console.log(`Player bet ${betPredictionStatus.value.bet}`)
-    gameDetails.value.currentCredits -= bet
     betPredictionStatus.value.prediction = prediction
     console.log(`Player predicted ${Prediction[betPredictionStatus.value.bet]}`)
     isShowing.value = GameStates.result
-    console.log(computeRoundResult(prediction, gameDetails.value.currentCard))
-}
-
-function awardBet(bet: number) {
-    gameDetails.value.currentCredits += bet
+    // console.log(computeRoundResult(prediction, gameDetails.value.currentCard))
 }
 </script>
 
 <template>
-    <StartMessage class=start-message-component v-if="isShowing === GameStates.welcome" @start-game="startNewGame()"
-        @play-audio="$emit('playAudio', $event)">
-    </StartMessage>
+    <div class=game>
+        <StartMessage class=start-message-component v-if="isShowing === GameStates.start"
+            @play-audio="$emit('playAudio', $event)" @change-active-game-state="startRound(token)">
+        </StartMessage>
 
-    <DrawDeck class=draw-deck-component v-else-if="isShowing === GameStates.deck" @play-audio="$emit('playAudio', $event)"
-        @drawCard="drawCard(gameDetails.deck)">
-    </DrawDeck>
+        <!-- <WelcomeScreen class="welcome-screen-component" v-if="isShowing === GameStates.welcome" :roundInfo=roundInfo>
+    </WelcomeScreen> -->
 
-    <GetBetPrediction v-else-if="isShowing === GameStates.betPrediction" @submit-bet-prediction="submitBetPrediction"
-        @play-audio=" $emit('playAudio', $event)" :currentCard=gameDetails.currentCard
-        :currentCredits=gameDetails.currentCredits>
-    </GetBetPrediction>
+        <DrawDeck class=draw-deck-component v-else-if="isShowing === GameStates.deck" :currentCard=roundInfo.current_card
+            @play-audio="$emit('playAudio', $event)">
+        </DrawDeck>
 
-    <GameResult v-else-if="isShowing === GameStates.result" :drawnCard=roundResult.drawnCard :isWin=roundResult.win>
-    </GameResult>
+        <GetBetPrediction v-else-if="isShowing === GameStates.betPrediction" @submit-bet-prediction="submitBetPrediction"
+            @play-audio=" $emit('playAudio', $event)" :currentCard=roundInfo.current_card
+            :currentCredits=roundInfo.player.credits>
+        </GetBetPrediction>
 
-
-
-    <div class=game v-if=false>
-
-        <h2 class="inventory-credits">Remaining "Credits": {{ gameDetails.currentCredits }}</h2>
-
-        <CardInventory v-if=false class="inventory-cards" :card=gameDetails.currentCard>
-        </CardInventory>
+        <GameResult v-else-if="isShowing === GameStates.result" :drawnCard=roundResult.drawn_card :isWin=roundResult.win>
+        </GameResult>
     </div>
+
+    <h2 class="gamestate">Gamestate: {{ GameStates[isShowing] }}</h2>
+    <!-- <h2 class="inventory-credits">Remaining "Credits": {{ roundInfo.player.credits }}</h2> -->
+
+    <!-- <CardInventory v-if=false class="inventory-cards" :card=roundInfo.current_card>
+        </CardInventory> -->
 </template>
 
 <style scoped>
@@ -151,8 +149,14 @@ function awardBet(bet: number) {
     display: grid;
     width: 100vw;
     height: 100vh;
-    grid-template-rows: [game-events] auto [game-misc] auto;
-    grid-template-columns: [left] 1fr [middle] 1fr [right] 1fr;
+    place-items: center;
+    background-color: rgba(255, 192, 203, 0.197);
+}
+
+.gamestate {
+    position: absolute;
+    left: 10px;
+    bottom: 0px;
 }
 
 
