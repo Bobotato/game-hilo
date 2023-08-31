@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Card } from '@/types/gameElements/gameElementTypes';
+import { CardRanks } from '@/services/card';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -48,7 +49,7 @@ function flipCard() {
                 <div class=top-symbol>
                     <div :class="{ 'rank rank-top red': isRed(props.card), 'rank rank-top': isRed(props.card) == false }">
                         {{
-                            props.card.rank }}</div>
+                            CardRanks[props.card.rank] }}</div>
 
                     <div
                         :class="{ 'minisuit suit-top red': isRed(props.card), 'minisuit suit-top': isRed(props.card) == false }">
@@ -65,36 +66,34 @@ function flipCard() {
 
                     <div
                         :class="{ 'rank rank-bottom red': isRed(props.card), 'rank rank-bottom': isRed(props.card) == false }">
-                        {{ props.card.rank }}</div>
+                        {{ CardRanks[props.card.rank] }}</div>
                 </div>
             </div>
         </Transition>
     </button>
 </template>
   
-<style>
+<style scoped>
 .v-enter-from {
     transform: rotateY(90deg)
 }
 
 .v-enter-active {
-    transition: 0.25s linear 0.25s;
+    transition: 0.2s linear 0.2s;
 }
 
 .v-leave-to {
     transform: rotateY(-90deg);
-    transition: 0.25s linear;
+    transition: 0.2s linear;
 
 }
 
 .poker-card-component {
-    width: 400px;
-    height: 600px;
-    border-radius: 10px;
+    width: 100%;
+    height: 100%;
     box-shadow: none;
     perspective: 1000px;
     background-color: transparent;
-
 }
 
 .poker-card-component:hover {
@@ -105,41 +104,42 @@ function flipCard() {
 .card-face {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: transparent;
-    background-position: center;
+    border-radius: 20px;
 }
 
 .back {
-    background-image: url("@/assets/images/cardRearBackground.png");
+    background: url("@/assets/images/cardRearBackground.png");
+    background-position: center;
+    background-size: 100% 102%;
 }
 
 .front {
-    display: grid;
-    grid-template-rows: [top-symbol] auto [suit] auto [bottom-symbol] auto;
     background: url("@/assets/images/CardBackground.png");
+    display: grid;
+    grid-template-rows: [top-symbol] 25% [suit] 50% [bottom-symbol] 25%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .rank {
-    font-size: 2em;
+    font-size: 40px;
     font-weight: bold;
-    letter-spacing: -0.1em;
+    letter-spacing: -5px;
 }
 
 .minisuit {
-    font-size: 2em;
+    font-size: 70px;
     font-weight: bold;
-    letter-spacing: -0.1em;
+    letter-spacing: -5px;
 }
 
 .top-symbol {
     display: grid;
+    align-self: start;
     place-items: center;
-    width: 1em;
-    grid-template-rows: [rank-top] 2em [suit-top] 2em;
-    margin: 1em 0 0 1em;
+    grid-template-rows: [rank-top] 50px [suit-top] 60px;
+    margin: 20px 0 0 10px;
+    justify-self: start;
 }
 
 .suit-top {
@@ -153,10 +153,9 @@ function flipCard() {
 .bottom-symbol {
     display: grid;
     place-items: center;
-    width: 1em;
-    grid-template-rows: [rank-bottom] 2em [suit-bottom] 2em;
-    margin: 0 1em 1em 0;
+    grid-template-rows: [rank-bottom] 50px [suit-bottom] 60px;
     transform: rotate(180deg);
+    margin: 0 10px 20px 0;
     justify-self: end;
 }
 
@@ -169,11 +168,10 @@ function flipCard() {
 }
 
 .suit {
-    width: 200px;
     grid-row: suit;
-    font-size: 10em;
+    line-height: 265px;
+    font-size: 200px;
     text-align: center;
-    margin: -0.2em 0 -0.5em 0;
 }
 
 .red {

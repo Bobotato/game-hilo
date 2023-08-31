@@ -24,7 +24,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM0OTE2MTB9.iPsncViCOWzIKohXs48EO956WXhw_YV68n6Kmv0t5bc" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM1MDY2NDZ9.2VAM720KQBXK3rUMmu123JIZ3cX2e54aZAxqcgQPzHU" }
 enum GameStates {
     "start",
     "welcome",
@@ -132,7 +132,7 @@ function submitBetPrediction(bet: number, prediction: Prediction) {
         </WelcomeScreen>
 
         <DrawDeck class=draw-deck-component v-else-if="isShowing === GameStates.deck" :currentCard=roundInfo.current_card
-            @play-audio="$emit('playAudio', $event)">
+            @play-audio="$emit('playAudio', $event)" @change-active-game-state="isShowing = GameStates.betPrediction">
         </DrawDeck>
 
         <GetBetPrediction v-else-if="isShowing === GameStates.betPrediction" @submit-bet-prediction="submitBetPrediction"

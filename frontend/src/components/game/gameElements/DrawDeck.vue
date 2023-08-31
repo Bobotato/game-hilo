@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
+import { CardRanks, CardSuits } from '@/services/card'
 
 interface Props {
     currentCard: Card
@@ -11,7 +12,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'drawCard'): void
+    (e: 'changeActiveGameState'): void
     (e: 'playAudio', sound: string): void
 }>()
 
@@ -20,24 +21,25 @@ let deckMessage = ref({
     isShowing: true
 })
 
-function emitDrawCard() {
-    emit('playAudio', 'choiceSelectSfx')
-    emit('drawCard')
+function drawCard() {
+    deckMessage.value.message = `Your card is the ${CardRanks[props.currentCard.rank]} of ${CardSuits[props.currentCard.suit]}.`
+}
+
+function emitChangeGameState() {
+    emit('playAudio', 'menuSelectSfx')
+    emit('changeActiveGameState')
 }
 
 </script>
 
 <template>
     <div class="bg-filter">
-        <PokerCard :card=props.currentCard @play-audio="$emit('playAudio', $event)"></PokerCard>
-
-
-
-
-
-        // <!-- <h2>{{ deckMessage.message }}</h2>
-        // <img class="deck" src="@/assets/images/CardDeck.png">
-        // <button class="deck-button" @click.once="emitDrawCard"></button> -->
+        <h2>{{ deckMessage.message }}</h2>
+        <img class="deck" src="@/assets/images/CardDeck.png">
+        <button class="deck-button" @click="drawCard">
+            <PokerCard :card=props.currentCard @play-audio="$emit('playAudio', $event)"></PokerCard>
+        </button>
+        <button class="continue-button" @click.once="emitChangeGameState">Continue</button>
     </div>
 </template>
 
@@ -48,17 +50,12 @@ function emitDrawCard() {
 }
 
 .deck-button {
-    position: absolute;
     background-color: transparent;
-    width: 240px;
-    height: 360px;
-    border-radius: 10px;
-    background-image: url("@/assets/images/cardRearBackground.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: #cccccc00;
-    box-shadow: 0px 0px 5px rgba(48, 48, 44, 0.8);
-    transform: perspective(800px) rotateX(15deg) rotateZ(2deg);
+    width: 300px;
+    height: 400px;
+    scale: 90%;
+    /* transform: perspective(800px) rotateX(15deg); */
+    margin: -430px 0 30px 0;
 }
 
 .deck-button:hover {

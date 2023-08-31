@@ -3,11 +3,11 @@ import { ref, Ref } from 'vue'
 
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
-import { Card } from '@/classes/PokerCard';
-
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
+import { Card } from '@/types/gameElements/gameElementTypes';
+import { CardRanks, CardSuits } from '@/services/card';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 
@@ -29,7 +29,7 @@ let prediction: Ref<Prediction> = ref(Prediction.None)
 
 let errorHeader: Ref<string> = ref("")
 
-let currentInventoryMessage: string = `Your current card is ${props.currentCard}. \n You have ${props.currentCredits} "credits".`
+let currentInventoryMessage: string = `Your current card is the ${CardRanks[props.currentCard.rank]} of ${CardSuits[props.currentCard.suit]}.\n You have ${props.currentCredits} "credits".`
 
 let betPredictionMessage: string = `Choose if the next card will be higher or lower, \n and how much you're willing to bet.`
 
@@ -77,7 +77,9 @@ function submitBetPrediction() {
                 {{ currentInventoryMessage }}
             </div>
 
-            <PokerCard class="current-card" :card=props.currentCard></PokerCard>
+            <div class="current-card">
+                <PokerCard :card=props.currentCard></PokerCard>
+            </div>
 
             <div class="bet-prediction-message">
                 {{ betPredictionMessage }}
@@ -106,7 +108,7 @@ function submitBetPrediction() {
     </div>
 </template>
 
-<style>
+<style scoped>
 .menu-wrapper {
     display: grid;
     width: 100vw;
@@ -127,12 +129,15 @@ function submitBetPrediction() {
     font-size: 1.5em;
     color: white;
     line-height: 1.5em;
-    margin: 0 0 50px 0;
+    margin: 0 0 20px 0;
 }
 
 .current-card {
+    width: 300px;
+    height: 400px;
+    scale: 90%;
     grid-row: current-card;
-    margin: 0 0 50px 0;
+    margin: 0 0 20px 0;
 }
 
 .bet-prediction-message {
