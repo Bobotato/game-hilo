@@ -9,11 +9,15 @@ const emit = defineEmits<{
 
 interface Props {
     card: Card
+    isStatic: boolean
 }
+const props = defineProps<Props>()
 
 let isCardFlipped = ref(false)
 
-const props = defineProps<Props>()
+if (props.isStatic) {
+    isCardFlipped.value = true
+}
 
 function convertSymbol(card: Card): string {
     switch (card.suit) {
@@ -35,17 +39,19 @@ function isRed(card: Card): boolean {
 }
 
 function flipCard() {
-    emit("playAudio", "menuReturnSfx")
-    isCardFlipped.value = !isCardFlipped.value
+    if (!props.isStatic) {
+        emit("playAudio", "menuReturnSfx")
+        isCardFlipped.value = !isCardFlipped.value
+    }
 }
 </script>
 <template>
     <button class="poker-card-component" @click="flipCard">
 
         <Transition>
-            <div class="card-face back" v-if=!isCardFlipped></div>
+            <div class="card-face back" v-if="!isCardFlipped && !isStatic"></div>
 
-            <div class="card-face front" v-else-if=isCardFlipped>
+            <div class="card-face front" v-else-if="isCardFlipped || isStatic">
                 <div class=top-symbol>
                     <div :class="{ 'rank rank-top red': isRed(props.card), 'rank rank-top': isRed(props.card) == false }">
                         {{

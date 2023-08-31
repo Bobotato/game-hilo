@@ -37,7 +37,7 @@ function emitChangeGameState() {
         <h2>{{ deckMessage.message }}</h2>
         <img class="deck" src="@/assets/images/CardDeck.png">
         <button class="deck-button" @click="drawCard">
-            <PokerCard :card=props.currentCard @play-audio="$emit('playAudio', $event)"></PokerCard>
+            <PokerCard :card=props.currentCard :isStatic=false @play-audio="$emit('playAudio', $event)"></PokerCard>
         </button>
         <button class="continue-button" @click.once="emitChangeGameState">Continue</button>
     </div>
@@ -54,7 +54,7 @@ function emitChangeGameState() {
     width: 300px;
     height: 400px;
     scale: 90%;
-    /* transform: perspective(800px) rotateX(15deg); */
+    transform: perspective(800px) rotateX(15deg);
     margin: -430px 0 30px 0;
 }
 

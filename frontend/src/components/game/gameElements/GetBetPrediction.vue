@@ -36,6 +36,7 @@ let betPredictionMessage: string = `Choose if the next card will be higher or lo
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
     prediction.value = choice
+    console.log(prediction.value)
 }
 
 function checkBetandPrediction() {
@@ -78,7 +79,7 @@ function submitBetPrediction() {
             </div>
 
             <div class="current-card">
-                <PokerCard :card=props.currentCard></PokerCard>
+                <PokerCard :card=props.currentCard :isStatic="true"></PokerCard>
             </div>
 
             <div class="bet-prediction-message">

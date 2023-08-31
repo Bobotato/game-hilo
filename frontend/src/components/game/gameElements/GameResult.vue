@@ -1,7 +1,9 @@
 <script lang='ts' setup>
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
-import { Card } from '@/classes/PokerCard';
+import { Card } from '@/types/gameElements/gameElementTypes';
+import { CardRanks, CardSuits } from '@/services/card';
+
 
 interface Props {
     drawnCard: Card
@@ -20,12 +22,12 @@ const emit = defineEmits<{
     <div class="game-result">
         <h2 class="drawn-card-message">The drawn card was:</h2>
 
-        <PokerCard class="drawn-card" :card=props.drawnCard></PokerCard>
+        <PokerCard class="drawn-card" :card=props.drawnCard :isStatic="false"></PokerCard>
 
-        <h2 class="drawn-card-string">{{ drawnCard.toString() }}</h2>
+        <h2 class="drawn-card-string">{{ CardRanks[props.drawnCard.rank] }} of {{ CardSuits[props.drawnCard.suit] }}</h2>
 
-        <h2 class="result-message win" v-if="isWin">You have won.</h2>
-        <h2 class="result-message win" v-if="!isWin">You have lost.</h2>
+        <h2 class="result-message win" v-if="props.isWin">You have won.</h2>
+        <h2 class="result-message win" v-if="!props.isWin">You have lost.</h2>
 
         <button class="continue-button">
             Continue
@@ -49,6 +51,9 @@ const emit = defineEmits<{
 
 .drawn-card {
     grid-row: drawn-card;
+    width: 300px;
+    height: 400px;
+    scale: 90%;
 }
 
 .drawn-card-string {
