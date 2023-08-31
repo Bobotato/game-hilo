@@ -5,6 +5,7 @@ import gameTheme from '@/assets/sounds/bgmAudio/gameTheme.mp3'
 import enterConfirm from '@/assets/sounds/foleyAudio/enterConfirm.mp3'
 import choiceSelect from '@/assets/sounds/foleyAudio/choiceSelect.mp3'
 import menuReturn from '@/assets/sounds/foleyAudio/menuReturn.mp3'
+import creditPickup from '@/assets/sounds/foleyAudio/creditPickup.mp3'
 
 export class AudioPlayer {
   bgmAudio: any
@@ -41,6 +42,9 @@ export class AudioPlayer {
         break
       case (sound = "menuReturnSfx"):
         this.playFoleyAudio(menuReturn)
+        break
+      case (sound = "creditPickupSfx"):
+        this.playFoleyAudio(creditPickup)
         break
     }
   }

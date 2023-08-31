@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
-    (e: 'startGame'): void
+    (e: 'changeActiveGameState'): void
 }>()
 
 interface Props {
@@ -11,8 +11,9 @@ interface Props {
 
 const props = defineProps<Props>()
 
-function emitStartGame() {
-    emit('startGame')
+function emitChangeGameState() {
+    emit('playAudio', 'creditPickupSfx')
+    emit('changeActiveGameState')
 }
 </script>
 
@@ -21,8 +22,7 @@ function emitStartGame() {
         <h2 class="welcome-message">Welcome back, {{ props.name }}.</h2>
         <h2 class="welcome-message-2">You currently have {{ props.credits }} "credits".</h2>
         <h2 class="take-credit-prompt">Take your credits.</h2>
-        <button class="take-credit-button" @click.once=(emitStartGame)><img class="item-image"
-                src="@/assets/images/Fingers.png" :alt="'Credits'">
+        <button class="take-credit-button" alt="Credits" @click.once=(emitChangeGameState)>
         </button>
     </div>
 </template>
@@ -61,7 +61,10 @@ function emitStartGame() {
     height: 300px;
     width: 400px;
     color: white;
-    background-color: rgba(48, 0, 0, 0);
+    background-image: url("@/assets/images/Fingers.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #cccccc00;
 }
 
 .take-credit-button:hover {
