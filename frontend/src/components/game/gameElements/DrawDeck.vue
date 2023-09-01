@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/services/card'
+import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard'
 
 interface Props {
     currentCard: Card

@@ -2,7 +2,7 @@
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/services/card';
+import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
 
 
 interface Props {
@@ -13,34 +13,37 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'acceptResult'): void
+    (e: 'changeActiveGameState'): void
     (e: 'playAudio', sound: string): void
 }>()
+
+function emitChangeGameState() {
+    emit('playAudio', 'menuSelectSfx')
+    emit('changeActiveGameState')
+}
 </script>
 
 <template>
     <div class="game-result">
         <h2 class="drawn-card-message">The drawn card was:</h2>
 
-        <PokerCard class="drawn-card" :card=props.drawnCard :isStatic="false"></PokerCard>
+        <PokerCard class="drawn-card" :card=props.drawnCard :isStatic="true"></PokerCard>
 
         <h2 class="drawn-card-string">{{ CardRanks[props.drawnCard.rank] }} of {{ CardSuits[props.drawnCard.suit] }}</h2>
 
-        <h2 class="result-message win" v-if="props.isWin">You have won.</h2>
+        <h2 class="result-message win" v-if="props.isWin">You have won. <br /> You survive another round.</h2>
         <h2 class="result-message win" v-if="!props.isWin">You have lost.</h2>
 
-        <button class="continue-button">
+        <button class="continue-button" @click.once="emitChangeGameState">
             Continue
         </button>
     </div>
 </template>
 
-<style>
+<style scoped>
 .game-result {
     display: grid;
     grid-template-rows: [drawn-card-message] auto [drawn-card] auto [drawn-card-string] auto [result-message] auto [continue-button] auto;
-    width: 100%;
-    height: 50%;
     place-items: center;
     align-self: center;
 }
@@ -62,6 +65,7 @@ const emit = defineEmits<{
 
 .result-message {
     grid-row: result-message;
+    text-align: center;
 }
 
 .continue-button {

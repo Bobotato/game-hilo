@@ -7,7 +7,7 @@ import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/services/card';
+import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 
@@ -71,7 +71,7 @@ function submitBetPrediction() {
 </script>
 
 <template>
-    <div class="menu-wrapper">
+    <div class="bet-prediction-component">
         <div class="bet-prediction-menu">
 
             <div class="current-card-message">
@@ -110,7 +110,7 @@ function submitBetPrediction() {
 </template>
 
 <style scoped>
-.menu-wrapper {
+.bet-prediction-component {
     display: grid;
     width: 100vw;
     height: 100vh;
@@ -119,7 +119,7 @@ function submitBetPrediction() {
 
 .bet-prediction-menu {
     display: grid;
-    grid-template-rows: [current-card-message] auto [current-card] auto [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [submit-button] auto;
+    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [submit-button] auto;
     place-items: center;
 }
 

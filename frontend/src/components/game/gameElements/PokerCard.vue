@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks } from '@/services/card';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -34,6 +33,39 @@ function convertSymbol(card: Card): string {
     }
 }
 
+function convertNumeric(card: Card): string {
+    switch (card.rank) {
+        case 1:
+            return 'A';
+        case 2:
+            return '2';
+        case 3:
+            return '3';
+        case 4:
+            return '4';
+        case 5:
+            return '5';
+        case 6:
+            return '6';
+        case 7:
+            return '7';
+        case 8:
+            return '8';
+        case 9:
+            return '9';
+        case 10:
+            return '10';
+        case 11:
+            return 'J';
+        case 12:
+            return 'Q';
+        case 13:
+            return 'K';
+        default:
+            return '';
+    }
+}
+
 function isRed(card: Card): boolean {
     return (card.suit == 1 || card.suit == 3)
 }
@@ -41,6 +73,7 @@ function isRed(card: Card): boolean {
 function flipCard() {
     if (!props.isStatic) {
         emit("playAudio", "menuReturnSfx")
+        console.log(props.card)
         isCardFlipped.value = !isCardFlipped.value
     }
 }
@@ -55,7 +88,7 @@ function flipCard() {
                 <div class=top-symbol>
                     <div :class="{ 'rank rank-top red': isRed(props.card), 'rank rank-top': isRed(props.card) == false }">
                         {{
-                            CardRanks[props.card.rank] }}</div>
+                            convertNumeric(props.card) }}</div>
 
                     <div
                         :class="{ 'minisuit suit-top red': isRed(props.card), 'minisuit suit-top': isRed(props.card) == false }">
@@ -72,7 +105,7 @@ function flipCard() {
 
                     <div
                         :class="{ 'rank rank-bottom red': isRed(props.card), 'rank rank-bottom': isRed(props.card) == false }">
-                        {{ CardRanks[props.card.rank] }}</div>
+                        {{ convertNumeric(props.card) }}</div>
                 </div>
             </div>
         </Transition>

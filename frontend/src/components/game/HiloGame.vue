@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref, Ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 
-import CardInventory from '@/components/game/gameElements/CardInventory.vue'
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
 import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
 import StartMessage from '@/components/game/gameElements/StartMessage.vue';
@@ -21,7 +20,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM1MTIwODd9.QFh9Pp5FsZ3ClRmmD5ZQb7UQ85Kq5ZrVokxc9qdp9pY" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM1OTc3NDB9.6wCjQ6j7-ydAa2O1E9DssAbjYAg9McvtJpwF685JDQM" }
 enum GameStates {
     "start",
     "welcome",
@@ -108,11 +107,12 @@ async function submitBetPrediction(bet: number, prediction: number) {
         </GetBetPrediction>
 
         <GameResult v-else-if="activeGameState === GameStates.result" :drawnCard=roundResult.drawn_card
-            :isWin=roundResult.win>
+            :isWin=roundResult.win @change-active-game-state="activeGameState = GameStates.deck">
         </GameResult>
     </div>
 
-    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}</h2>
+    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }} Remaining "Credits": {{ roundInfo.player.credits }}
+    </h2>
     <!-- <h2 class="inventory-credits">Remaining "Credits": {{ roundInfo.player.credits }}</h2> -->
 
     <!-- <CardInventory v-if=false class="inventory-cards" :card=roundInfo.current_card>
