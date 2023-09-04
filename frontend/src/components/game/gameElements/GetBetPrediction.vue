@@ -6,14 +6,13 @@ import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
-import { Card } from '@/types/gameElements/gameElementTypes';
+import { Card, RoundInfo } from '@/types/gameElements/gameElementTypes';
 import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 
 interface Props {
-    currentCard: Card
-    currentCredits: number
+    roundInfo: RoundInfo
 }
 
 const props = defineProps<Props>()
@@ -29,10 +28,6 @@ let prediction: Ref<Prediction> = ref(Prediction.None)
 
 let errorHeader: Ref<string> = ref("")
 
-let currentInventoryMessage: string = `Your current card is the ${CardRanks[props.currentCard.rank]} of ${CardSuits[props.currentCard.suit]}.\n You have ${props.currentCredits} "credits".`
-
-let betPredictionMessage: string = `Choose if the next card will be higher or lower, \n and how much you're willing to bet.`
-
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
     prediction.value = choice
@@ -44,7 +39,7 @@ function checkBetandPrediction() {
         errorHeader.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
 
-    } else if (bet.value > props.currentCredits) {
+    } else if (bet.value > props.roundInfo.player.credits) {
         errorHeader.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
 
@@ -74,16 +69,17 @@ function submitBetPrediction() {
     <div class="bet-prediction-component">
         <div class="bet-prediction-menu">
 
-            <div class="current-card-message">
-                {{ currentInventoryMessage }}
-            </div>
+            <h2 class="current-card-message">
+                Your current card is the {{ CardRanks[props.roundInfo.current_card.rank] }} of
+                {{ CardSuits[props.roundInfo.current_card.suit] }}.
+            </h2>
 
             <div class="current-card">
-                <PokerCard :card=props.currentCard :isStatic="true"></PokerCard>
+                <PokerCard :card=props.roundInfo.current_card :isStatic="true"></PokerCard>
             </div>
 
             <div class="bet-prediction-message">
-                {{ betPredictionMessage }}
+                Choose if the next card will be higher or lower, <br> and how much you're willing to bet.
             </div>
 
             <div class="prediction-button-wrapper">
@@ -97,7 +93,11 @@ function submitBetPrediction() {
                 </button>
             </div>
 
-            <input class="bet-input" type="number" min=0 :max=props.currentCredits v-model="bet" required />
+            <h2 class="current-credits-message">
+                You have {{ props.roundInfo.player.credits }} "credits".
+            </h2>
+
+            <input class="bet-input" type="number" min=0 :max=props.roundInfo.player.credits v-model="bet" required />
 
             <errorDialogue class="error-dialogue" v-if="errorHeader !== ''" :errorMessage="errorHeader">
             </errorDialogue>

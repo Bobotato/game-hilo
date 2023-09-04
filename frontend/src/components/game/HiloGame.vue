@@ -20,7 +20,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM1OTc3NDB9.6wCjQ6j7-ydAa2O1E9DssAbjYAg9McvtJpwF685JDQM" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM4MzAxNjF9.KBFpbiGwjP_hysTxwot54d2C3i8Ce9DvqF5hd2lP2fI" }
 enum GameStates {
     "start",
     "welcome",
@@ -64,10 +64,6 @@ async function handleGetRoundResult(token: Token, bet: Bet, prediction: Predicti
     }
 }
 
-onMounted(() => {
-    handleGetRoundInfo(token)
-})
-
 async function startRound(token: Token) {
     try {
         activeGameState.value = GameStates.welcome
@@ -83,6 +79,20 @@ async function submitBetPrediction(bet: number, prediction: number) {
     await handleGetRoundResult(token, bet, prediction)
     activeGameState.value = GameStates.result
 }
+
+async function endRound(token: Token) {
+    try {
+        activeGameState.value = GameStates.betPrediction
+        await handleGetRoundInfo(token)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+onMounted(() => {
+    handleGetRoundInfo(token)
+})
+
 </script>
 
 <template>
@@ -102,16 +112,15 @@ async function submitBetPrediction(bet: number, prediction: number) {
         </DrawDeck>
 
         <GetBetPrediction v-else-if="activeGameState === GameStates.betPrediction"
-            @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)"
-            :currentCard=roundInfo.current_card :currentCredits=roundInfo.player.credits>
+            @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)" :roundInfo=roundInfo>
         </GetBetPrediction>
 
         <GameResult v-else-if="activeGameState === GameStates.result" :drawnCard=roundResult.drawn_card
-            :isWin=roundResult.win @change-active-game-state="activeGameState = GameStates.deck">
+            :isWin=roundResult.win @change-active-game-state="endRound(token)">
         </GameResult>
     </div>
 
-    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }} Remaining "Credits": {{ roundInfo.player.credits }}
+    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
     </h2>
     <!-- <h2 class="inventory-credits">Remaining "Credits": {{ roundInfo.player.credits }}</h2> -->
 

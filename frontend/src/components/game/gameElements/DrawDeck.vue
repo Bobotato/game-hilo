@@ -33,7 +33,7 @@ function emitChangeGameState() {
 </script>
 
 <template>
-    <div class="bg-filter">
+    <div class="deck-component">
         <h2>{{ deckMessage.message }}</h2>
         <img class="deck" src="@/assets/images/CardDeck.png">
         <button class="deck-button" @click="drawCard">
@@ -44,6 +44,16 @@ function emitChangeGameState() {
 </template>
 
 <style scoped>
+.deck-component {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(5px);
+}
+
 .deck {
     width: 300px;
     height: 400px;
@@ -54,21 +64,21 @@ function emitChangeGameState() {
     width: 300px;
     height: 400px;
     scale: 90%;
-    transform: perspective(800px) rotateX(15deg);
-    margin: -430px 0 30px 0;
+    transform: perspective(800px) rotateX(15deg) rotateZ(2deg);
+    margin: -430px 0 60px 0;
 }
 
-.deck-button:hover {
-    box-shadow: 0px 0px 5px rgba(48, 48, 44, 0.8);
-}
-
-.bg-filter {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    backdrop-filter: blur(5px);
+.continue-button {
+    height: 50px;
+    width: 250px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 1.5em;
+    color: white;
+    box-shadow: 3px 3px 5px black;
+    background-color: rgba(48, 0, 0);
 }
 </style>
