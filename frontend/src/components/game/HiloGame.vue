@@ -4,7 +4,7 @@ import { router } from '@/router/index'
 
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
 import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
-import StartMessage from '@/components/game/gameElements/StartMessage.vue';
+import PreGame from '@/components/game/gameElements/PreGame.vue';
 import GameResult from '@/components/game/gameElements/GameResult.vue';
 import WelcomeScreen from '@/components/game/gameElements/WelcomeScreen.vue'
 import GameOverScreen from '@/components/game/gameElements/GameOverScreen.vue';
@@ -22,14 +22,14 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQwNzQ2OTd9.X7WlktInEr0-gYSfGkYa4k34mSc7qXiKXGWqtfx24lY" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQwNzk3NDR9.8MhSegBZT024QsdnYo2mIPqLUeZFqpdG0EXK9zrEdBo" }
 
 let errorMessage = ref({
     message: "",
     isShowing: false
 })
 
-let activeGameState = ref(GameStates.start)
+let activeGameState = ref(GameStates.preGame)
 
 async function handleGetRoundInfo(token: Token) {
     try {
@@ -61,7 +61,6 @@ async function handleGetRoundResult(token: Token, bet: Bet, prediction: Predicti
 
 async function startRound(token: Token) {
     try {
-        activeGameState.value = GameStates.welcome
         await handleGetRoundInfo(token)
     } catch (error) {
         console.log(error)
@@ -93,6 +92,7 @@ onMounted(() => {
 })
 
 function changeActiveGameState(gamestate: GameStates) {
+    console.log(gamestate)
     activeGameState.value = gamestate
 }
 
@@ -100,13 +100,13 @@ function changeActiveGameState(gamestate: GameStates) {
 
 <template>
     <div class=game>
-        <StartMessage class=start-message-component v-if="activeGameState === GameStates.start"
-            @play-audio="$emit('playAudio', $event)" @change-active-game-state="startRound(token)">
-        </StartMessage>
+        <PreGame class=start-message-component v-if="activeGameState === GameStates.preGame"
+            @play-audio="$emit('playAudio', $event)" @change-active-game-state="changeActiveGameState($event)"
+            @start-game="startRound(token)">
+        </PreGame>
 
-        <WelcomeScreen class="welcome-screen-component" v-if="activeGameState === GameStates.welcome"
-            :name=roundInfo.player.name :credits=roundInfo.player.credits
-            @change-active-game-state="activeGameState = GameStates.deck" @play-audio="$emit('playAudio', $event)">
+        <WelcomeScreen class="welcome-screen-component" v-if="activeGameState === GameStates.welcome" :roundInfo=roundInfo
+            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
         </WelcomeScreen>
 
         <DrawDeck class=draw-deck-component v-else-if="activeGameState === GameStates.deck"
@@ -114,8 +114,8 @@ function changeActiveGameState(gamestate: GameStates) {
             @change-active-game-state="activeGameState = GameStates.betPrediction">
         </DrawDeck>
 
-        <GetBetPrediction v-else-if="activeGameState === GameStates.betPrediction"
-            @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)" :roundInfo=roundInfo>
+        <GetBetPrediction v-else-if="activeGameState === GameStates.betPrediction" :roundInfo=roundInfo
+            @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)">
         </GetBetPrediction>
 
         <GameResult v-else-if="activeGameState === GameStates.result" :roundResult=roundResult
