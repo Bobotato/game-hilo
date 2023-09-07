@@ -1,25 +1,28 @@
 <script lang='ts' setup>
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
-import { Card } from '@/types/gameElements/gameElementTypes';
+import { RoundResult } from '@/types/gameElements/gameElementTypes';
 import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
 
 
 interface Props {
-    drawnCard: Card
-    isWin: boolean
+    roundResult: RoundResult
 }
 
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'changeActiveGameState'): void
+    (e: 'changeActiveGameState', state: string): void
     (e: 'playAudio', sound: string): void
 }>()
 
 function emitChangeGameState() {
     emit('playAudio', 'menuSelectSfx')
-    emit('changeActiveGameState')
+    if (props.roundResult.is_player_bankrupt) {
+        emit('changeActiveGameState', 'betPrediction')
+    } else {
+        emit('changeActiveGameState', 'gameOver')
+    }
 }
 </script>
 
@@ -27,12 +30,13 @@ function emitChangeGameState() {
     <div class="game-result">
         <h2 class="drawn-card-message">The drawn card was:</h2>
 
-        <PokerCard class="drawn-card" :card=props.drawnCard :isStatic="true"></PokerCard>
+        <PokerCard class="drawn-card" :card=props.roundResult.drawn_card :isStatic="true"></PokerCard>
 
-        <h2 class="drawn-card-string">{{ CardRanks[props.drawnCard.rank] }} of {{ CardSuits[props.drawnCard.suit] }}</h2>
+        <h2 class="drawn-card-string">{{ CardRanks[props.roundResult.drawn_card.rank] }} of {{
+            CardSuits[props.roundResult.drawn_card.suit] }}</h2>
 
-        <h2 class="result-message win" v-if="props.isWin">You have won. <br /> You survive another round.</h2>
-        <h2 class="result-message win" v-if="!props.isWin">You have lost.</h2>
+        <h2 class="result-message win" v-if="props.roundResult.win">You have won. <br /> You survive another round.</h2>
+        <h2 class="result-message lose" v-if="!props.roundResult.win">You have lost.</h2>
 
         <button class="continue-button" @click.once="emitChangeGameState">
             Continue

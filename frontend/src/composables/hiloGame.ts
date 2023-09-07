@@ -36,3 +36,12 @@ export function useRoundResultComposable() {
 
     return { roundResult, updateRoundResult }
 }
+
+export enum GameStates {
+    "start",
+    "welcome",
+    "deck",
+    "betPrediction",
+    "result",
+    "gameOver"
+}

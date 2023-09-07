@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
+import { router } from '@/router/index'
 
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
 import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
 import StartMessage from '@/components/game/gameElements/StartMessage.vue';
 import GameResult from '@/components/game/gameElements/GameResult.vue';
 import WelcomeScreen from '@/components/game/gameElements/WelcomeScreen.vue'
+import GameOverScreen from '@/components/game/gameElements/GameOverScreen.vue';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 import { Token } from '@/services/apiService/game/game';
 
-import { useRoundInfoComposable, useRoundResultComposable } from '@/composables/hiloGame'
+import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/composables/hiloGame'
 import { UnauthorisedError } from '@/services/apiService/errors';
 
 let { roundInfo, updateRoundInfo } = useRoundInfoComposable()
@@ -20,14 +22,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTM4MzAxNjF9.KBFpbiGwjP_hysTxwot54d2C3i8Ce9DvqF5hd2lP2fI" }
-enum GameStates {
-    "start",
-    "welcome",
-    "deck",
-    "betPrediction",
-    "result"
-}
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQwNzQ2OTd9.X7WlktInEr0-gYSfGkYa4k34mSc7qXiKXGWqtfx24lY" }
 
 let errorMessage = ref({
     message: "",
@@ -89,9 +84,17 @@ async function endRound(token: Token) {
     }
 }
 
+function endGame() {
+    router.push({ path: '/mainmenu' })
+}
+
 onMounted(() => {
     handleGetRoundInfo(token)
 })
+
+function changeActiveGameState(gamestate: GameStates) {
+    activeGameState.value = gamestate
+}
 
 </script>
 
@@ -115,17 +118,18 @@ onMounted(() => {
             @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)" :roundInfo=roundInfo>
         </GetBetPrediction>
 
-        <GameResult v-else-if="activeGameState === GameStates.result" :drawnCard=roundResult.drawn_card
-            :isWin=roundResult.win @change-active-game-state="endRound(token)">
+        <GameResult v-else-if="activeGameState === GameStates.result" :roundResult=roundResult
+            @change-active-game-state="endRound(token)" @play-audio=" $emit('playAudio', $event)">
         </GameResult>
+
+        <GameOverScreen v-else-if="activeGameState === GameStates.gameOver"
+            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)"
+            @end-game="endGame">
+        </GameOverScreen>
     </div>
 
     <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
     </h2>
-    <!-- <h2 class="inventory-credits">Remaining "Credits": {{ roundInfo.player.credits }}</h2> -->
-
-    <!-- <CardInventory v-if=false class="inventory-cards" :card=roundInfo.current_card>
-        </CardInventory> -->
 </template>
 
 <style scoped>
