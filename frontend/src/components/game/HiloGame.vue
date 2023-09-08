@@ -7,7 +7,8 @@ import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vu
 import PreGame from '@/components/game/gameElements/PreGame.vue';
 import GameResult from '@/components/game/gameElements/GameResult.vue';
 import WelcomeScreen from '@/components/game/gameElements/WelcomeScreen.vue'
-import GameOverScreen from '@/components/game/gameElements/GameOverScreen.vue';
+import GameOver from '@/components/game/gameElements/GameOver.vue';
+import ErrorOverlay from '@/components/game/errorOverlay.vue';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 import { Token } from '@/services/apiService/game/game';
@@ -22,10 +23,10 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQwNzk3NDR9.8MhSegBZT024QsdnYo2mIPqLUeZFqpdG0EXK9zrEdBo" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQxNTc0Mjl9.u9kJP9RmLrV9ETIsv4zow5b2rvR7Du34b3LcYWLMRyU" }
 
-let errorMessage = ref({
-    message: "",
+let errorOverlay = ref({
+    error: "",
     isShowing: false
 })
 
@@ -38,7 +39,8 @@ async function handleGetRoundInfo(token: Token) {
         console.log(error)
         switch (error.constructor) {
             case UnauthorisedError:
-                errorMessage.value.message = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.error = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
                 console.log(error.message)
                 break
         }
@@ -52,7 +54,8 @@ async function handleGetRoundResult(token: Token, bet: Bet, prediction: Predicti
         console.log(error)
         switch (error.constructor) {
             case UnauthorisedError:
-                errorMessage.value.message = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.error = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
                 console.log(error.message)
                 break
         }
@@ -83,10 +86,6 @@ async function endRound(token: Token) {
     }
 }
 
-function endGame() {
-    router.push({ path: '/mainmenu' })
-}
-
 onMounted(() => {
     handleGetRoundInfo(token)
 })
@@ -100,6 +99,9 @@ function changeActiveGameState(gamestate: GameStates) {
 
 <template>
     <div class=game>
+        <ErrorOverlay v-if="errorOverlay.isShowing" :error=errorOverlay.error @play-audio="$emit('playAudio', $event)">
+        </ErrorOverlay>
+
         <PreGame class=start-message-component v-if="activeGameState === GameStates.preGame"
             @play-audio="$emit('playAudio', $event)" @change-active-game-state="changeActiveGameState($event)"
             @start-game="startRound(token)">
@@ -122,10 +124,9 @@ function changeActiveGameState(gamestate: GameStates) {
             @change-active-game-state="endRound(token)" @play-audio=" $emit('playAudio', $event)">
         </GameResult>
 
-        <GameOverScreen v-else-if="activeGameState === GameStates.gameOver"
-            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)"
-            @end-game="endGame">
-        </GameOverScreen>
+        <GameOver v-else-if="activeGameState === GameStates.gameOver"
+            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
+        </GameOver>
     </div>
 
     <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}

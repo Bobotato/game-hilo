@@ -1,15 +1,22 @@
 <script lang="ts" setup>
+import { router } from '@/router/index'
+
 import { GameStates } from '@/composables/hiloGame'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
     (e: 'changeActiveGameState', state: GameStates): void
-    (e: 'endGame'): void
 }>()
 
 function emitChangeGameState() {
     emit('playAudio', 'menuSelectSfx')
     emit('changeActiveGameState', GameStates["gameOver"])
+}
+
+function endGame() {
+    emit('playAudio', 'menuSelectSfx')
+    router.push({ path: '/mainmenu' })
+
 }
 </script>
 
@@ -20,7 +27,7 @@ function emitChangeGameState() {
         </h2>
 
         <button class="button retry" @click.once=emitChangeGameState>Retry</button>
-        <button class="button leave" @click.once="emit('endGame')">Leave</button>
+        <button class="button leave" @click.once="endGame">Leave</button>
     </div>
 </template>
 
