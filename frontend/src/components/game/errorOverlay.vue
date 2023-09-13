@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { router } from '@/router/index'
 
 interface Props {
@@ -24,22 +23,24 @@ function returnToLogin() {
 
     <div class="error-overlay-component">
         <img class="error-icon" src="@/assets/images/errorIcon.svg">
-        <h2 class="message">An error has occured: {{ props.error }}</h2>
+        <h2 class="message">An error has occured: <br> {{ props.error }}</h2>
         <button class="button" @click.once="returnToLogin">Return to Login</button>
     </div>
 </template>
 
 <style scoped>
 .backdrop-filter {
-    backdrop-filter: blur(10px) grayscale(80%);
+    z-index: 1000;
+    backdrop-filter: blur(10px) grayscale(50%);
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     width: 100%;
     height: 100%;
 }
 
 .error-overlay-component {
-    z-index: 999;
     position: absolute;
+    z-index: 1000;
     display: grid;
     grid-template-rows: [icon] auto [message] auto [button] auto;
     gap: 30px;

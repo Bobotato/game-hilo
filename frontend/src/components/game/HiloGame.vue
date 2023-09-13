@@ -15,6 +15,7 @@ import { Token } from '@/services/apiService/game/game';
 
 import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/composables/hiloGame'
 import { UnauthorisedError } from '@/services/apiService/errors';
+import { AxiosError } from 'axios';
 
 let { roundInfo, updateRoundInfo } = useRoundInfoComposable()
 let { roundResult, updateRoundResult } = useRoundResultComposable()
@@ -23,7 +24,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQxNTc0Mjl9.u9kJP9RmLrV9ETIsv4zow5b2rvR7Du34b3LcYWLMRyU" }
+const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQ0MjA5MzZ9.RopjavyMAa94AtlN3P3J2_SnsYPDSYrlzjSSjBWixNg" }
 
 let errorOverlay = ref({
     error: "",
@@ -43,6 +44,11 @@ async function handleGetRoundInfo(token: Token) {
                 errorOverlay.value.isShowing = true
                 console.log(error.message)
                 break
+            case AxiosError:
+                errorOverlay.value.error = 'There is an issue with the API server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.log(error.message)
+                break
         }
     }
 }
@@ -55,6 +61,11 @@ async function handleGetRoundResult(token: Token, bet: Bet, prediction: Predicti
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.error = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
+                console.log(error.message)
+                break
+            case AxiosError:
+                errorOverlay.value.error = 'There is an issue with the API server. Please try again later.'
                 errorOverlay.value.isShowing = true
                 console.log(error.message)
                 break

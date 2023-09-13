@@ -8,10 +8,13 @@ from api.router.user import user
 
 app = FastAPI()
 
+app.include_router(user.router)
+app.include_router(game.router)
+
 origins = ["*"]
 
-app.add_middleware(
-    CORSMiddleware,
+app = CORSMiddleware(
+    app=app,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
@@ -19,6 +22,3 @@ app.add_middleware(
 )
 
 models.Base.metadata.create_all(engine)
-
-app.include_router(user.router)
-app.include_router(game.router)
