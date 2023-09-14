@@ -24,8 +24,6 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const token = { access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJzdHJpbmciLCJleHAiOjE2OTQ0MjA5MzZ9.RopjavyMAa94AtlN3P3J2_SnsYPDSYrlzjSSjBWixNg" }
-
 let errorOverlay = ref({
     error: "",
     isShowing: false

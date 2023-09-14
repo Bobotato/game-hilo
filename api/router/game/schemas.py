@@ -14,6 +14,8 @@ class InfoOut(BaseModel):
 
 
 class ResultIn(BaseModel):
+    bet: int
+    prediction: int
     access_token: str
 
 

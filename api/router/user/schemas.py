@@ -8,7 +8,6 @@ class AuthenticateIn(BaseModel):
 
 class AuthenticateOut(BaseModel):
     access_token: str
-    refresh_token: str
 
     class Config:
         orm_mode = True
@@ -16,12 +15,10 @@ class AuthenticateOut(BaseModel):
 
 class RefreshAccessTokenIn(BaseModel):
     access_token: str
-    refresh_token: str
 
 
 class RefreshAccessTokenOut(BaseModel):
     access_token: str
-    refresh_token: str
 
 
 class RegisterIn(BaseModel):
@@ -31,4 +28,3 @@ class RegisterIn(BaseModel):
 
 class RegisterOut(BaseModel):
     access_token: str
-    refresh_token: str
