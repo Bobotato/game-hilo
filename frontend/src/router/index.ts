@@ -24,6 +24,11 @@ export const router = createRouter({
       name: 'mainmenu',
       component: () => import('../views/MainMenuView.vue')
     },
+    {
+      path: '/:notfound',
+      name: 'notfound',
+      component: () => import('../views/NotFound.vue')
+    }
   ]
 })
 

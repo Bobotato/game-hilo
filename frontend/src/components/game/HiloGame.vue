@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { router } from '@/router/index'
 
 import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
 import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
