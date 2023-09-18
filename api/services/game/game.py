@@ -21,10 +21,10 @@ def get_game_object(username: str, repo: GameRepository) -> Game:
         raise NoSuchGameException
 
 
-def get_info(token: schemas.InfoIn, db: Session):
+def get_info(token: str, db: Session):
     repo = GameRepository.create(db)
 
-    username = decode_access_token(access_token=token.access_token)["sub"]
+    username = decode_access_token(access_token=token)["username"]
 
     try:
         game = get_game_object(username=username, repo=repo)
@@ -41,11 +41,11 @@ def get_info(token: schemas.InfoIn, db: Session):
 
 
 def get_result(
-    bet: int, prediction: int, token: schemas.ResultIn, db: Session
+    bet: int, prediction: int, token: str, db: Session
 ) -> RoundResult:
     repo = GameRepository.create(db)
 
-    username = decode_access_token(access_token=token.access_token)["sub"]
+    username = decode_access_token(access_token=token)["username"]
 
     try:
         game = get_game_object(username=username, repo=repo)

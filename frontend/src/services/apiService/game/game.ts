@@ -15,20 +15,9 @@ export interface Token {
     access_token: string
 }
 
-export async function getInfo(token: Token): Promise<InfoResponse> {
+export async function getInfo(): Promise<InfoResponse> {
     try {
-        const requestBody = {
-            access_token: token.access_token
-        };
-
-        const response = await apiClient.post('/game/info',
-            requestBody,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            },
-        )
+        const response = await apiClient.post('/game/info')
         InfoResponseSchema.parse(response.data)
         return response.data as InfoResponse
     } catch (error: any) {
@@ -49,22 +38,14 @@ export async function getInfo(token: Token): Promise<InfoResponse> {
     }
 }
 
-export async function getResult(token: Token, bet: Bet, prediction: Prediction): Promise<ResultResponse> {
+export async function getResult(bet: Bet, prediction: Prediction): Promise<ResultResponse> {
     try {
-        const requestBody = {
-            access_token: token.access_token
-        };
-
         const response = await apiClient.post('/game/result',
-            requestBody,
             {
                 params: {
                     bet: bet,
                     prediction: prediction
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                }
             },
         )
         ResultResponseSchema.parse(response.data)

@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, status
+from fastapi import APIRouter, Cookie, Depends, Header, status
 from fastapi.responses import JSONResponse
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
@@ -21,10 +21,11 @@ router = APIRouter()
     response_model=schemas.InfoOut,
 )
 def info(
-    token: Annotated[schemas.InfoIn, Header()], db: Session = Depends(get_db)
+    access_token: Annotated[str | None, Cookie()],
+    db: Session = Depends(get_db),
 ):
     try:
-        return get_info(token=token, db=db)
+        return get_info(token=access_token, db=db)
 
     except ExpiredSignatureError:
         return JSONResponse(
@@ -52,13 +53,13 @@ def info(
     response_model=schemas.ResultOut,
 )
 def result(
-    token: Annotated[schemas.ResultIn, Header()],
+    access_token: Annotated[str | None, Cookie()],
     bet: int,
     prediction: int,
     db: Session = Depends(get_db),
 ):
     try:
-        return get_result(bet=bet, prediction=prediction, token=token, db=db)
+        return get_result(bet=bet, prediction=prediction, token=access_token, db=db)
 
     except ExpiredSignatureError:
         return JSONResponse(

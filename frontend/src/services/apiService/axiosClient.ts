@@ -3,11 +3,11 @@ import axios from 'axios'
 const apiBaseURL = import.meta.env.VITE_APIBASEURL
 
 export const apiClient = axios.create({
-  baseURL: apiBaseURL,
   withCredentials: true,
+  baseURL: apiBaseURL,
   headers: {
     Accept: 'application/json',
     'content-type': 'application/json',
-    timeout: 1000
+    timeout: 1000,
   },
 })

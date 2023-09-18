@@ -31,9 +31,9 @@ let errorOverlay = ref({
 
 let activeGameState = ref(GameStates.preGame)
 
-async function handleGetRoundInfo(token: Token) {
+async function handleGetRoundInfo() {
     try {
-        await updateRoundInfo(token)
+        await updateRoundInfo()
     } catch (error: any) {
         console.log(error)
         switch (error.constructor) {
@@ -51,9 +51,9 @@ async function handleGetRoundInfo(token: Token) {
     }
 }
 
-async function handleGetRoundResult(token: Token, bet: Bet, prediction: Prediction) {
+async function handleGetRoundResult(bet: Bet, prediction: Prediction) {
     try {
-        await updateRoundResult(token, bet, prediction)
+        await updateRoundResult(bet, prediction)
     } catch (error: any) {
         console.log(error)
         switch (error.constructor) {
@@ -82,21 +82,21 @@ async function startRound(token: Token) {
 async function submitBetPrediction(bet: number, prediction: number) {
     console.log(`Player bet ${bet}`)
     console.log(`Player predicted ${Prediction[prediction]}`)
-    await handleGetRoundResult(token, bet, prediction)
+    await handleGetRoundResult(bet, prediction)
     activeGameState.value = GameStates.result
 }
 
 async function endRound(token: Token) {
     try {
         activeGameState.value = GameStates.betPrediction
-        await handleGetRoundInfo(token)
+        await handleGetRoundInfo()
     } catch (error) {
         console.log(error)
     }
 }
 
 onMounted(() => {
-    handleGetRoundInfo(token)
+    handleGetRoundInfo()
 })
 
 function changeActiveGameState(gamestate: GameStates) {
