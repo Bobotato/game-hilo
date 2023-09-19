@@ -40,14 +40,12 @@ export async function getInfo(): Promise<InfoResponse> {
 
 export async function getResult(bet: Bet, prediction: Prediction): Promise<ResultResponse> {
     try {
-        const response = await apiClient.post('/game/result',
-            {
-                params: {
-                    bet: bet,
-                    prediction: prediction
-                }
-            },
-        )
+        const response = await apiClient.post('/game/result', {}, {
+            params: {
+                bet: bet,
+                prediction: prediction
+            }
+        })
         ResultResponseSchema.parse(response.data)
         return response.data as ResultResponse
     } catch (error: any) {
