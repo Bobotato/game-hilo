@@ -114,17 +114,33 @@ function flipCard() {
   
 <style scoped>
 .v-enter-from {
+    opacity: 0%;
     transform: rotateY(90deg)
 }
 
 .v-enter-active {
-    transition: 0.2s linear 0.2s;
+    transition-property: transform, opacity;
+    transition-delay: 0.4s;
+    transition-duration: 0.2s, 1ms;
+}
+
+.v-enter-to {
+    opacity: 100%;
+}
+
+.v-leave-from {
+    opacity: 100%;
+}
+
+.v-leave-active {
+    transition-property: transform, opacity;
+    transition-delay: 0s, 0.2s;
+    transition-duration: 0.2s, 1ms;
 }
 
 .v-leave-to {
     transform: rotateY(-90deg);
-    transition: 0.2s linear;
-
+    opacity: 0%;
 }
 
 .poker-card-component {

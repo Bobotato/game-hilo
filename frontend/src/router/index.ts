@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import PreGameView from '@/views/PreGameView.vue'
+import DisclaimerView from '@/views/DisclaimerView.vue'
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'pregame',
-      component: PreGameView
+      name: 'disclaimer',
+      component: DisclaimerView
     },
     {
       path: '/game',
@@ -17,7 +17,7 @@ export const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/AuthenticationView.vue')
     },
     {
       path: '/mainmenu',
@@ -27,7 +27,7 @@ export const router = createRouter({
     {
       path: '/:notfound',
       name: 'notfound',
-      component: () => import('../views/NotFound.vue')
+      component: () => import('../views/NotFoundView.vue')
     }
   ]
 })
