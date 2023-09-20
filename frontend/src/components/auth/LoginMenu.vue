@@ -2,7 +2,7 @@
 import { ref, Ref } from 'vue'
 import { router } from '@/router/index'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import loadingCover from '@/components/loading/loadingCover.vue';
+import loadingCover from '@/components/loading/loadingCover.vue'
 import { login } from '@/composables/auth/login'
 import {
     APIServerDownError,
@@ -127,7 +127,7 @@ function togglePasswordShow() {
     font-weight: 300;
     margin-bottom: 20px;
     padding: 0px 0px 0px 20px;
-    background: rgba(3, 3, 3, 70%);
+    background: rgba(3, 3, 3);
 }
 
 .input::placeholder {
@@ -164,7 +164,7 @@ input[type="password"]::placeholder {
 .toggle-password-button {
     height: 50px;
     width: 50px;
-    background-color: rgba(3, 3, 3, 70%);
+    background-color: rgba(3, 3, 3);
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: center;
@@ -200,11 +200,11 @@ input[type="password"]::placeholder {
 
 .login-button {
     grid-row: login-button;
-    background-color: rgba(0, 48, 0, 80%);
+    background-color: rgba(0, 48, 0);
 }
 
 .register-button {
     grid-row: register-button;
-    background-color: rgba(48, 0, 0, 80%);
+    background-color: rgba(48, 0, 0);
 }
-</style>@/composables/auth/authMenu@/composables/auth/login
+</style>

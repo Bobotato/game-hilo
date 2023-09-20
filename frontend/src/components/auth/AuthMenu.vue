@@ -70,11 +70,11 @@ function toggleRegister() {
 
 .goto-register-button {
     grid-row: toggle-button;
-    background-color: rgba(48, 0, 0, 80%);
+    background-color: rgba(48, 0, 0);
 }
 
 .goto-login-button {
     grid-row: toggle-button;
-    background-color: rgba(0, 48, 0, 80%);
+    background-color: rgba(0, 48, 0);
 }
 </style>

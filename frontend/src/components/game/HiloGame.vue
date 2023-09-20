@@ -10,7 +10,6 @@ import GameOver from '@/components/game/gameElements/GameOver.vue';
 import ErrorOverlay from '@/components/game/errorOverlay.vue';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
-import { Token } from '@/services/apiService/game/game';
 
 import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/composables/hiloGame'
 import { UnauthorisedError } from '@/services/apiService/errors';
@@ -70,9 +69,9 @@ async function handleGetRoundResult(bet: Bet, prediction: Prediction) {
     }
 }
 
-async function startRound(token: Token) {
+async function startRound() {
     try {
-        await handleGetRoundInfo(token)
+        await handleGetRoundInfo()
     } catch (error) {
         console.log(error)
     }
@@ -85,7 +84,7 @@ async function submitBetPrediction(bet: number, prediction: number) {
     activeGameState.value = GameStates.result
 }
 
-async function endRound(token: Token) {
+async function endRound() {
     try {
         activeGameState.value = GameStates.betPrediction
         await handleGetRoundInfo()
@@ -112,7 +111,7 @@ function changeActiveGameState(gamestate: GameStates) {
 
         <PreGame class=start-message-component v-if="activeGameState === GameStates.preGame"
             @play-audio="$emit('playAudio', $event)" @change-active-game-state="changeActiveGameState($event)"
-            @start-game="startRound(token)">
+            @start-game="startRound()">
         </PreGame>
 
         <WelcomeScreen class="welcome-screen-component" v-if="activeGameState === GameStates.welcome" :roundInfo=roundInfo
@@ -129,16 +128,13 @@ function changeActiveGameState(gamestate: GameStates) {
         </GetBetPrediction>
 
         <GameResult v-else-if="activeGameState === GameStates.result" :roundResult=roundResult
-            @change-active-game-state="endRound(token)" @play-audio=" $emit('playAudio', $event)">
+            @change-active-game-state="endRound()" @play-audio=" $emit('playAudio', $event)">
         </GameResult>
 
         <GameOver v-else-if="activeGameState === GameStates.gameOver"
             @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
         </GameOver>
     </div>
-
-    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
-    </h2>
 </template>
 
 <style scoped>

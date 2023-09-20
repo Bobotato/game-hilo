@@ -6,7 +6,7 @@ import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
-import { Card, RoundInfo } from '@/types/gameElements/gameElementTypes';
+import { RoundInfo } from '@/types/gameElements/gameElementTypes';
 import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
@@ -170,7 +170,7 @@ function submitBetPrediction() {
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
-    background-color: rgba(48, 0, 0, 80%);
+    background-color: rgba(48, 0, 0);
 }
 
 .selected-button {
@@ -179,7 +179,7 @@ function submitBetPrediction() {
 
 .unselected-button {
     color: grey;
-    background-color: rgba(38, 38, 38, 0.8);
+    background-color: rgba(38, 38, 38);
 }
 
 .bet-input {
@@ -193,7 +193,7 @@ function submitBetPrediction() {
     font-weight: 300;
     margin: 0 0 25px 0;
     padding: 0px 0px 0px 20px;
-    background: rgba(3, 3, 3, 70%);
+    background: rgba(3, 3, 3);
 }
 
 .bet-input::placeholder {
@@ -231,6 +231,6 @@ input[type=number] {
     color: white;
     box-shadow: 3px 3px 5px black;
     margin: 25px 0 0 0;
-    background-color: rgba(0, 48, 0, 80%);
+    background-color: rgba(0, 48, 0);
 }
 </style>

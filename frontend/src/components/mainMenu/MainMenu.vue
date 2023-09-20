@@ -87,7 +87,7 @@ h2 {
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
-    background-color: rgba(48, 0, 0, 80%);
+    background-color: rgba(48, 0, 0);
 }
 
 .main-menu-button:hover {
