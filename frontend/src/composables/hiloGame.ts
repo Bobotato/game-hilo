@@ -37,7 +37,7 @@ export function useRoundResultComposable() {
 }
 
 export enum GameStates {
-    "preGame",
+    "loading",
     "welcome",
     "deck",
     "betPrediction",

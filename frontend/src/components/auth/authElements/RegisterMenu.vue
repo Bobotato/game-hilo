@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 import { router } from '@/router/index'
 
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import loadingCover from '@/components/loading/loadingCover.vue';
+import LoadingPage from '@/components/loading/LoadingPage.vue';
 import { register } from '@/composables/auth/register';
 import {
     APIServerDownError,
@@ -56,6 +56,8 @@ function togglePasswordShow() {
 </script>
 
 <template>
+    <LoadingPage v-if=isLoading></LoadingPage>
+    
     <div class="registration-menu">
         <div class="welcome-message">
             Please register your details.
@@ -85,14 +87,9 @@ function togglePasswordShow() {
         </form>
 
     </div>
-    <loadingCover class=loading-cover v-if=isLoading></loadingCover>
 </template>
 
 <style scoped>
-.loading-cover {
-    z-index: 999;
-}
-
 .registration-menu {
     display: grid;
     border-radius: 10px;

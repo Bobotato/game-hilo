@@ -9,12 +9,16 @@
 
 <style>
 .loading-cover {
+    z-index: 999;
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0);
 }
 
 .loading-message {

@@ -2,7 +2,7 @@
 import { ref, Ref } from 'vue'
 import { router } from '@/router/index'
 import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
-import loadingCover from '@/components/loading/loadingCover.vue'
+import LoadingPage from '@/components/loading/LoadingPage.vue'
 import { login } from '@/composables/auth/login'
 import {
     APIServerDownError,
@@ -55,6 +55,8 @@ function togglePasswordShow() {
 </script>
 
 <template>
+    <LoadingPage v-if=isLoading></LoadingPage>
+
     <div class="login-menu">
         <div class="welcome-message">
             Welcome to Alex's hi-lo game.
@@ -85,15 +87,9 @@ function togglePasswordShow() {
         </form>
 
     </div>
-
-    <loadingCover class=loading-cover v-if=isLoading></loadingCover>
 </template>
 
 <style scoped>
-.loading-cover {
-    z-index: 999;
-}
-
 .login-menu {
     display: grid;
     border-radius: 10px;

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import LoginMenu from "@/components/auth/LoginMenu.vue"
-import RegisterMenu from "@/components/auth/RegisterMenu.vue"
+import LoginMenu from "@/components/auth/authElements/LoginMenu.vue"
+import RegisterMenu from "@/components/auth/authElements/RegisterMenu.vue"
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
