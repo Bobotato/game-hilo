@@ -11,14 +11,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: hilogamedb:latest
+    image: postgres:alpine
     user: postgres
     volumes:
-        - pgdata:/postgresql/data
+        - "./hilo-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
 
-  app:
+  backend:
     container_name: hilogameapi
-    image: hilogameapi:latest
+    image: valenciaga/test
     env_file: .env
     depends_on:
       database:
@@ -27,6 +27,8 @@ services:
         - 1337:1337
     volumes:
         - ./.env:/app/.env:ro
+  
+  frontend:
+    container_name: hilogamefrontend
+    image: node:16-alpine
 
-volumes:
-  pgdata:
