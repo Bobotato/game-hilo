@@ -62,6 +62,12 @@ def get_result(
     return round_result
 
 
+def reset_game(token: str, db: Session) -> None:
+    repo = GameRepository.create(db)
+    username = decode_access_token(access_token=token)["username"]
+    update_game(username=username, game=Game(name=username), repo=repo)
+
+
 def update_game(username: str, game: Game, repo: GameRepository) -> None:
     repo.patch(
         target=GameState.username,

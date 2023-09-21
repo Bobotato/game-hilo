@@ -7,7 +7,7 @@ from api.database import get_db
 from api.repository.errors import NoSuchGameException
 from api.router import error_codes
 from api.router.game import schemas
-from api.services.game.game import get_info, get_result
+from api.services.game.game import get_info, get_result, reset_game
 
 router = APIRouter()
 
@@ -85,5 +85,31 @@ def result(
             content={
                 "error_code": error_codes.NO_SUCH_GAME,
                 "detail": "There is no game associated with this user.",
+            },
+        )
+
+
+@router.post(
+    "/game/reset", summary="Resets a player's game.", tags=["Game Operations"]
+)
+def reset(access_token: str = Cookie(None), db: Session = Depends(get_db)):
+    try:
+        reset_game(token=access_token, db=db)
+
+    except ExpiredSignatureError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.EXPIRED_TOKEN,
+                "detail": "The token has expired. Please login again.",
+            },
+        )
+
+    except JWTError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.INVALID_TOKEN,
+                "detail": "The given token is invalid.",
             },
         )

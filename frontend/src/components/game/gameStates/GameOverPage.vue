@@ -10,7 +10,7 @@ const emit = defineEmits<{
 
 function emitChangeGameState() {
     emit('playAudio', 'menuSelectSfx')
-    emit('changeActiveGameState', GameStates["gameOver"])
+    emit('changeActiveGameState', 'gameOver')
 }
 
 function endGame() {
