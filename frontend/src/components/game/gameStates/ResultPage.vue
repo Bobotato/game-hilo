@@ -12,17 +12,13 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'changeActiveGameState', state: string): void
+    (e: 'endRound', isGameOver: boolean): void
     (e: 'playAudio', sound: string): void
 }>()
 
-function emitChangeGameState() {
+function emitEndRound() {
     emit('playAudio', 'menuSelectSfx')
-    if (props.roundResult.is_player_bankrupt) {
-        emit('changeActiveGameState', 'betPrediction')
-    } else {
-        emit('changeActiveGameState', 'gameOver')
-    }
+    emit('endRound', props.roundResult.is_player_bankrupt)
 }
 </script>
 
@@ -38,7 +34,7 @@ function emitChangeGameState() {
         <h2 class="result-message win" v-if="props.roundResult.win">You have won. <br /> You survive another round.</h2>
         <h2 class="result-message lose" v-if="!props.roundResult.win">You have lost.</h2>
 
-        <button class="continue-button" @click.once="emitChangeGameState">
+        <button class="continue-button" @click.once="emitEndRound">
             Continue
         </button>
     </div>

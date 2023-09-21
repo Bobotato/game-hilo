@@ -2,7 +2,7 @@ import { ref, Ref } from 'vue'
 
 import { getInfo, getResult } from "@/services/apiService/game/game";
 
-import { Bet, Prediction, RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
+import { Prediction, RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
 
 export function useRoundInfoComposable() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)
@@ -23,7 +23,7 @@ export function useRoundInfoComposable() {
 export function useRoundResultComposable() {
     const roundResult: Ref<RoundResult> = ref({} as RoundResult)
 
-    async function updateRoundResult(bet: Bet, prediction: Prediction) {
+    async function updateRoundResult(bet: number, prediction: Prediction) {
         try {
             roundResult.value = await getResult(bet, prediction)
             return roundResult

@@ -9,10 +9,6 @@ export interface Player {
     credits: number
 }
 
-export interface Bet {
-    bet: number
-}
-
 export interface Prediction {
     prediction: number
 }

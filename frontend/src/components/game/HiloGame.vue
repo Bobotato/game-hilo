@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 
-import WelcomePage from '@/components/game/gameStages/WelcomePage.vue'
-
-import DrawDeck from '@/components/game/gameElements/DrawDeck.vue'
-import GetBetPrediction from '@/components/game/gameElements/GetBetPrediction.vue';
-import GameResult from '@/components/game/gameElements/GameResult.vue';
-
-import GameOver from '@/components/game/gameElements/GameOver.vue';
-import ErrorOverlay from '@/components/game/errorOverlay.vue';
 import LoadingPage from '@/components/loading/LoadingPage.vue';
+import WelcomePage from '@/components/game/gameStates/WelcomePage.vue'
+import DrawDeckPage from '@/components/game/gameStates/DrawDeckPage.vue'
+import BetPage from '@/components/game/gameStates/BetPage.vue';
+import ResultPage from '@/components/game/gameStates/ResultPage.vue';
+import GameOverPage from '@/components/game/gameStates/GameOverPage.vue';
+
+import ErrorOverlay from '@/components/game/error/errorOverlay.vue';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 
@@ -51,7 +50,7 @@ async function handleGetRoundInfo() {
     }
 }
 
-async function handleGetRoundResult(bet: Bet, prediction: Prediction) {
+async function handleGetRoundResult(bet: number, prediction: Prediction) {
     try {
         await updateRoundResult(bet, prediction)
     } catch (error: any) {
@@ -87,10 +86,15 @@ async function submitBetPrediction(bet: number, prediction: number) {
     activeGameState.value = GameStates.result
 }
 
-async function endRound() {
+async function endRound(isGameOver: boolean) {
     try {
-        activeGameState.value = GameStates.betPrediction
-        await handleGetRoundInfo()
+        if (isGameOver) {
+            changeActiveGameState(GameStates.gameOver)
+        }
+        else {
+            await handleGetRoundInfo()
+            changeActiveGameState(GameStates.betPrediction)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -108,27 +112,27 @@ startRound()
         <ErrorOverlay v-if="errorOverlay.isShowing" :error=errorOverlay.error @play-audio="$emit('playAudio', $event)">
         </ErrorOverlay>
 
-        <loadingCover v-if="activeGameState === GameStates.loading"></loadingCover>
+        <LoadingPage v-if="activeGameState === GameStates.loading"></LoadingPage>
 
         <WelcomePage v-if="activeGameState === GameStates.welcome" :roundInfo=roundInfo
             @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
         </WelcomePage>
 
-        <DrawDeck v-if="activeGameState === GameStates.deck" :currentCard=roundInfo.current_card
+        <DrawDeckPage v-if="activeGameState === GameStates.deck" :currentCard=roundInfo.current_card
             @play-audio="$emit('playAudio', $event)" @change-active-game-state="activeGameState = GameStates.betPrediction">
-        </DrawDeck>
+        </DrawDeckPage>
 
-        <GetBetPrediction v-else-if="activeGameState === GameStates.betPrediction" :roundInfo=roundInfo
+        <BetPage v-else-if="activeGameState === GameStates.betPrediction" :roundInfo=roundInfo
             @submit-bet-prediction="submitBetPrediction" @play-audio=" $emit('playAudio', $event)">
-        </GetBetPrediction>
+        </BetPage>
 
-        <GameResult v-else-if="activeGameState === GameStates.result" :roundResult=roundResult
-            @change-active-game-state="endRound()" @play-audio=" $emit('playAudio', $event)">
-        </GameResult>
+        <ResultPage v-else-if="activeGameState === GameStates.result" :roundResult=roundResult @endRound="endRound($event)"
+            @play-audio=" $emit('playAudio', $event)">
+        </ResultPage>
 
-        <GameOver v-else-if="activeGameState === GameStates.gameOver"
+        <GameOverPage v-else-if="activeGameState === GameStates.gameOver"
             @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
-        </GameOver>
+        </GameOverPage>
     </div>
 
     <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
