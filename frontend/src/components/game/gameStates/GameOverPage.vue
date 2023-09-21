@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import { router } from '@/router/index'
 
-import { GameStates } from '@/composables/hiloGame'
-
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
-    (e: 'changeActiveGameState', state: GameStates): void
+    (e: 'isRetrying'): void
 }>()
 
-function emitChangeGameState() {
+function retry() {
     emit('playAudio', 'menuSelectSfx')
-    emit('changeActiveGameState', 'gameOver')
+    emit('isRetrying')
 }
 
 function endGame() {
@@ -26,7 +24,7 @@ function endGame() {
             You have run out of credits. <br> Would you like to start again by providing your own "credits"?
         </h2>
 
-        <button class="button retry" @click.once=emitChangeGameState>Retry</button>
+        <button class="button retry" @click.once="retry">Retry</button>
         <button class="button leave" @click.once="endGame">Leave</button>
     </div>
 </template>

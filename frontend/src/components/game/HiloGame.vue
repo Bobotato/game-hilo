@@ -16,6 +16,8 @@ import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/
 import { UnauthorisedError } from '@/services/apiService/errors';
 import { AxiosError } from 'axios';
 
+import { resetGame } from '@/services/apiService/game/game';
+
 let { roundInfo, updateRoundInfo } = useRoundInfoComposable()
 let { roundResult, updateRoundResult } = useRoundResultComposable()
 
@@ -73,7 +75,11 @@ async function handleGetRoundResult(bet: number, prediction: Prediction) {
 async function startRound() {
     try {
         await handleGetRoundInfo()
-        changeActiveGameState(GameStates.welcome)
+        if (roundInfo.value.player.credits === 0) {
+            changeActiveGameState(GameStates.gameOver)
+        } else {
+            changeActiveGameState(GameStates.welcome)
+        }
     } catch (error) {
         console.log(error)
     }
@@ -104,6 +110,12 @@ function changeActiveGameState(gamestate: GameStates) {
     activeGameState.value = gamestate
 }
 
+function restartGame() {
+    resetGame()
+    handleGetRoundInfo()
+    changeActiveGameState(GameStates.welcome)
+}
+
 startRound()
 </script>
 
@@ -130,8 +142,8 @@ startRound()
             @play-audio=" $emit('playAudio', $event)">
         </ResultPage>
 
-        <GameOverPage v-else-if="activeGameState === GameStates.gameOver"
-            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
+        <GameOverPage v-else-if="activeGameState === GameStates.gameOver" @is-retrying="restartGame()"
+            @play-audio="$emit('playAudio', $event)">
         </GameOverPage>
     </div>
 

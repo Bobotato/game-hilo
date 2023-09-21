@@ -9,7 +9,7 @@ import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
 import { InfoResponse, ResultResponse } from '@/types/apiResponseTypes'
-import { Bet, Prediction } from '@/types/gameElements/gameElementTypes'
+import { Prediction } from '@/types/gameElements/gameElementTypes'
 
 export interface Token {
     access_token: string
@@ -38,7 +38,7 @@ export async function getInfo(): Promise<InfoResponse> {
     }
 }
 
-export async function getResult(bet: Bet, prediction: Prediction): Promise<ResultResponse> {
+export async function getResult(bet: number, prediction: Prediction): Promise<ResultResponse> {
     try {
         const response = await apiClient.post('/game/result', {}, {
             params: {
@@ -62,6 +62,25 @@ export async function getResult(bet: Bet, prediction: Prediction): Promise<Resul
             }
         } else if (error instanceof ZodError) {
             throw new APIResponseMalformedError('API returned malformed response')
+        } else {
+            throw error
+        }
+    }
+}
+
+export async function resetGame(): Promise<void> {
+    try {
+        await apiClient.post('/game/reset')
+    } catch (error: any) {
+        if (error instanceof AxiosError && error.response) {
+            switch (error.response.status) {
+                case 401:
+                    throw new UnauthorisedError('Token is invalid')
+                case 500:
+                    throw new APIServerDownError('API Server down')
+                default:
+                    throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
+            }
         } else {
             throw error
         }
