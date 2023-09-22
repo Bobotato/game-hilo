@@ -1,13 +1,15 @@
+CREATE TABLE user_details (
+    username VARCHAR(255) NOT NULL,
+    password_hash VARCHAR,
+    PRIMARY KEY (username)
+);
+
 CREATE TABLE gamestates (
-    id INTEGER NOT NULL,
-    game VARCHAR(255),
+    id SERIAL NOT NULL,
+    game VARCHAR,
     username VARCHAR(255) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY(username) REFERENCES user_details (username)
 );
 
-CREATE TABLE user_details (
-    username VARCHAR(255) NOT NULL,
-    password_hash VARCHAR(255),
-    PRIMARY KEY (username)
-);
+
