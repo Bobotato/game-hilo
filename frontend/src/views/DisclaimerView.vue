@@ -5,32 +5,38 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
+let descriptionText = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n Use the mute icon on the bottom right to disable sounds."
+
 onUnmounted(() => {
     emit('playAudio', 'enterConfirmSfx')
 })
-
-let description = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n Use the mute icon on the bottom right to disable sounds."
 </script>
 
 <template>
-    <div class="bg">
-        <div class="description-card">
-            <h2 class="description">{{ description }}</h2>
+    <div class="disclaimer-component">
+        <div class="description-wrapper">
+            <h2 class="description-text">{{ descriptionText }}</h2>
+
             <RouterLink to="/login">
-                <button class="continue-button" @click="emit('playAudio', 'menuSelectSfx')">Continue</button>
+                <button class="description-continue-button"
+                    @click="emit('playAudio', 'menuSelectSfx')">
+                    Continue
+                </button>
             </RouterLink>
         </div>
     </div>
 </template>
 
 <style scoped>
-.bg {
+.disclaimer-component {
+    display: flex;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     background-color: black;
 }
 
-.description-card {
+.description-wrapper {
     display: grid;
     justify-items: center;
     align-items: center;
@@ -38,7 +44,7 @@ let description = "This game might be slightly spooky, with spooky sounds and di
     grid-template-rows: [description-text] auto [continue-button] auto;
 }
 
-.description {
+.description-text {
     line-height: 200%;
     font-size: 1.5em;
     white-space: pre-wrap;
@@ -46,7 +52,7 @@ let description = "This game might be slightly spooky, with spooky sounds and di
     color: white;
 }
 
-.continue-button {
+.description-continue-button {
     height: 50px;
     width: 300px;
     border: none;
@@ -58,20 +64,10 @@ let description = "This game might be slightly spooky, with spooky sounds and di
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
-    background-color: rgba(48, 0, 0, 80%);
+    background-color: rgba(48, 0, 0);
 }
 
-.continue-button:hover {
+.description-continue-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
 }
 </style>

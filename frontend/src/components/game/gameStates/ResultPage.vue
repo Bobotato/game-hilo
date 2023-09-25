@@ -2,7 +2,7 @@
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { RoundResult } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
+import { CardRanks, CardSuits } from '@/components/gameElements/pokerCard';
 
 
 interface Props {

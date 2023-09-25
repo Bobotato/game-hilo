@@ -1,25 +1,28 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
-let isMuted: Ref<boolean> = ref(false)
 
-const emit = defineEmits(['toggleMute'])
+const emit = defineEmits<{
+    (e: 'toggleMute'): void
+}>()
+
+let isMuted: Ref<boolean> = ref(false)
 
 function toggleMute() {
     isMuted.value = !isMuted.value
-    console.log(isMuted.value)
+    console.log("Audio mute:", isMuted.value)
     emit('toggleMute')
 }
 </script>
 
 <template>
-    <div class="mute-button">
-        <button :class="{ 'toggle-mute-button audio-muted': isMuted, 'toggle-mute-button audio-unmuted': !isMuted }"
+    <div class=togglemute-main>
+        <button :class="{ 'togglemute-button togglemute-button_audio-muted': isMuted, 'togglemute-button togglemute-button_audio-unmuted': !isMuted }"
             @click="toggleMute"></button>
     </div>
 </template>
 
 <style>
-.toggle-mute-button {
+.togglemute-button {
     position: absolute;
     right: 1vw;
     bottom: 1vh;
@@ -32,11 +35,11 @@ function toggleMute() {
     background-position: center;
 }
 
-.audio-muted {
+.togglemute-button_audio-muted {
     background-image: url('@/assets/icons/Muted.svg');
 }
 
-.audio-unmuted {
+.togglemute-button_audio-unmuted {
     background-image: url('@/assets/icons/Unmuted.svg');
 }
 </style>

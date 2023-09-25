@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
 import { router } from '@/router/index'
-import errorDialogue from '@/components/errorDialogue/errorDialogue.vue'
+
+import errorWarning from '@/components/errorWarning/errorWarning.vue'
 import LoadingPage from '@/components/loading/LoadingPage.vue'
-import { login } from '@/composables/auth/login'
+
+import { useLoginComposable } from '@/composables/authMenu/loginMenu'
 import {
     APIServerDownError,
     InvalidCredentialsError
@@ -13,34 +15,34 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const { getCredentialsForm, tryLogin } = login()
+const { getCredentialsForm, tryLogin } = useLoginComposable()
 
 let showPassword: Ref<boolean> = ref(false)
 
 let isLoading: Ref<boolean> = ref(false)
 
-let errorMessage: Ref<string> = ref("")
+let errorString: Ref<string> = ref("")
 
 async function handleLogin() {
     try {
         emit("playAudio", "menuSelectSfx")
         isLoading.value = true
-        errorMessage.value = ""
+        errorString.value = ""
         const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(loginResponse)
         router.push({ path: '/mainmenu' })
     } catch (error: any) {
         switch (error.constructor) {
             case InvalidCredentialsError:
-                errorMessage.value = 'The credentials provided were invalid. Please try again.'
+                errorString.value = 'The credentials provided were invalid. Please try again.'
                 console.log(error.message)
                 break
             case APIServerDownError:
-                errorMessage.value = 'The auth server is down, please try again later.'
+                errorString.value = 'The auth server is down, please try again later.'
                 console.log(error.message)
                 break
             default:
-                errorMessage.value = `Something went wrong, please try again later. The error is: ${error}`
+                errorString.value = `Something went wrong, please try again later. The error is: ${error}`
                 console.log(error.message)
                 break
         }
@@ -57,31 +59,54 @@ function togglePasswordShow() {
 <template>
     <LoadingPage v-if=isLoading></LoadingPage>
 
-    <div class="login-menu">
-        <div class="welcome-message">
+    <div class="login-menu-main">
+        <div class="login-instructions">
             Welcome to Alex's hi-lo game.
             Please log-in or register.
         </div>
 
-        <form class="login-fields" @submit.prevent="handleLogin()">
-            <input autofocus type="text" class="input username-input" placeholder="Username"
-                v-model="getCredentialsForm.username" required>
+        <form class="login-form" @submit.prevent="handleLogin">
+
+            <input class="login-form-input login-form-input_username-input" 
+                autofocus type="text"
+                placeholder="Username"
+                v-model="getCredentialsForm.username"
+                required
+            >
 
             <div class="password-input-wrapper">
-                <input v-if="showPassword" type="text" class="input password-input" v-model="getCredentialsForm.password"
-                    placeholder="Password" required />
-                <input v-else type="password" class="input password-input" v-model="getCredentialsForm.password"
-                    placeholder="Password" required />
+                
+                <input class="login-form-input login-form-input_password-input"
+                    v-if="showPassword"
+                    type="text"
+                    v-model="getCredentialsForm.password"
+                    placeholder="Password"
+                    required
+                />
+
+                <input class="login-form-input login-form-input_password-input"
+                    v-else
+                    type="password" 
+                    v-model="getCredentialsForm.password"
+                    placeholder="Password"
+                    required
+                />
 
                 <button
-                    :class="{ 'toggle-password-button password-shown': showPassword, 'toggle-password-button password-hidden': !showPassword }"
-                    @click="togglePasswordShow" type="button"></button>
+                    :class="{ 'toggle-password-button toggle-password-button_password-shown': showPassword, 'toggle-password-button toggle-password-button_password-hidden': !showPassword }"
+                    @click="togglePasswordShow"
+                    type="button"></button>
             </div>
 
-            <errorDialogue class="error_dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
-            </errorDialogue>
+            <errorWarning class="error-warning"
+                v-if="errorString !== ''"
+                :errorString="errorString">
+            </errorWarning>
 
-            <button class="button login-button" type="submit" :disabled=isLoading>
+            <button class="login-submit-button"
+                type="submit"
+                :disabled=isLoading
+            >
                 Log In
             </button>
         </form>
@@ -90,15 +115,15 @@ function togglePasswordShow() {
 </template>
 
 <style scoped>
-.login-menu {
+.login-menu-main {
     display: grid;
     border-radius: 10px;
     place-items: center;
-    grid-template-rows: [welcome-message] auto [username-input] auto [password-input] auto [error-message] auto [login-button] auto [register-button] auto;
+    grid-template-rows: [login-instructions] auto [username-input] auto [password-input] auto [error-message] auto [login-button] auto [register-button] auto;
 }
 
-.welcome-message {
-    grid-row: welcome-message;
+.login-instructions {
+    grid-row: login-instructions;
     width: 50%;
     line-height: 150%;
     font-size: 1.5em;
@@ -107,13 +132,13 @@ function togglePasswordShow() {
     margin: 30px 20px;
 }
 
-.login-fields {
+.login-form {
     display: grid;
     grid-template-rows: [username-input] auto [password-input] auto [error-message] auto [register-button] auto;
     place-items: center;
 }
 
-.input {
+.login-form-input {
     height: 50px;
     border: none;
     outline: none;
@@ -126,15 +151,15 @@ function togglePasswordShow() {
     background: rgba(3, 3, 3);
 }
 
-.input::placeholder {
+.login-form-input::placeholder {
     color: white;
 }
 
-.input:not(:focus):not(:placeholder-shown):invalid {
+.login-form-input:not(:focus):not(:placeholder-shown):invalid {
     border: 1px solid red;
 }
 
-.username-input {
+.login-form-input_username-input {
     grid-row: username-input;
     width: 400px;
 }
@@ -145,7 +170,7 @@ function togglePasswordShow() {
     grid-template-columns: [password-input] 370px [password-view-toggle-button] 50px;
 }
 
-.password-input {
+.login-form-input_password-input {
     margin-bottom: 20px;
 }
 
@@ -167,16 +192,15 @@ input[type="password"]::placeholder {
     border: none;
 }
 
-.password-shown {
+.toggle-password-button_password-shown {
     background-image: url('@/assets/icons/EyeSlashIcon.svg');
 }
 
-.password-hidden {
+.toggle-password-button_password-hidden {
     background-image: url('@/assets/icons/EyeIcon.svg');
 }
 
-
-.button {
+.login-submit-button {
     height: 50px;
     width: 250px;
     border: none;
@@ -188,19 +212,11 @@ input[type="password"]::placeholder {
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
-}
-
-.button:hover {
-    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
-}
-
-.login-button {
     grid-row: login-button;
     background-color: rgba(0, 48, 0);
 }
 
-.register-button {
-    grid-row: register-button;
-    background-color: rgba(48, 0, 0);
+.login-submit-button:hover {
+    box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 </style>

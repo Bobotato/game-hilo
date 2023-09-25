@@ -7,9 +7,7 @@ import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
 import { RoundInfo } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard';
-
-import { Prediction } from '@/composables/gameElements/getBetPrediction';
+import { CardRanks, CardSuits } from '@/components/gameElements/pokerCard';
 
 interface Props {
     roundInfo: RoundInfo
@@ -22,40 +20,45 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
+enum Prediction {
+    None = 0,
+    Higher = 1,
+    Lower = 2
+}
+
 let bet: Ref<number> = ref(0)
 
 let prediction: Ref<Prediction> = ref(Prediction.None)
 
-let errorHeader: Ref<string> = ref("")
+let errorMessage: Ref<string> = ref("")
 
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
     prediction.value = choice
-    console.log(prediction.value)
 }
 
-function checkBetandPrediction() {
+function validateBetPrediction() {
     if (prediction.value === Prediction.None && bet.value === 0) {
-        errorHeader.value = "You have not made any bet or prediction."
+        errorMessage.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
 
     } else if (bet.value > props.roundInfo.player.credits) {
-        errorHeader.value = "You cannot bet more than you have."
+        errorMessage.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
 
     } else if (bet.value === 0) {
-        errorHeader.value = "You cannot bet nothing."
+        errorMessage.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
 
     } else if (prediction.value === Prediction.None) {
-        errorHeader.value = "You have not chosen a prediction."
+        errorMessage.value = "You have not chosen a prediction."
         throw new BetPredictionError("NilPredictionError")
     }
 }
 
 function submitBetPrediction() {
     try {
-        checkBetandPrediction()
+        validateBetPrediction()
         emit('playAudio', 'menuSelectSfx')
         emit('submitBetPrediction', bet.value, prediction.value)
     } catch (error) {
@@ -67,7 +70,7 @@ function submitBetPrediction() {
 
 <template>
     <div class="bet-prediction-component">
-        <div class="bet-prediction-menu">
+        <div class="menu">
 
             <h2 class="current-card-message">
                 Your current card is the {{ CardRanks[props.roundInfo.current_card.rank] }} of
@@ -97,12 +100,12 @@ function submitBetPrediction() {
                 You have {{ props.roundInfo.player.credits }} "credits".
             </h2>
 
-            <input class="bet-input" type="number" min=0 :max=props.roundInfo.player.credits v-model="bet" required />
+            <input class="input-bet" type="number" min=0 :max=props.roundInfo.player.credits v-model="bet" required />
 
-            <errorDialogue class="error-dialogue" v-if="errorHeader !== ''" :errorMessage="errorHeader">
+            <errorDialogue class="error-dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
             </errorDialogue>
 
-            <button class="button submit-button" @click="submitBetPrediction">
+            <button class="button-submit" @click="submitBetPrediction">
                 Confirm
             </button>
         </div>
@@ -117,9 +120,9 @@ function submitBetPrediction() {
     place-items: center;
 }
 
-.bet-prediction-menu {
+.menu {
     display: grid;
-    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [submit-button] auto;
+    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [button-submit] auto;
     place-items: center;
 }
 
@@ -182,7 +185,7 @@ function submitBetPrediction() {
     background-color: rgba(38, 38, 38);
 }
 
-.bet-input {
+.input-bet {
     height: 50px;
     width: 80%;
     border: none;
@@ -196,16 +199,16 @@ function submitBetPrediction() {
     background: rgba(3, 3, 3);
 }
 
-.bet-input::placeholder {
+.input-bet::placeholder {
     color: white;
 }
 
-.bet-input:focus {
+.input-bet:focus {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     cursor: text;
 }
 
-.bet-input:not(:focus):not(:placeholder-shown):invalid {
+.input-bet:not(:focus):not(:placeholder-shown):invalid {
     border: 1px solid rgb(151, 0, 0);
 }
 
@@ -219,7 +222,7 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-.submit-button {
+.button-submit {
     height: 50px;
     width: 250px;
     border: none;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted } from 'vue';
-import AuthMenu from '@/components/auth/AuthMenu.vue'
+
+import AuthMenu from '@/components/authMenu/AuthenticationMenu.vue'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -18,13 +19,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="bg">
-        <AuthMenu @play-audio="$emit('playAudio', $event)"></AuthMenu>
+    <div class="authentication-component">
+        <AuthMenu 
+            @play-audio="$emit('playAudio', $event)">
+        </AuthMenu>
     </div>
 </template>
 
 <style scoped>
-.bg {
+.authentication-component {
     background-image: url("@/assets/images/loginScreen.jpg");
     background-repeat: no-repeat;
     background-size: cover;

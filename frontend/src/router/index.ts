@@ -10,14 +10,14 @@ export const router = createRouter({
       component: DisclaimerView
     },
     {
-      path: '/game',
-      name: 'game',
-      component: () => import('../views/GameView.vue')
-    },
-    {
       path: '/login',
       name: 'login',
       component: () => import('../views/AuthenticationView.vue')
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: () => import('../views/GameView.vue')
     },
     {
       path: '/mainmenu',

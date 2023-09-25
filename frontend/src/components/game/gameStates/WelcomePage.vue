@@ -117,4 +117,4 @@ function emitChangeGameState() {
         background-color: #08000062;
     }
 }
-</style>
+</style>@/composables/game/hiloGame

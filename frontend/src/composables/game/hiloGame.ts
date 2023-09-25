@@ -1,6 +1,6 @@
 import { ref, Ref } from 'vue'
 
-import { getInfo, getResult, resetGame } from "@/services/apiService/game/game";
+import { getInfo, getResult } from "@/services/apiService/game/game";
 
 import { Prediction, RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
 

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/composables/gameElements/pokerCard'
+import { CardRanks, CardSuits } from '@/components/gameElements/pokerCard'
 
 interface Props {
     currentCard: Card
@@ -37,7 +37,11 @@ function emitChangeGameState() {
         <h2>{{ deckMessage.message }}</h2>
         <img class="deck" src="@/assets/images/CardDeck.png">
         <button class="deck-button" @click="drawCard">
-            <PokerCard :card=props.currentCard :isStatic=false @play-audio="$emit('playAudio', $event)"></PokerCard>
+            <PokerCard 
+                :card=props.currentCard 
+                :isStatic=false 
+                @play-audio="$emit('playAudio', $event)">
+            </PokerCard>
         </button>
         <button class="continue-button" @click.once="emitChangeGameState">Continue</button>
     </div>

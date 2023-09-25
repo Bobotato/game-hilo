@@ -10,12 +10,30 @@ interface Props {
     card: Card
     isStatic: boolean
 }
+
 const props = defineProps<Props>()
 
-let isCardFlipped = ref(false)
+enum CardRanks {
+    "A" = 1,
+    "Two" = 2,
+    "Three" = 3,
+    "Four" = 4,
+    "Five" = 5,
+    "Six" = 6,
+    "Seven" = 7,
+    "Eight" = 8,
+    "Nine" = 9,
+    "Ten" = 10,
+    "J" = 11,
+    "Q" = 12,
+    "K" = 13
+}
 
-if (props.isStatic) {
-    isCardFlipped.value = true
+enum CardSuits {
+    "Diamonds" = 1,
+    "Clubs" = 2,
+    "Hearts" = 3,
+    "Spades" = 4
 }
 
 function convertSymbol(card: Card): string {
@@ -76,6 +94,12 @@ function flipCard() {
         console.log(props.card)
         isCardFlipped.value = !isCardFlipped.value
     }
+}
+
+let isCardFlipped = ref(false)
+
+if (props.isStatic) {
+    isCardFlipped.value = true
 }
 </script>
 <template>

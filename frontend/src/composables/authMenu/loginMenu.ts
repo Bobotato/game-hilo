@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 import { postLogin } from "@/services/apiService/user/user";
 import { Credentials } from '@/services/apiService/user/user'
 
-export function login() {
+export function useLoginComposable() {
     const getCredentialsForm: Ref<Credentials> = ref({} as Credentials)
 
     async function tryLogin(credentials: Credentials) {

@@ -12,7 +12,7 @@ import ErrorOverlay from '@/components/game/error/errorOverlay.vue';
 
 import { Prediction } from '@/composables/gameElements/getBetPrediction';
 
-import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/composables/hiloGame'
+import { useRoundInfoComposable, useRoundResultComposable, GameStates } from '@/composables/game/hiloGame'
 import { UnauthorisedError } from '@/services/apiService/errors';
 import { AxiosError } from 'axios';
 
