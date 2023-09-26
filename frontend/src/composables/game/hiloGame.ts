@@ -2,7 +2,8 @@ import { ref, Ref } from 'vue'
 
 import { getInfo, getResult } from "@/services/apiService/game/game";
 
-import { Prediction, RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
+import { RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
+import { Prediction } from '@/models/betPrediction';
 
 export function useRoundInfoComposable() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)
@@ -34,13 +35,4 @@ export function useRoundResultComposable() {
     }
 
     return { roundResult, updateRoundResult }
-}
-
-export enum GameStates {
-    "loading",
-    "welcome",
-    "deck",
-    "betPrediction",
-    "result",
-    "gameOver"
 }

@@ -2,12 +2,12 @@
 import { ref, Ref } from 'vue'
 
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
-
-import errorDialogue from '@/components/errorDialogue/errorDialogue.vue';
+import ErrorWarning from '@/components/errorWarning/ErrorWarning.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
 import { RoundInfo } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/components/gameElements/pokerCard';
+import { CardRanks, CardSuits } from '@/models/pokerCard';
+import { Prediction } from '@/models/betPrediction'
 
 interface Props {
     roundInfo: RoundInfo
@@ -20,40 +20,15 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-enum Prediction {
-    None = 0,
-    Higher = 1,
-    Lower = 2
-}
-
 let bet: Ref<number> = ref(0)
 
 let prediction: Ref<Prediction> = ref(Prediction.None)
 
-let errorMessage: Ref<string> = ref("")
+let errorString: Ref<string> = ref("")
 
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
     prediction.value = choice
-}
-
-function validateBetPrediction() {
-    if (prediction.value === Prediction.None && bet.value === 0) {
-        errorMessage.value = "You have not made any bet or prediction."
-        throw new BetPredictionError("BetPredictionNotSelectedError")
-
-    } else if (bet.value > props.roundInfo.player.credits) {
-        errorMessage.value = "You cannot bet more than you have."
-        throw new BetPredictionError("BetExceedsCreditsError")
-
-    } else if (bet.value === 0) {
-        errorMessage.value = "You cannot bet nothing."
-        throw new BetPredictionError("NilBetError")
-
-    } else if (prediction.value === Prediction.None) {
-        errorMessage.value = "You have not chosen a prediction."
-        throw new BetPredictionError("NilPredictionError")
-    }
 }
 
 function submitBetPrediction() {
@@ -62,14 +37,33 @@ function submitBetPrediction() {
         emit('playAudio', 'menuSelectSfx')
         emit('submitBetPrediction', bet.value, prediction.value)
     } catch (error) {
-        console.log(error)
+        console.error(error)
         emit('playAudio', 'errorBuzzer')
+    }
+}
+
+function validateBetPrediction() {
+    if (prediction.value === Prediction.None && bet.value === 0) {
+        errorString.value = "You have not made any bet or prediction."
+        throw new BetPredictionError("BetPredictionNotSelectedError")
+
+    } else if (bet.value > props.roundInfo.player.credits) {
+        errorString.value = "You cannot bet more than you have."
+        throw new BetPredictionError("BetExceedsCreditsError")
+
+    } else if (bet.value === 0) {
+        errorString.value = "You cannot bet nothing."
+        throw new BetPredictionError("NilBetError")
+
+    } else if (prediction.value === Prediction.None) {
+        errorString.value = "You have not chosen a prediction."
+        throw new BetPredictionError("NilPredictionError")
     }
 }
 </script>
 
 <template>
-    <div class="bet-prediction-component">
+    <div class="bet-prediction-main">
         <div class="menu">
 
             <h2 class="current-card-message">
@@ -102,8 +96,8 @@ function submitBetPrediction() {
 
             <input class="input-bet" type="number" min=0 :max=props.roundInfo.player.credits v-model="bet" required />
 
-            <errorDialogue class="error-dialogue" v-if="errorMessage !== ''" :errorMessage="errorMessage">
-            </errorDialogue>
+            <ErrorWarning class="error-warning" v-if="errorString !== ''" :errorString="errorString">
+            </ErrorWarning>
 
             <button class="button-submit" @click="submitBetPrediction">
                 Confirm
@@ -113,7 +107,7 @@ function submitBetPrediction() {
 </template>
 
 <style scoped>
-.bet-prediction-component {
+.bet-prediction-main {
     display: grid;
     width: 100vw;
     height: 100vh;

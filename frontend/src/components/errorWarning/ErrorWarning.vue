@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-defineProps<{
-  errorString: string
-}>()
+interface Props {
+    errorString: string
+}
+
+const props = defineProps<Props>()
 </script>
 
 <template>
@@ -13,7 +15,7 @@ defineProps<{
         />
       </div>
 
-      <p class="error-text">{{ errorString }}</p>
+      <p class="error-text">{{ props.errorString }}</p>
     </div>
   </div>
 </template>

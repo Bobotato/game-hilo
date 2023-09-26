@@ -2,7 +2,7 @@
 import { ref, Ref } from 'vue'
 import { router } from '@/router/index'
 
-import errorWarning from '@/components/errorWarning/errorWarning.vue'
+import ErrorWarning from '@/components/errorWarning/ErrorWarning.vue'
 import LoadingPage from '@/components/loading/LoadingPage.vue';
 
 import { useRegisterComposable } from '@/composables/authMenu/registerMenu';
@@ -98,10 +98,10 @@ function togglePasswordShow() {
                 </button>
             </div>
 
-            <errorWarning class="error-warning"
+            <ErrorWarning class="error-warning"
                 v-if="errorString !== ''" 
                 :errorString="errorString">
-            </errorWarning>
+            </ErrorWarning>
 
             <button class="register-submit-button" 
                 type="submit" 

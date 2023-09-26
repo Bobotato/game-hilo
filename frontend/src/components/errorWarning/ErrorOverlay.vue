@@ -2,7 +2,7 @@
 import { router } from '@/router/index'
 
 interface Props {
-    error: string
+    errorString: string
 }
 
 const props = defineProps<Props>()
@@ -23,7 +23,7 @@ function returnToLogin() {
 
     <div class="error-overlay-component">
         <img class="error-icon" src="@/assets/images/errorIcon.svg">
-        <h2 class="message">An error has occured: <br> {{ props.error }}</h2>
+        <h2 class="message">An error has occured: <br> {{ props.errorString }}</h2>
         <button class="button" @click.once="returnToLogin">Return to Login</button>
     </div>
 </template>

@@ -5,8 +5,6 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-let playerName = ref("stranger")
-
 let ruleSet = ref({
     isShowing: false,
     text: 'The game uses a standard 52 card deck. \n\n 1 card is dealt face up, and another face down. \n\n You need to guess if the face down card is of a higher or lower value than the face up card. \n\n A right answer doubles your bet, and a wrong answer forfeits your bet. Happy playing.'
@@ -19,24 +17,33 @@ function showRuleset() {
 </script>
 
 <template>
-    <div class="main-menu-component">
+    <div class="main-menu-main">
         <div class="main-menu">
-            <h2 class="welcome-message" v-if="!ruleSet.isShowing">Welcome to the table, {{ playerName }}.</h2>
-            <h2 class="ruleset" v-if="ruleSet.isShowing">{{ ruleSet.text }}</h2>
+            <h2 class="main-menu-message" v-if="!ruleSet.isShowing">Welcome to the table.</h2>
+            <h2 class="main-menu-ruleset" v-if="ruleSet.isShowing">{{ ruleSet.text }}</h2>
 
             <RouterLink to="/game">
-                <div class="button-wrapper">
-                    <button class="main-menu-button play-button" @click="emit('playAudio', 'menuSelectSfx')">Play</button>
+                <div class="main-menu-button-wrapper">
+                    <button class="main-menu-button main-menu-button_play-button"
+                        @click="emit('playAudio', 'menuSelectSfx')">
+                        Play
+                    </button>
                 </div>
             </RouterLink>
 
-            <div class="button-wrapper">
-                <button class="main-menu-button ruleset-button" @click="showRuleset">Ruleset</button>
+            <div class="main-menu-button-wrapper">
+                <button class="main-menu-button main-menu-button_ruleset-button"
+                    @click="showRuleset">
+                    Ruleset
+                </button>
             </div>
 
-            <div class="button-wrapper">
+            <div class="main-menu-button-wrapper">
                 <RouterLink to="/login">
-                    <button class="main-menu-button leave-button" @click="emit('playAudio', 'menuReturnSfx')">Leave</button>
+                    <button class="main-menu-button main-menu-button_leave-button"
+                        @click="emit('playAudio', 'menuReturnSfx')">
+                        Leave
+                    </button>
                 </RouterLink>
             </div>
         </div>
@@ -50,7 +57,7 @@ h2 {
     color: white;
 }
 
-.main-menu-component {
+.main-menu-main {
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -63,14 +70,14 @@ h2 {
     width: 500px;
     align-items: center;
     justify-content: center;
-    grid-template-rows: [welcome-message] auto [play-button] auto [ruleset-button] auto [leave-button] auto;
+    grid-template-rows: [main-menu-message] auto [main-menu-button_play-button] auto [main-menu-button_ruleset-button] auto [main-menu-button_leave-button] auto;
 }
 
-.welcome-message {
-    grid-row: welcome-message;
+.main-menu-message {
+    grid-row: main-menu-message;
 }
 
-.button-wrapper {
+.main-menu-button-wrapper {
     display: flex;
     justify-content: center;
 }
@@ -94,15 +101,15 @@ h2 {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 
-.play-button {
-    grid-row: play-button;
+.main-menu-button_play-button {
+    grid-row: main-menu-button_play-button;
 }
 
-.ruleset-button {
-    grid-row: ruleset-button;
+.main-menu-button_ruleset-button {
+    grid-row: main-menu-button_ruleset-button;
 }
 
-.leave-button {
-    grid-row: leave-button;
+.main-menu-button_leave-button {
+    grid-row: main-menu-button_leave-button;
 }
 </style>

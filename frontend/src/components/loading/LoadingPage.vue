@@ -2,13 +2,13 @@
 </script>
 
 <template>
-    <div class="loading-cover">
+    <div class="loading-main">
         <p class="loading-message">Loading...</p>
     </div>
 </template>
 
 <style>
-.loading-cover {
+.loading-main {
     z-index: 999;
     position: absolute;
     top: 0;

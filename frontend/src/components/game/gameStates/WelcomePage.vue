@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { GameStates } from '@/composables/hiloGame'
+import { GameStates } from '@/models/gameStates'
 import { RoundInfo } from '@/types/gameElements/gameElementTypes';
 
 interface Props {
@@ -21,8 +21,8 @@ function emitChangeGameState() {
 </script>
 
 <template>
-    <div class="welcome-component">
-        <h2 class="message">Welcome back, {{ props.roundInfo.player.name }}. <br> You currently have {{
+    <div class="welcome-main">
+        <h2 class="welcome-message">Welcome back, {{ props.roundInfo.player.name }}. <br> You currently have {{
             props.roundInfo.player.credits }}
             "credits". <br><br> Take your credits.
         </h2>
@@ -33,7 +33,7 @@ function emitChangeGameState() {
 </template>
 
 <style>
-.welcome-component {
+.welcome-main {
     display: grid;
     grid-template-rows: [message] auto [image] auto [shadow] auto;
     place-items: center;
@@ -41,7 +41,7 @@ function emitChangeGameState() {
     width: 100%;
 }
 
-.message {
+.welcome-message {
     grid-row: message;
     text-align: center;
     font-size: 1.5em;
@@ -117,4 +117,4 @@ function emitChangeGameState() {
         background-color: #08000062;
     }
 }
-</style>@/composables/game/hiloGame
+</style>

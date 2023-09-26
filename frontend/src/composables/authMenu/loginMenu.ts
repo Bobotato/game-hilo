@@ -8,11 +8,9 @@ export function useLoginComposable() {
 
     async function tryLogin(credentials: Credentials) {
         try {
-            const response = await postLogin(credentials)
-            return response
-
+            return await postLogin(credentials)
         } catch (error: any) {
-            console.log('Login failed with error:', `${error}`)
+            console.error('Login failed with error:', `${error}`)
             throw error
         }
     }

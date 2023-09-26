@@ -13,29 +13,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-enum CardRanks {
-    "A" = 1,
-    "Two" = 2,
-    "Three" = 3,
-    "Four" = 4,
-    "Five" = 5,
-    "Six" = 6,
-    "Seven" = 7,
-    "Eight" = 8,
-    "Nine" = 9,
-    "Ten" = 10,
-    "J" = 11,
-    "Q" = 12,
-    "K" = 13
-}
-
-enum CardSuits {
-    "Diamonds" = 1,
-    "Clubs" = 2,
-    "Hearts" = 3,
-    "Spades" = 4
-}
-
 function convertSymbol(card: Card): string {
     switch (card.suit) {
         case 1:
@@ -91,7 +68,6 @@ function isRed(card: Card): boolean {
 function flipCard() {
     if (!props.isStatic) {
         emit("playAudio", "menuReturnSfx")
-        console.log(props.card)
         isCardFlipped.value = !isCardFlipped.value
     }
 }
@@ -103,13 +79,13 @@ if (props.isStatic) {
 }
 </script>
 <template>
-    <button class="poker-card-component" @click="flipCard">
+    <button class="card-main" @click="flipCard">
 
         <Transition>
-            <div class="card-face back" v-if="!isCardFlipped && !isStatic"></div>
+            <div class="card-face card-face_back" v-if="!isCardFlipped && !isStatic"></div>
 
-            <div class="card-face front" v-else-if="isCardFlipped || isStatic">
-                <div class=top-symbol>
+            <div class="card-face card-face_front" v-else-if="isCardFlipped || isStatic">
+                <div class=card-top-symbols>
                     <div :class="{ 'rank rank-top red': isRed(props.card), 'rank rank-top': isRed(props.card) == false }">
                         {{
                             convertNumeric(props.card) }}</div>
@@ -122,7 +98,7 @@ if (props.isStatic) {
                 <div :class="{ 'suit red': isRed(props.card), 'suit': isRed(props.card) == false }">{{
                     convertSymbol(props.card) }}</div>
 
-                <div class=bottom-symbol>
+                <div class=card-bottom-symbols>
                     <div
                         :class="{ 'minisuit suit-bottom red': isRed(props.card), 'minisuit suit-bottom': isRed(props.card) == false }">
                         {{ convertSymbol(props.card) }}</div>
@@ -167,7 +143,7 @@ if (props.isStatic) {
     opacity: 0%;
 }
 
-.poker-card-component {
+.card-main {
     width: 100%;
     height: 100%;
     box-shadow: none;
@@ -175,7 +151,7 @@ if (props.isStatic) {
     background-color: transparent;
 }
 
-.poker-card-component:hover {
+.card-main:hover {
     cursor: grab;
     box-shadow: none;
 }
@@ -186,16 +162,16 @@ if (props.isStatic) {
     border-radius: 20px;
 }
 
-.back {
+.card-face_back {
     background: url("@/assets/images/cardRearBackground.png");
     background-position: center;
     background-size: 100% 102%;
 }
 
-.front {
+.card-face_front {
     background: url("@/assets/images/CardBackground.png");
     display: grid;
-    grid-template-rows: [top-symbol] 25% [suit] 50% [bottom-symbol] 25%;
+    grid-template-rows: [card-top-symbols] 25% [suit] 50% [card-bottom-symbols] 25%;
     background-position: center;
     background-repeat: no-repeat;
 }
@@ -212,7 +188,7 @@ if (props.isStatic) {
     letter-spacing: -5px;
 }
 
-.top-symbol {
+.card-top-symbols {
     display: grid;
     align-self: start;
     place-items: center;
@@ -229,7 +205,7 @@ if (props.isStatic) {
     grid-row: rank-top;
 }
 
-.bottom-symbol {
+.card-bottom-symbols {
     display: grid;
     place-items: center;
     grid-template-rows: [rank-bottom] 50px [suit-bottom] 60px;

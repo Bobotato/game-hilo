@@ -19,8 +19,8 @@ function endGame() {
 </script>
 
 <template>
-    <div class="game-over-component">
-        <h2 class="message">
+    <div class="game-over-main">
+        <h2 class="game-over-message">
             You have run out of credits. <br> Would you like to start again by providing your own "credits"?
         </h2>
 
@@ -30,7 +30,7 @@ function endGame() {
 </template>
 
 <style scoped>
-.game-over-component {
+.game-over-main {
     display: grid;
     grid-template-rows: [message] auto [button-retry] auto [button-leave] auto;
     place-items: center;
@@ -38,7 +38,7 @@ function endGame() {
     width: 100vw;
 }
 
-.message {
+.game-over-message {
     grid-row: message;
     text-align: center;
     line-height: 2em;

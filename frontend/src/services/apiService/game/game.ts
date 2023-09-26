@@ -9,7 +9,7 @@ import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
 import { InfoResponse, ResultResponse } from '@/types/apiResponseTypes'
-import { Prediction } from '@/types/gameElements/gameElementTypes'
+import { Prediction } from '@/models/betPrediction'
 
 export interface Token {
     access_token: string

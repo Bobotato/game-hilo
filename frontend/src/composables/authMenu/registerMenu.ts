@@ -8,11 +8,9 @@ export function useRegisterComposable() {
 
     async function tryRegister(credentials: Credentials) {
         try {
-            const response = await postRegister(credentials)
-            return response
-
+            return await postRegister(credentials)
         } catch (error: any) {
-            console.log('Registration failed with error:', `${error}`)
+            console.error('Registration failed with error:', `${error}`)
             throw error
         }
     }

@@ -9,10 +9,6 @@ export interface Player {
     credits: number
 }
 
-export interface Prediction {
-    prediction: number
-}
-
 export interface RoundInfo {
     player: Player,
     current_card: Card

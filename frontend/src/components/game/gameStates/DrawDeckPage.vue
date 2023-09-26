@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+
 import PokerCard from '@/components/game/gameElements/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/components/gameElements/pokerCard'
+import { CardRanks, CardSuits } from '@/models/pokerCard'
 
 interface Props {
     currentCard: Card
