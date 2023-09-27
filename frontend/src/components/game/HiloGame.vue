@@ -108,9 +108,25 @@ function changeActiveGameState(gamestate: GameStates) {
 }
 
 function restartGame() {
-    resetGame()
-    handleGetRoundInfo()
-    changeActiveGameState(GameStates.welcome)
+    try {
+        resetGame()
+        handleGetRoundInfo()
+        changeActiveGameState(GameStates.welcome)
+    } catch (error: any) {
+        console.error(error)
+        switch (error.constructor) {
+            case UnauthorisedError:
+                errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+            case AxiosError:
+                errorOverlay.value.errorString = 'There is an issue with the API server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+        }
+    }
 }
 
 startRound()

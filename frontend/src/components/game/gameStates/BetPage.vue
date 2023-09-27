@@ -64,14 +64,14 @@ function validateBetPrediction() {
 
 <template>
     <div class="bet-prediction-main">
-        <div class="menu">
+        <div class="bet-prediction-menu">
 
-            <h2 class="current-card-message">
+            <h2 class="bet-prediction_current-card-message">
                 Your current card is the {{ CardRanks[props.roundInfo.current_card.rank] }} of
                 {{ CardSuits[props.roundInfo.current_card.suit] }}.
             </h2>
 
-            <div class="current-card">
+            <div class="bet-prediction_current-card">
                 <PokerCard :card=props.roundInfo.current_card :isStatic="true"></PokerCard>
             </div>
 
@@ -79,27 +79,42 @@ function validateBetPrediction() {
                 Choose if the next card will be higher or lower, <br> and how much you're willing to bet.
             </div>
 
-            <div class="prediction-button-wrapper">
-                <button @click="selectPredictionButton(Prediction.Higher)"
-                    :class="{ 'prediction-button higher': prediction == Prediction.None, 'prediction-button higher selected-button': prediction == Prediction.Higher, 'prediction-button higher unselected-button': prediction == Prediction.Lower }">
+            <div class="bet-prediction-prediction-selection-wrapper">
+                <button 
+                    @click="selectPredictionButton(Prediction.Higher)"
+                    :class="{ 'prediction-button prediction-button_higher': prediction == Prediction.None,
+                              'prediction-button prediction-button_higher prediction-button_selected': prediction == Prediction.Higher,
+                              'prediction-button prediction-button_higher prediction-button_unselected': prediction == Prediction.Lower }">
                     Higher
                 </button>
-                <button @click="selectPredictionButton(Prediction.Lower)"
-                    :class="{ 'prediction-button lower': prediction == Prediction.None, 'prediction-button higher selected-button': prediction == Prediction.Lower, 'prediction-button higher unselected-button': prediction == Prediction.Higher }">
+
+                <button 
+                    @click="selectPredictionButton(Prediction.Lower)"
+                    :class="{ 'prediction-button prediction-button_lower': prediction == Prediction.None,
+                              'prediction-button prediction-button_higher prediction-button_selected': prediction == Prediction.Lower,
+                              'prediction-button prediction-button_higher prediction-button_unselected': prediction == Prediction.Higher }">
                     Lower
                 </button>
             </div>
 
-            <h2 class="current-credits-message">
+            <h2 class="bet-prediction_current-credits-message">
                 You have {{ props.roundInfo.player.credits }} "credits".
             </h2>
 
-            <input class="input-bet" type="number" min=0 :max=props.roundInfo.player.credits v-model="bet" required />
+            <input class="bet-prediction_bet-input"
+                type="number" 
+                min=0 
+                :max=props.roundInfo.player.credits 
+                v-model="bet" 
+                required />
 
-            <ErrorWarning class="error-warning" v-if="errorString !== ''" :errorString="errorString">
+            <ErrorWarning class="error-warning" 
+                v-if="errorString !== ''" 
+                :errorString="errorString">
             </ErrorWarning>
 
-            <button class="button-submit" @click="submitBetPrediction">
+            <button class="bet-prediction_submit-bet-prediction-button" 
+                @click="submitBetPrediction">
                 Confirm
             </button>
         </div>
@@ -114,13 +129,13 @@ function validateBetPrediction() {
     place-items: center;
 }
 
-.menu {
+.bet-prediction-menu {
     display: grid;
-    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [button-submit] auto;
+    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [bet-prediction_submit-bet-prediction-button] auto;
     place-items: center;
 }
 
-.current-card-message {
+.bet-prediction_current-card-message {
     grid-row: current-card-message;
     white-space: pre-wrap;
     text-align: center;
@@ -130,7 +145,7 @@ function validateBetPrediction() {
     margin: 0 0 20px 0;
 }
 
-.current-card {
+.bet-prediction_current-card {
     width: 300px;
     height: 400px;
     scale: 90%;
@@ -148,7 +163,7 @@ function validateBetPrediction() {
     margin: 0 0 50px 0;
 }
 
-.prediction-button-wrapper {
+.bet-prediction-prediction-selection-wrapper {
     grid-row: prediction-buttons;
     display: flex;
     justify-content: center;
@@ -170,16 +185,16 @@ function validateBetPrediction() {
     background-color: rgba(48, 0, 0);
 }
 
-.selected-button {
+.prediction-button_selected {
     background-color: rgb(90, 0, 0);
 }
 
-.unselected-button {
+.prediction-button_unselected {
     color: grey;
     background-color: rgba(38, 38, 38);
 }
 
-.input-bet {
+.bet-prediction_bet-input {
     height: 50px;
     width: 80%;
     border: none;
@@ -193,16 +208,16 @@ function validateBetPrediction() {
     background: rgba(3, 3, 3);
 }
 
-.input-bet::placeholder {
+.bet-prediction_bet-input::placeholder {
     color: white;
 }
 
-.input-bet:focus {
+.bet-prediction_bet-input:focus {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     cursor: text;
 }
 
-.input-bet:not(:focus):not(:placeholder-shown):invalid {
+.bet-prediction_bet-input:not(:focus):not(:placeholder-shown):invalid {
     border: 1px solid rgb(151, 0, 0);
 }
 
@@ -216,7 +231,7 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-.button-submit {
+.bet-prediction_submit-bet-prediction-button {
     height: 50px;
     width: 250px;
     border: none;

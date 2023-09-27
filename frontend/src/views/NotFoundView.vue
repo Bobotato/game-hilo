@@ -12,38 +12,42 @@ function returnToMain() {
 </script>
 
 <template>
-    <div class="bg">
-        <div class="component">
-            <h2 class="message">There is nothing here. <br> Use this to go back to the front page.</h2>
-            <button class="return-button" @click.once=returnToMain()>Back to Start</button>
+    <div class="not-found-main">
+        <div class="not-found-wrapper">
+            <h2 class="not-found-message">There is nothing here. <br> Use this to go back to the front page.</h2>
+            
+            <button class="not-found-return-button"
+                @click.once=returnToMain()>
+                Back to Start
+            </button>
         </div>
     </div>
 </template>
 
 <style scoped>
-.bg {
+.not-found-main {
+    height: 100vh;
+    width: 100vw;
     background-image: url("@/assets/images/notFound.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-
-    width: 100vw;
     display: grid;
     place-items: center;
 }
 
-.component {
+.not-found-wrapper {
     display: grid;
     grid-template-rows: [message] auto [button] auto;
     place-items: center;
 }
 
-.message {
+.not-found-message {
     text-align: center;
     line-height: 2em;
 }
 
-.return-button {
+.not-found-return-button {
     height: 50px;
     width: 300px;
     border: none;
@@ -58,7 +62,7 @@ function returnToMain() {
     background-color: rgba(48, 0, 0);
 }
 
-.return-button:hover {
+.not-found-return-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
 </style>
