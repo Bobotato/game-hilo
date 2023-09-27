@@ -23,7 +23,16 @@ def info(
     db: Session = Depends(get_db),
 ):
     try:
-        return get_info(token=access_token, db=db)
+        if access_token:
+            return get_info(token=access_token, db=db)
+        else:
+            return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.INVALID_TOKEN,
+                "detail": "No token was supplied Please supply an access token.",
+            },
+        )
 
     except ExpiredSignatureError:
         return JSONResponse(
@@ -57,8 +66,17 @@ def result(
     db: Session = Depends(get_db),
 ):
     try:
-        return get_result(
-            bet=bet, prediction=prediction, token=access_token, db=db
+        if access_token:
+            return get_result(
+                bet=bet, prediction=prediction, token=access_token, db=db
+            )
+        else:
+            return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.INVALID_TOKEN,
+                "detail": "No token was supplied Please supply an access token.",
+            },
         )
 
     except ExpiredSignatureError:
