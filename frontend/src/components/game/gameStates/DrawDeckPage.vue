@@ -34,22 +34,26 @@ function emitChangeGameState() {
 </script>
 
 <template>
-    <div class="deck-component">
+    <div class="draw-deck-main">
         <h2>{{ deckMessage.message }}</h2>
-        <img class="deck" src="@/assets/images/CardDeck.png">
-        <button class="deck-button" @click="drawCard">
+
+        <img class="deck-image" src="@/assets/images/CardDeck.png">
+
+        <button class="deck-button"
+                @click="drawCard">
             <PokerCard 
                 :card=props.currentCard 
                 :isStatic=false 
                 @play-audio="$emit('playAudio', $event)">
             </PokerCard>
         </button>
-        <button class="continue-button" @click.once="emitChangeGameState">Continue</button>
+
+        <button class="deck-continue-button" @click.once="emitChangeGameState">Continue</button>
     </div>
 </template>
 
 <style scoped>
-.deck-component {
+.draw-deck-main {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -59,7 +63,7 @@ function emitChangeGameState() {
     backdrop-filter: blur(5px);
 }
 
-.deck {
+.deck-image {
     width: 300px;
     height: 400px;
 }
@@ -73,7 +77,7 @@ function emitChangeGameState() {
     margin: -430px 0 60px 0;
 }
 
-.continue-button {
+.deck-continue-button {
     height: 50px;
     width: 250px;
     border: none;

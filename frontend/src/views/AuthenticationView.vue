@@ -19,7 +19,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="authentication-component">
+    <div class="authentication-main">
         <AuthMenu 
             @play-audio="$emit('playAudio', $event)">
         </AuthMenu>
@@ -27,7 +27,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.authentication-component {
+.authentication-main {
     background-image: url("@/assets/images/loginScreen.jpg");
     background-repeat: no-repeat;
     background-size: cover;

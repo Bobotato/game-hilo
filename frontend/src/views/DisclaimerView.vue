@@ -13,7 +13,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="disclaimer-component">
+    <div class="disclaimer-main">
         <div class="description-wrapper">
             <h2 class="description-text">{{ descriptionText }}</h2>
 
@@ -28,7 +28,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.disclaimer-component {
+.disclaimer-main {
     display: flex;
     height: 100vh;
     justify-content: center;
