@@ -7,7 +7,7 @@ const emit = defineEmits<{
 }>()
 
 function retry() {
-    emit('playAudio', 'menuSelectSfx')
+    emit('playAudio', 'restartGameSfx')
     emit('isRetrying')
 }
 
@@ -24,8 +24,9 @@ function endGame() {
             You have run out of credits. <br> Would you like to start again by providing your own "credits"?
         </h2>
 
-        <button class="button retry" @click.once="retry">Retry</button>
-        <button class="button leave" @click.once="endGame">Leave</button>
+        <button class="game-over-button_retry" @click.once="retry"></button>
+
+        <button class="game-over-button game-over-button_leave" @click.once="endGame">Leave</button>
     </div>
 </template>
 
@@ -44,7 +45,28 @@ function endGame() {
     line-height: 2em;
 }
 
-.button {
+.game-over-restart-button-wrapper {
+    grid-row: button-retry;
+}
+
+.game-over-button_retry {
+    height: 700px;
+    width: 400px;
+    background: transparent;
+    background-image: url("@/assets/images/restartButton.png")
+}
+
+.game-over-button_retry:hover {
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.game-over-button_retry:active {
+  box-shadow: none;
+  transform: none;
+}
+
+.game-over-button {
     height: 50px;
     width: 250px;
     border: none;
@@ -57,11 +79,7 @@ function endGame() {
     box-shadow: 3px 3px 5px black;
 }
 
-.button.retry {
-    background-color: rgba(0, 48, 0);
-}
-
-.button.leave {
+.game-over-button_leave {
     background-color: rgba(48, 0, 0);
 }
 
