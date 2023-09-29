@@ -5,7 +5,7 @@ import { router } from '@/router/index'
 import ErrorWarning from '@/components/errorWarning/ErrorWarning.vue'
 import LoadingPage from '@/components/loading/LoadingPage.vue';
 
-import { useRegisterComposable } from '@/composables/authMenu/registerMenu';
+import { useAuthComposable } from '@/composables/authMenu/auth';
 import {
     APIServerDownError,
     UsernameAlreadyExistsError
@@ -15,7 +15,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const { getCredentialsForm, tryRegister } = useRegisterComposable()
+const { getCredentialsForm, tryRegister } = useAuthComposable()
 
 let showPassword: Ref<boolean> = ref(false)
 

@@ -5,7 +5,7 @@ import { router } from '@/router/index'
 import ErrorWarning from '@/components/errorWarning/ErrorWarning.vue'
 import LoadingPage from '@/components/loading/LoadingPage.vue'
 
-import { useLoginComposable } from '@/composables/authMenu/loginMenu'
+import { useAuthComposable } from '@/composables/authMenu/auth'
 import {
     APIServerDownError,
     InvalidCredentialsError
@@ -15,10 +15,10 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const { getCredentialsForm, tryLogin } = useLoginComposable()
+const { getCredentialsForm, tryLogin } = useAuthComposable()
 
 let showPassword: Ref<boolean> = ref(false)
-
+    
 let isLoading: Ref<boolean> = ref(false)
 
 let errorString: Ref<string> = ref("")
@@ -26,10 +26,13 @@ let errorString: Ref<string> = ref("")
 async function handleLogin() {
     try {
         emit("playAudio", "menuSelectSfx")
+        
         isLoading.value = true
         errorString.value = ""
+
         const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
         console.log(loginResponse)
+
         router.push({ path: '/mainmenu' })
     } catch (error: any) {
         switch (error.constructor) {
