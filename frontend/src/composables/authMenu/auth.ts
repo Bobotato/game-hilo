@@ -6,7 +6,7 @@ import { Credentials } from '@/services/apiService/user/user'
 export function useAuthComposable() {
     const getCredentialsForm: Ref<Credentials> = ref({} as Credentials)
 
-    async function tryLogin(credentials: Credentials) {
+    async function loginAccount(credentials: Credentials) {
         try {
             return await postLogin(credentials)
         } catch (error: any) {
@@ -16,7 +16,7 @@ export function useAuthComposable() {
     }
 
 
-    async function tryRegister(credentials: Credentials) {
+    async function registerAccount(credentials: Credentials) {
         try {
             return await postRegister(credentials)
         } catch (error: any) {
@@ -25,5 +25,5 @@ export function useAuthComposable() {
         }
     }
 
-    return { getCredentialsForm, tryLogin, tryRegister }
+    return { getCredentialsForm, loginAccount, registerAccount }
 }

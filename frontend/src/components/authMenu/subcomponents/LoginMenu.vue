@@ -15,7 +15,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-const { getCredentialsForm, tryLogin } = useAuthComposable()
+const { getCredentialsForm, loginAccount } = useAuthComposable()
 
 let showPassword: Ref<boolean> = ref(false)
 
@@ -30,7 +30,7 @@ async function handleLogin() {
         isLoading.value = true
         errorString.value = ""
 
-        const loginResponse = await tryLogin(getCredentialsForm.value)
+        const loginResponse = await loginAccount(getCredentialsForm.value)
         console.log(loginResponse)
 
         router.push({ path: '/mainmenu' })
