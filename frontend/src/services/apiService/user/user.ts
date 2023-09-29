@@ -17,21 +17,9 @@ export interface Credentials {
 
 export async function postLogin(credentials: Credentials): Promise<LoginResponse> {
   try {
-    const requestBody = {
-      username: credentials.username,
-      password: credentials.password
-    };
-
-    const response = await apiClient.post('/user/authenticate',
-      requestBody,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    LoginResponseSchema.parse(response.data)
-    return response.data as LoginResponse
+    const {data} = await apiClient.post('/user/authenticate', credentials)
+    LoginResponseSchema.parse(data)
+    return data as LoginResponse
   } catch (error: any) {
     if (error instanceof AxiosError && error.response) {
       switch (error.response.status) {
@@ -52,21 +40,9 @@ export async function postLogin(credentials: Credentials): Promise<LoginResponse
 
 export async function postRegister(credentials: Credentials): Promise<RegisterResponse> {
   try {
-    const requestBody = {
-      username: credentials.username,
-      password: credentials.password
-    };
-
-    const response = await apiClient.post('/user/register',
-      requestBody,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-    RegisterResponseSchema.parse(response.data)
-    return response.data as RegisterResponse
+    const {data} = await apiClient.post('/user/register', credentials)
+    RegisterResponseSchema.parse(data)
+    return data as RegisterResponse
 
   } catch (error: any) {
     if (error instanceof AxiosError && error.response) {

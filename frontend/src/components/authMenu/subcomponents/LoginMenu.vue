@@ -18,7 +18,7 @@ const emit = defineEmits<{
 const { getCredentialsForm, tryLogin } = useAuthComposable()
 
 let showPassword: Ref<boolean> = ref(false)
-    
+
 let isLoading: Ref<boolean> = ref(false)
 
 let errorString: Ref<string> = ref("")
@@ -30,7 +30,7 @@ async function handleLogin() {
         isLoading.value = true
         errorString.value = ""
 
-        const loginResponse = await tryLogin({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
+        const loginResponse = await tryLogin(getCredentialsForm.value)
         console.log(loginResponse)
 
         router.push({ path: '/mainmenu' })

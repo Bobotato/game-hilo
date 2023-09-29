@@ -26,10 +26,13 @@ let errorString: Ref<string> = ref("")
 async function handleRegister() {
     try {
         emit("playAudio", "menuSelectSfx")
+
         isLoading.value = true
         errorString.value = ""
-        const registerResponse = await tryRegister({ username: getCredentialsForm.value.username, password: getCredentialsForm.value.password })
+
+        const registerResponse = await tryRegister(getCredentialsForm.value)
         console.log(registerResponse)
+        
         router.push({ path: '/mainmenu' })
     } catch (error: any) {
         switch (error.constructor) {
