@@ -54,7 +54,7 @@ async function handleLogin() {
     }
 }
 
-function togglePasswordShow() {
+function toggleShowPassword() {
     showPassword.value = !showPassword.value
 }
 </script>
@@ -97,7 +97,7 @@ function togglePasswordShow() {
 
                 <button
                     :class="{ 'toggle-password-button toggle-password-button_password-shown': showPassword, 'toggle-password-button toggle-password-button_password-hidden': !showPassword }"
-                    @click="togglePasswordShow"
+                    @click="toggleShowPassword"
                     type="button"></button>
             </div>
 
