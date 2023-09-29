@@ -5,8 +5,9 @@ import { getInfo, getResult } from "@/services/apiService/game/game";
 import { RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
 import { Prediction } from '@/models/betPrediction';
 
-export function useRoundInfoComposable() {
+export function useGame() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)
+    const roundResult: Ref<RoundResult> = ref({} as RoundResult)
 
     async function updateRoundInfo() {
         try {
@@ -18,12 +19,6 @@ export function useRoundInfoComposable() {
         }
     }
 
-    return { roundInfo, updateRoundInfo }
-}
-
-export function useRoundResultComposable() {
-    const roundResult: Ref<RoundResult> = ref({} as RoundResult)
-
     async function updateRoundResult(bet: number, prediction: Prediction) {
         try {
             roundResult.value = await getResult(bet, prediction)
@@ -34,5 +29,5 @@ export function useRoundResultComposable() {
         }
     }
 
-    return { roundResult, updateRoundResult }
+    return { roundInfo, roundResult, updateRoundInfo, updateRoundResult }
 }
