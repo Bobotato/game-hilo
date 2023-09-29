@@ -41,3 +41,6 @@ def decode_access_token(access_token: str) -> dict:
 
     except JWTError:
         raise JWTError
+
+    except AttributeError:
+        raise JWTError

@@ -27,12 +27,12 @@ def info(
             return get_info(token=access_token, db=db)
         else:
             return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={
-                "error_code": error_codes.INVALID_TOKEN,
-                "detail": "No token was supplied Please supply an access token.",
-            },
-        )
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_TOKEN,
+                    "detail": "No token was supplied. Please supply an access token.",
+                },
+            )
 
     except ExpiredSignatureError:
         return JSONResponse(
@@ -72,12 +72,12 @@ def result(
             )
         else:
             return JSONResponse(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            content={
-                "error_code": error_codes.INVALID_TOKEN,
-                "detail": "No token was supplied Please supply an access token.",
-            },
-        )
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_TOKEN,
+                    "detail": "No token was supplied. Please supply an access token.",
+                },
+            )
 
     except ExpiredSignatureError:
         return JSONResponse(
