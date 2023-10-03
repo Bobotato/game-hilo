@@ -11,14 +11,15 @@ import GameOverPage from '@/components/game/gameStates/GameOverPage.vue';
 
 import ErrorOverlay from '@/components/errorWarning/ErrorOverlay.vue';
 
-import { useRoundInfoComposable, useRoundResultComposable } from '@/composables/game/hiloGame'
-import { UnauthorisedError } from '@/services/apiService/errors';
+import { router } from '@/router/index'
+import { useGame } from '@/composables/game/game'
+import { APIServerDownError, UnauthorisedError } from '@/services/apiService/errors';
 import { resetGame } from '@/services/apiService/game/game';
+import { postLogout } from '@/services/apiService/user/user'
 import { GameStates } from '@/models/gameStates';
 import { Prediction } from '@/models/betPrediction';
 
-let { roundInfo, updateRoundInfo } = useRoundInfoComposable()
-let { roundResult, updateRoundResult } = useRoundResultComposable()
+let { roundInfo, updateRoundInfo, roundResult, updateRoundResult } = useGame()
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -43,7 +44,7 @@ async function handleGetRoundInfo() {
                 console.error(error.message)
                 break
             case AxiosError:
-                errorOverlay.value.errorString = 'There is an issue with the API server. Please try again later.'
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
                 errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
@@ -63,7 +64,7 @@ async function handleGetRoundResult(bet: number, prediction: Prediction) {
                 console.error(error.message)
                 break
             case AxiosError:
-                errorOverlay.value.errorString = 'There is an issue with the API server. Please try again later.'
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
                 errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
@@ -121,12 +122,39 @@ function restartGame() {
                 console.error(error.message)
                 break
             case AxiosError:
-                errorOverlay.value.errorString = 'There is an issue with the API server. Please try again later.'
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
                 errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
         }
     }
+}
+
+function logOutGame() {
+    emit('playAudio', 'menuSelectSfx')
+    try {
+        postLogout()
+        router.push({ path: '/login' })
+    } catch (error: any) {
+        console.error(error)
+        switch (error.constructor) {
+            case UnauthorisedError:
+                errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+            case APIServerDownError:
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+            case AxiosError:
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+    }
+}
 }
 
 startRound()
@@ -178,6 +206,8 @@ startRound()
         </GameOverPage>
     </div>
 
+
+    <button class="game-logout-button" @click.once=logOutGame>Log Out</button>
     <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
     </h2>
 </template>
@@ -194,5 +224,23 @@ startRound()
     position: absolute;
     left: 10px;
     bottom: 0px;
+}
+
+.game-logout-button {
+    position: absolute;
+    left: 10vw;
+    bottom: 10vh;
+    height: 50px;
+    width: 250px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 1.5em;
+    color: white;
+    box-shadow: 3px 3px 5px black;
+    margin: 25px 0 0 0;
+    background-color: rgba(0, 48, 0);
 }
 </style>

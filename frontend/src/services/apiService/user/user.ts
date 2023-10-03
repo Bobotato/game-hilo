@@ -3,6 +3,7 @@ import {
   APIServerDownError,
   InvalidCredentialsError,
   APIResponseMalformedError,
+  UnauthorisedError,
   UsernameAlreadyExistsError
 } from '@/services/apiService/errors'
 import { AxiosError } from 'axios'
@@ -60,4 +61,23 @@ export async function postRegister(credentials: Credentials): Promise<RegisterRe
       throw error
     }
   }
+}
+
+export async function postLogout(): Promise<void> {
+    try {
+      await apiClient.post('/user/logout')
+    } catch (error: any) {
+        if (error instanceof AxiosError && error.response) {
+            switch (error.response.status) {
+                case 401:
+                    throw new UnauthorisedError('Token is invalid')
+                case 500:
+                    throw new APIServerDownError('API Server down')
+                default:
+                    throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
+            }
+        } else {
+            throw error
+        }
+    }
 }

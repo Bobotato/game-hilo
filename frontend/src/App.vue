@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router'
 
 import AudioController from '@/components/audioController/AudioController.vue';
-import { AudioPlayer } from '@/composables/audioController/audioController'
+import { AudioPlayer } from '@/utils/audioController/audioController'
 
 let audio = new AudioPlayer()
 </script>

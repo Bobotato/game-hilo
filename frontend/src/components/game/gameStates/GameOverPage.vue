@@ -14,7 +14,6 @@ function retry() {
 function endGame() {
     emit('playAudio', 'menuSelectSfx')
     router.push({ path: '/mainmenu' })
-
 }
 </script>
 
@@ -23,6 +22,8 @@ function endGame() {
         <h2 class="game-over-message">
             You have run out of credits. <br> Would you like to start again by providing your own "credits"?
         </h2>
+
+        <div class="game-over-spotlight"></div>
 
         <button class="game-over-button_retry" @click.once="retry"></button>
 
@@ -50,10 +51,11 @@ function endGame() {
 }
 
 .game-over-button_retry {
+    aspect-ratio: 4/7;
     height: 700px;
-    width: 400px;
     background: transparent;
-    background-image: url("@/assets/images/restartButton.png")
+    background-image: url("@/assets/images/restartButton.png");
+    z-index: 1;
 }
 
 .game-over-button_retry:hover {
@@ -64,6 +66,17 @@ function endGame() {
 .game-over-button_retry:active {
   box-shadow: none;
   transform: none;
+}
+
+.game-over-spotlight {
+    position: absolute;
+    top: 70%;
+    height: 100px;
+    width: 700px;
+    margin: 5vh 0 0 0;
+    background-color: rgba(255, 241, 200, 0.3);
+    filter: blur(20px);
+    border-radius: 50%;
 }
 
 .game-over-button {

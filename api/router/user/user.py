@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status, Response
+from fastapi import APIRouter, Cookie, Depends, status, Response
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
@@ -91,3 +91,12 @@ def register(
     response.set_cookie("access_token", access_token)
 
     return {"access_token": access_token}
+
+
+@router.post("/user/logout", tags=["User Operations"])
+def logout(
+    response: Response,
+    access_token: str = Cookie(None),
+):
+    if access_token:
+        response.delete_cookie("access_token")
