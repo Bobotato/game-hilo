@@ -11,11 +11,10 @@ import GameOverPage from '@/components/game/gameStates/GameOverPage.vue';
 
 import ErrorOverlay from '@/components/errorWarning/ErrorOverlay.vue';
 
-import { router } from '@/router/index'
 import { useGame } from '@/composables/game/game'
 import { APIServerDownError, UnauthorisedError } from '@/services/apiService/errors';
 import { resetGame } from '@/services/apiService/game/game';
-import { postLogout } from '@/services/apiService/user/user'
+import { logOut } from '@/utils/logOut'
 import { GameStates } from '@/models/gameStates';
 import { Prediction } from '@/models/betPrediction';
 
@@ -130,11 +129,10 @@ function restartGame() {
     }
 }
 
-function logOutGame() {
+function logOutFromGame() {
     emit('playAudio', 'menuSelectSfx')
     try {
-        postLogout()
-        router.push({ path: '/login' })
+        logOut()
     } catch (error: any) {
         console.error(error)
         switch (error.constructor) {
@@ -207,7 +205,7 @@ startRound()
     </div>
 
 
-    <button class="game-logout-button" @click.once=logOutGame>Log Out</button>
+    <button class="game-logout-button" @click.once=logOutFromGame>Log Out</button>
     <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
     </h2>
 </template>

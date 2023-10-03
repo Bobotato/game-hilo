@@ -1,5 +1,12 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { AxiosError } from 'axios';
+
+import ErrorOverlay from '../errorWarning/ErrorOverlay.vue';
+
+import { APIServerDownError, UnauthorisedError } from '@/services/apiService/errors';
+
+import { logOut } from '@/utils/logOut'
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -10,14 +17,51 @@ let ruleSet = ref({
     text: 'The game uses a standard 52 card deck. \n\n 1 card is dealt face up, and another face down. \n\n You need to guess if the face down card is of a higher or lower value than the face up card. \n\n A right answer doubles your bet, and a wrong answer forfeits your bet. Happy playing.'
 })
 
+let errorOverlay = ref({
+    errorString: "",
+    isShowing: false
+})
+
 function showRuleset() {
     emit("playAudio", "menuSelectSfx")
     ruleSet.value.isShowing = !ruleSet.value.isShowing
+}
+
+function logOutFromMainMenu() {
+    emit('playAudio', 'menuSelectSfx')
+    try {
+        logOut()
+    } catch (error: any) {
+        console.error(error)
+        switch (error.constructor) {
+            case UnauthorisedError:
+                errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+            case APIServerDownError:
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+            case AxiosError:
+                errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
+                errorOverlay.value.isShowing = true
+                console.error(error.message)
+                break
+    }
+}
 }
 </script>
 
 <template>
     <div class="main-menu-main">
+        <ErrorOverlay 
+            v-if="errorOverlay.isShowing"
+            :errorString=errorOverlay.errorString
+            @play-audio="$emit('playAudio', $event)">
+        </ErrorOverlay>
+
         <div class="main-menu">
             <h2 class="main-menu-message" v-if="!ruleSet.isShowing">Welcome to the table.</h2>
             <h2 class="main-menu-ruleset" v-if="ruleSet.isShowing">{{ ruleSet.text }}</h2>
@@ -39,12 +83,10 @@ function showRuleset() {
             </div>
 
             <div class="main-menu-button-wrapper">
-                <RouterLink to="/login">
-                    <button class="main-menu-button main-menu-button_leave-button"
-                        @click="emit('playAudio', 'menuReturnSfx')">
-                        Leave
-                    </button>
-                </RouterLink>
+                <button class="main-menu-button main-menu-button_leave-button"
+                    @click.once="logOutFromMainMenu">
+                    Log Out
+                </button>
             </div>
         </div>
     </div>
