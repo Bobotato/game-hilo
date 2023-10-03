@@ -55,6 +55,9 @@ function endGame() {
     height: 700px;
     background: transparent;
     background-image: url("@/assets/images/restartButton.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     z-index: 1;
 }
 

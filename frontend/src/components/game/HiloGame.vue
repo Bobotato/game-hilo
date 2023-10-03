@@ -206,8 +206,6 @@ startRound()
 
 
     <button class="game-logout-button" @click.once=logOutFromGame>Log Out</button>
-    <h2 class="gamestate">Gamestate: {{ GameStates[activeGameState] }}
-    </h2>
 </template>
 
 <style scoped>
@@ -218,16 +216,10 @@ startRound()
     place-items: center;
 }
 
-.gamestate {
-    position: absolute;
-    left: 10px;
-    bottom: 0px;
-}
-
 .game-logout-button {
     position: absolute;
-    left: 10vw;
-    bottom: 10vh;
+    left: 3%;
+    bottom: 4%;
     height: 50px;
     width: 250px;
     border: none;
