@@ -81,3 +81,22 @@ export async function postLogout(): Promise<void> {
         }
     }
 }
+
+export async function verifyJWT(): Promise<void> {
+  try {
+    await apiClient.post('/user/verify-token')
+  } catch (error: any) {
+      if (error instanceof AxiosError && error.response) {
+        switch (error.response.status) {
+            case 401:
+                throw new UnauthorisedError('Token is invalid')
+            case 500:
+                throw new APIServerDownError('API Server down')
+            default:
+                throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
+        }
+    } else {
+        throw error
+    }
+  }
+}
