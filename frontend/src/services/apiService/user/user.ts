@@ -9,11 +9,18 @@ import {
 import { AxiosError } from 'axios'
 import { ZodError } from 'zod'
 import { LoginResponseSchema, RegisterResponseSchema } from '@/schemas/schemas'
-import { LoginResponse, RegisterResponse } from '@/types/apiResponseTypes'
 
 export interface Credentials {
   username: string
   password: string
+}
+
+export interface RegisterResponse {
+  access_token: string
+}
+
+export interface LoginResponse {
+  access_token: string
 }
 
 export async function postLogin(credentials: Credentials): Promise<LoginResponse> {

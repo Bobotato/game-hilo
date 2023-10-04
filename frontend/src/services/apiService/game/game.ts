@@ -1,3 +1,6 @@
+import { AxiosError } from 'axios'
+import { ZodError } from 'zod'
+
 import { apiClient } from '@/services/apiService/axiosClient'
 import {
     APIServerDownError,
@@ -5,14 +8,24 @@ import {
     APIResponseMalformedError,
     NoSuchGameError
 } from '@/services/apiService/errors'
-import { AxiosError } from 'axios'
-import { ZodError } from 'zod'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
-import { InfoResponse, ResultResponse } from '@/types/apiResponseTypes'
 import { Prediction } from '@/models/betPrediction'
+import { Card, Player } from "@/types/gameElements/gameElementTypes"
 
 export interface Token {
     access_token: string
+}
+
+export interface InfoResponse {
+    player: Player,
+    current_card: Card
+}
+
+export interface ResultResponse {
+    drawn_card: Card,
+    win: boolean,
+    is_player_bankrupt: boolean,
+    is_deck_empty: boolean
 }
 
 export async function getInfo(): Promise<InfoResponse> {
