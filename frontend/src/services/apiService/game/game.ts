@@ -12,6 +12,11 @@ import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
 import { Prediction } from '@/models/betPrediction'
 import { Card, Player } from "@/types/gameElements/gameElementTypes"
 
+export const gameErrorCodes: { [key: number]: Error } = { 
+    401: new UnauthorisedError('Token is invalid'),
+    404: new NoSuchGameError('There is no ongoing game associated with this account'),
+    500: new APIServerDownError('API Server down'), }
+
 export interface Token {
     access_token: string
 }
@@ -34,15 +39,8 @@ export async function getInfo(): Promise<InfoResponse> {
         InfoResponseSchema.parse(response.data)
         return response.data as InfoResponse
     } catch (error: any) {
-        if (error instanceof AxiosError && error.response) {
-            switch (error.response.status) {
-                case 401:
-                    throw new UnauthorisedError('Token is invalid')
-                case 500:
-                    throw new APIServerDownError('API Server down')
-                default:
-                    throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
-            }
+        if (error instanceof AxiosError && error.response && error.response.status in gameErrorCodes) {
+            throw (gameErrorCodes[error.response.status])
         } else if (error instanceof ZodError) {
             throw new APIResponseMalformedError('API returned malformed response')
         } else {
@@ -62,17 +60,8 @@ export async function getResult(bet: number, prediction: Prediction): Promise<Re
         ResultResponseSchema.parse(response.data)
         return response.data as ResultResponse
     } catch (error: any) {
-        if (error instanceof AxiosError && error.response) {
-            switch (error.response.status) {
-                case 401:
-                    throw new UnauthorisedError('Token is invalid')
-                case 404:
-                    throw new NoSuchGameError('There is no ongoing game associated with this account')
-                case 500:
-                    throw new APIServerDownError('API Server down')
-                default:
-                    throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
-            }
+        if (error instanceof AxiosError && error.response && error.response.status in gameErrorCodes) {
+            throw (gameErrorCodes[error.response.status])
         } else if (error instanceof ZodError) {
             throw new APIResponseMalformedError('API returned malformed response')
         } else {
@@ -85,15 +74,8 @@ export async function resetGame(): Promise<void> {
     try {
         await apiClient.post('/game/reset')
     } catch (error: any) {
-        if (error instanceof AxiosError && error.response) {
-            switch (error.response.status) {
-                case 401:
-                    throw new UnauthorisedError('Token is invalid')
-                case 500:
-                    throw new APIServerDownError('API Server down')
-                default:
-                    throw new Error(`Something went wrong with the API response, the error is: ${error}}`)
-            }
+        if (error instanceof AxiosError && error.response && error.response.status in gameErrorCodes) {
+            throw (gameErrorCodes[error.response.status])
         } else {
             throw error
         }
