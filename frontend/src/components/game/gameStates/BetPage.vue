@@ -50,19 +50,26 @@ function validateBetPrediction() {
         errorString.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
 
+    } else if (betPrediction.value.prediction === Prediction.None) {
+        errorString.value = "You have not chosen a prediction."
+        throw new BetPredictionError("NilPredictionError")
+
     } else if (betPrediction.value.bet > props.roundInfo.player.credits) {
         errorString.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
 
-    } else if (betPrediction.value.bet === 0) {
+    } else if (!betPrediction.value.bet || betPrediction.value.bet === 0) {
         errorString.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
 
-    } else if (betPrediction.value.prediction === Prediction.None) {
-        errorString.value = "You have not chosen a prediction."
-        throw new BetPredictionError("NilPredictionError")
-    }
-}
+    } else if (betPrediction.value.bet && typeof betPrediction.value.bet !== 'number') {
+        errorString.value = "You cannot bet a non-number."
+        throw new BetPredictionError("NilBetError")
+
+    } else if (betPrediction.value.bet % 1 !== 0) {
+        errorString.value = "You cannot bet a partial number."
+        throw new BetPredictionError("NilBetError")
+}}
 </script>
 
 <template>

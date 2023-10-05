@@ -26,7 +26,6 @@ const emit = defineEmits<{
 
 let errorOverlay = ref({
     errorString: "",
-    isShowing: false
 })
 
 let activeGameState: Ref<GameStates> = ref(GameStates.loading)
@@ -39,12 +38,10 @@ async function handleGetRoundInfo() {
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
         }
@@ -54,17 +51,16 @@ async function handleGetRoundInfo() {
 async function handleGetRoundResult(betPrediction: BetPrediction) {
     try {
         await updateRoundResult(betPrediction)
+        changeActiveGameState(GameStates.result)
     } catch (error: any) {
         console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
         }
@@ -82,11 +78,6 @@ async function startRound() {
     } catch (error) {
         console.error(error)
     }
-}
-
-async function submitBetPrediction(bet: number, prediction: number) {
-    await handleGetRoundResult(bet, prediction)
-    activeGameState.value = GameStates.result
 }
 
 async function endRound(isGameOver: boolean) {
@@ -117,12 +108,10 @@ function restartGame() {
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
         }
@@ -138,17 +127,14 @@ function logOutFromGame() {
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
             case APIServerDownError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                errorOverlay.value.isShowing = true
                 console.error(error.message)
                 break
     }
@@ -161,7 +147,6 @@ startRound()
 <template>
     <div class=game-main>
         <ErrorOverlay 
-            v-if="errorOverlay.isShowing"
             :errorString=errorOverlay.errorString
             @play-audio="$emit('playAudio', $event)">
         </ErrorOverlay>
@@ -187,7 +172,7 @@ startRound()
         <BetPage
             v-else-if="activeGameState === GameStates.betPrediction"
             :roundInfo=roundInfo
-            @submit-bet-prediction="submitBetPrediction"
+            @submit-bet-prediction="handleGetRoundResult($event)"
             @play-audio=" $emit('playAudio', $event)">
         </BetPage>
 
