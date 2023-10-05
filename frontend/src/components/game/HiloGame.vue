@@ -16,7 +16,7 @@ import { APIServerDownError, UnauthorisedError } from '@/services/apiService/err
 import { resetGame } from '@/services/apiService/game/game';
 import { logOut } from '@/utils/logOut'
 import { GameStates } from '@/models/gameStates';
-import { Prediction } from '@/models/betPrediction';
+import { BetPrediction } from '@/components/game/gameStates/BetPage';
 
 let { roundInfo, updateRoundInfo, roundResult, updateRoundResult } = useGame()
 
@@ -51,9 +51,9 @@ async function handleGetRoundInfo() {
     }
 }
 
-async function handleGetRoundResult(bet: number, prediction: Prediction) {
+async function handleGetRoundResult(betPrediction: BetPrediction) {
     try {
-        await updateRoundResult(bet, prediction)
+        await updateRoundResult(betPrediction)
     } catch (error: any) {
         console.error(error)
         switch (error.constructor) {

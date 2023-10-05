@@ -13,29 +13,32 @@ interface Props {
     roundInfo: RoundInfo
 }
 
+export interface BetPrediction {
+    bet: number
+    prediction: Prediction
+}
+
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
-    (e: 'submitBetPrediction', bet: number, prediction: Prediction): void
+    (e: 'submitBetPrediction', betPrediction: BetPrediction): void
     (e: 'playAudio', sound: string): void
 }>()
 
-let bet: Ref<number> = ref(0)
-
-let prediction: Ref<Prediction> = ref(Prediction.None)
+let betPrediction: Ref<BetPrediction> = ref({ bet: 0, prediction: Prediction.None })
 
 let errorString: Ref<string> = ref("")
 
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
-    prediction.value = choice
+    betPrediction.value.prediction = choice
 }
 
 function submitBetPrediction() {
     try {
         validateBetPrediction()
         emit('playAudio', 'menuSelectSfx')
-        emit('submitBetPrediction', bet.value, prediction.value)
+        emit('submitBetPrediction', betPrediction.value)
     } catch (error) {
         console.error(error)
         emit('playAudio', 'errorBuzzer')
@@ -43,19 +46,19 @@ function submitBetPrediction() {
 }
 
 function validateBetPrediction() {
-    if (prediction.value === Prediction.None && bet.value === 0) {
+    if (betPrediction.value.prediction === Prediction.None && betPrediction.value.bet === 0) {
         errorString.value = "You have not made any bet or prediction."
         throw new BetPredictionError("BetPredictionNotSelectedError")
 
-    } else if (bet.value > props.roundInfo.player.credits) {
+    } else if (betPrediction.value.bet > props.roundInfo.player.credits) {
         errorString.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
 
-    } else if (bet.value === 0) {
+    } else if (betPrediction.value.bet === 0) {
         errorString.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
 
-    } else if (prediction.value === Prediction.None) {
+    } else if (betPrediction.value.prediction === Prediction.None) {
         errorString.value = "You have not chosen a prediction."
         throw new BetPredictionError("NilPredictionError")
     }
@@ -82,17 +85,17 @@ function validateBetPrediction() {
             <div class="bet-prediction-prediction-selection-wrapper">
                 <button 
                     @click="selectPredictionButton(Prediction.Higher)"
-                    :class="{ 'prediction-button prediction-button_higher': prediction == Prediction.None,
-                              'prediction-button prediction-button_higher prediction-button_selected': prediction == Prediction.Higher,
-                              'prediction-button prediction-button_higher prediction-button_unselected': prediction == Prediction.Lower }">
+                    :class="{ 'prediction-button prediction-button_higher': betPrediction.prediction == Prediction.None,
+                              'prediction-button prediction-button_higher prediction-button_selected': betPrediction.prediction == Prediction.Higher,
+                              'prediction-button prediction-button_higher prediction-button_unselected': betPrediction.prediction == Prediction.Lower }">
                     Higher
                 </button>
 
                 <button 
                     @click="selectPredictionButton(Prediction.Lower)"
-                    :class="{ 'prediction-button prediction-button_lower': prediction == Prediction.None,
-                              'prediction-button prediction-button_higher prediction-button_selected': prediction == Prediction.Lower,
-                              'prediction-button prediction-button_higher prediction-button_unselected': prediction == Prediction.Higher }">
+                    :class="{ 'prediction-button prediction-button_lower': betPrediction.prediction == Prediction.None,
+                              'prediction-button prediction-button_higher prediction-button_selected': betPrediction.prediction == Prediction.Lower,
+                              'prediction-button prediction-button_higher prediction-button_unselected': betPrediction.prediction == Prediction.Higher }">
                     Lower
                 </button>
             </div>
@@ -105,7 +108,7 @@ function validateBetPrediction() {
                 type="number" 
                 min=0 
                 :max=props.roundInfo.player.credits 
-                v-model="bet" 
+                v-model="betPrediction.bet" 
                 required />
 
             <ErrorWarning class="error-warning" 

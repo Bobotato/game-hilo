@@ -9,7 +9,7 @@ import {
     NoSuchGameError
 } from '@/services/apiService/errors'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
-import { Prediction } from '@/models/betPrediction'
+import { BetPrediction } from '@/components/game/gameStates/BetPage';
 import { Card, Player } from "@/types/gameElements/gameElementTypes"
 
 export const gameErrorCodes: { [key: number]: Error } = { 
@@ -49,12 +49,12 @@ export async function getInfo(): Promise<InfoResponse> {
     }
 }
 
-export async function getResult(bet: number, prediction: Prediction): Promise<ResultResponse> {
+export async function getResult(betPrediction: BetPrediction): Promise<ResultResponse> {
     try {
         const response = await apiClient.post('/game/result', {}, {
             params: {
-                bet: bet,
-                prediction: prediction
+                bet: betPrediction.bet,
+                prediction: betPrediction.prediction
             }
         })
         ResultResponseSchema.parse(response.data)

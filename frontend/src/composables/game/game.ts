@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 import { getInfo, getResult } from "@/services/apiService/game/game";
 
 import { RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
-import { Prediction } from '@/models/betPrediction';
+import { BetPrediction } from '@/components/game/gameStates/BetPage';
 
 export function useGame() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)
@@ -19,9 +19,9 @@ export function useGame() {
         }
     }
 
-    async function updateRoundResult(bet: number, prediction: Prediction) {
+    async function updateRoundResult(betPrediction: BetPrediction) {
         try {
-            roundResult.value = await getResult(bet, prediction)
+            roundResult.value = await getResult(betPrediction)
             return roundResult
         } catch (error: any) {
             console.log(`RoundInfo retrieval failed with error ${error}`)
