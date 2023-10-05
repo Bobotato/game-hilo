@@ -25,14 +25,8 @@ function toggleShowRegisterPage() {
                 @play-audio="$emit('playAudio', $event)">
             </RegisterMenu>
 
-            <button class="auth-menu-button auth-menu-button_switch-to-register"
-                v-if="!isShowingRegisterPage"
-                @click="toggleShowRegisterPage">
-                Register Page
-            </button>
-
             <LoginMenu
-                v-if="!isShowingRegisterPage"
+                v-else
                 @play-audio="$emit('playAudio', $event)">
             </LoginMenu>
 
@@ -40,6 +34,12 @@ function toggleShowRegisterPage() {
                 v-if="isShowingRegisterPage"
                 @click="toggleShowRegisterPage">
                 Login Page
+            </button>
+
+            <button class="auth-menu-button auth-menu-button_switch-to-register"
+                v-else
+                @click="toggleShowRegisterPage">
+                Register Page
             </button>
 
         </div>
