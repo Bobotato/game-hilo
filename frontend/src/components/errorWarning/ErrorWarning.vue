@@ -52,43 +52,13 @@ const props = defineProps<Props>()
   margin-left: 10px;
 }
 
-@media screen and (min-width: 1000px) {
-  .error-main {
-    display: flex;
-    justify-content: center;
-  }
-
+@media only screen and (max-width: 600px) {
   .error {
-    display: grid;
     grid-template-columns: [error-icon] 40px [error-text] 1fr;
-    border-radius: 5px;
     margin-top: 0px;
-    width: 100%;
   }
-
-  .error-icon-wrapper {
-    display: flex;
-    grid-column: error-icon;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .error-icon {
-    width: 30px;
-    height: 30px;
-  }
-
   .error-text {
-    display: flex;
-    max-width: 600px;
-    justify-content: flex-start;
-    align-items: center;
-    grid-column: error-text;
-    margin-left: 10px;
-    color: red;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-    Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    font-size: 1.3em;
+    font-size: 1.2em;
   }
 }
 </style>

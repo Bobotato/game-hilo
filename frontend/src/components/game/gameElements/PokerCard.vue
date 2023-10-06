@@ -85,7 +85,7 @@ if (props.isStatic) {
             <div class="card-face card-face_back" v-if="!isCardFlipped && !isStatic"></div>
 
             <div class="card-face card-face_front" v-else-if="isCardFlipped || isStatic">
-                <div class=card-top-symbols>
+                <div class="card-face-symbol card-face-symbol_top">
                     <div :class="{ 'rank rank-top red': isRed(props.card), 'rank rank-top': isRed(props.card) == false }">
                         {{
                             convertNumeric(props.card) }}</div>
@@ -98,7 +98,7 @@ if (props.isStatic) {
                 <div :class="{ 'suit red': isRed(props.card), 'suit': isRed(props.card) == false }">{{
                     convertSymbol(props.card) }}</div>
 
-                <div class=card-bottom-symbols>
+                <div class="card-face-symbol card-face-symbol_bottom">
                     <div
                         :class="{ 'minisuit suit-bottom red': isRed(props.card), 'minisuit suit-bottom': isRed(props.card) == false }">
                         {{ convertSymbol(props.card) }}</div>
@@ -183,12 +183,12 @@ if (props.isStatic) {
 }
 
 .minisuit {
-    font-size: 70px;
+    font-size: 60px;
     font-weight: bold;
     letter-spacing: -5px;
 }
 
-.card-top-symbols {
+.card-face-symbol_top {
     display: grid;
     align-self: start;
     place-items: center;
@@ -205,7 +205,7 @@ if (props.isStatic) {
     grid-row: rank-top;
 }
 
-.card-bottom-symbols {
+.card-face-symbol_bottom {
     display: grid;
     place-items: center;
     grid-template-rows: [rank-bottom] 50px [suit-bottom] 60px;
@@ -224,12 +224,43 @@ if (props.isStatic) {
 
 .suit {
     grid-row: suit;
-    line-height: 265px;
-    font-size: 200px;
+    line-height: 240px;
+    font-size: 150px;
     text-align: center;
 }
 
 .red {
     color: rgb(139, 0, 0);
+}
+
+@media only screen and (max-width: 600px) {
+.card-face {
+    border-radius: 10px;
+}
+
+.card-face-symbol_top {
+    grid-template-rows: [rank-top] 25px [suit-top] 60px;
+    margin: 20px 0 0 10px;
+}
+
+.card-face-symbol_bottom {
+    grid-template-rows: [rank-bottom] 25px [suit-bottom] 60px;
+    margin: 0 10px 20px 0;
+}
+
+.rank {
+    font-size: 35px;
+}
+
+.suit {
+    font-size: 110px;
+    line-height: 180px;
+}
+
+.minisuit {
+    font-size: 45px;
+    letter-spacing: -5px;
+}
+
 }
 </style>

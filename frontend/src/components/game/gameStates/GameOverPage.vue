@@ -18,17 +18,15 @@ function endGame() {
 </script>
 
 <template>
-    <div class="game-over-main">
-        <h2 class="game-over-message">
+    <main class="game-over-main">
+        <p class="game-over-message">
             You have run out of credits. <br> Would you like to start again by providing your own "credits"?
-        </h2>
-
-        <div class="game-over-spotlight"></div>
+        </p>
 
         <button class="game-over-button_retry" @click.once="retry"></button>
 
         <button class="game-over-button game-over-button_leave" @click.once="endGame">Leave</button>
-    </div>
+    </main>
 </template>
 
 <style scoped>
@@ -41,6 +39,10 @@ function endGame() {
 }
 
 .game-over-message {
+    white-space: pre-wrap;
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
     grid-row: message;
     text-align: center;
     line-height: 2em;
@@ -51,7 +53,7 @@ function endGame() {
 }
 
 .game-over-button_retry {
-    aspect-ratio: 4/7;
+    width: 400px;
     height: 700px;
     background: transparent;
     background-image: url("@/assets/images/restartButton.png");
@@ -69,17 +71,6 @@ function endGame() {
 .game-over-button_retry:active {
   box-shadow: none;
   transform: none;
-}
-
-.game-over-spotlight {
-    position: absolute;
-    top: 70%;
-    height: 100px;
-    width: 700px;
-    margin: 5vh 0 0 0;
-    background-color: rgba(255, 241, 200, 0.3);
-    filter: blur(20px);
-    border-radius: 50%;
 }
 
 .game-over-button {
@@ -107,5 +98,19 @@ function endGame() {
 .button:active {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     transform: translateY(4px);
+}
+
+@media only screen and (max-width: 600px) {
+.game-over-button_retry {
+    width: 200px;
+    height: 350px;
+    }
+.game-over-button {
+    font-size: 1.2em;
+ }
+
+.game-over-message {
+    font-size: 1.2em;
+}
 }
 </style>

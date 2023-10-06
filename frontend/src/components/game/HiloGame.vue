@@ -196,7 +196,7 @@ startRound()
 <style scoped>
 .game-main {
     display: grid;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     place-items: center;
 }
@@ -217,5 +217,13 @@ startRound()
     box-shadow: 3px 3px 5px black;
     margin: 25px 0 0 0;
     background-color: rgba(0, 48, 0);
+}
+
+@media only screen and (max-width: 600px) {
+.game-logout-button {
+    bottom: 3%;
+    width: 120px;
+    font-size: 1.2em;
+}
 }
 </style>

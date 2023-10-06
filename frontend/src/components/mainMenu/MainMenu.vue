@@ -154,4 +154,19 @@ h2 {
 .main-menu-button_leave-button {
     grid-row: main-menu-button_leave-button;
 }
+
+@media only screen and (max-width: 600px) {
+.main-menu-message {
+    font-size: 1.2em;
+}
+
+.main-menu-ruleset {
+    margin: 10px 30px;
+    font-size: 1.2em;
+}
+
+.main-menu-button {
+    font-size: 1.2em;
+}
+} 
 </style>

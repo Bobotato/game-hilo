@@ -34,60 +34,98 @@ function emitChangeGameState() {
 </script>
 
 <template>
-    <div class="draw-deck-main">
-        <h2>{{ deckMessage.message }}</h2>
+    <main class="draw-deck-main">
+        <div class="deck-wrapper">
+            <p class="deck-message">{{ deckMessage.message }}</p>
+
+            <button class="deck-button"
+                    @click="drawCard">
+                <PokerCard 
+                    :card=props.currentCard 
+                    :isStatic=false 
+                    @play-audio="$emit('playAudio', $event)">
+                </PokerCard>
+            </button>
+
+            <button class="deck-continue-button" @click.once="emitChangeGameState">Continue</button>
+        </div>
 
         <img class="deck-image" src="@/assets/images/CardDeck.png">
-
-        <button class="deck-button"
-                @click="drawCard">
-            <PokerCard 
-                :card=props.currentCard 
-                :isStatic=false 
-                @play-audio="$emit('playAudio', $event)">
-            </PokerCard>
-        </button>
-
-        <button class="deck-continue-button" @click.once="emitChangeGameState">Continue</button>
-    </div>
+    </main>
 </template>
 
 <style scoped>
 .draw-deck-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    place-items: center;
     height: 100%;
     width: 100%;
-    backdrop-filter: blur(5px);
+}
+
+.deck-wrapper {
+    display: grid;
+    grid-template-rows: [deck-message] auto [draw-deck] auto [deck-continue-button] auto;
+    place-items: center;
+}
+
+.deck-message {
+    grid-row: deck-message;
+    white-space: pre-wrap;
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
 }
 
 .deck-image {
+    position: absolute;    
     width: 300px;
     height: 400px;
 }
 
 .deck-button {
+    z-index: 1;
+    grid-row: draw-deck;
     background-color: transparent;
-    width: 300px;
-    height: 400px;
-    scale: 90%;
-    transform: perspective(800px) rotateX(15deg) rotateZ(2deg);
-    margin: -430px 0 60px 0;
+    width: 270px;
+    height: 360px;
+    margin: 40px 0 65px 0;
 }
 
 .deck-continue-button {
+    grid-row: deck-continue-button;
     height: 50px;
     width: 250px;
     border: none;
     border-radius: 10px;
     padding: 10px;
+    margin: 20px 0;
     text-align: center;
     line-height: 1.5;
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
     background-color: rgba(48, 0, 0);
+}
+
+@media only screen and (max-width: 600px) {
+.deck-message {
+    width: 90%;
+    font-size: 1.2em;
+}
+
+.deck-image {
+    width: 225px;
+    height: 300px;
+}
+
+.deck-button {
+    width: 210px;
+    height: 280px;
+    margin: 20px 0 30px 0;
+}
+
+.deck-continue-button {
+    font-size: 1.2em;
+}
 }
 </style>

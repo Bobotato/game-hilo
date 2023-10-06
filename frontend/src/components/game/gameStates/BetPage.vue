@@ -73,21 +73,21 @@ function validateBetPrediction() {
 </script>
 
 <template>
-    <div class="bet-prediction-main">
+    <main class="bet-prediction-main">
         <div class="bet-prediction-menu">
 
-            <h2 class="bet-prediction_current-card-message">
+            <p class="bet-prediction_current-card-message">
                 Your current card is the {{ CardRanks[props.roundInfo.current_card.rank] }} of
                 {{ CardSuits[props.roundInfo.current_card.suit] }}.
-            </h2>
+            </p>
 
             <div class="bet-prediction_current-card">
                 <PokerCard :card=props.roundInfo.current_card :isStatic="true"></PokerCard>
             </div>
 
-            <div class="bet-prediction-message">
-                Choose if the next card will be higher or lower, <br> and how much you're willing to bet.
-            </div>
+            <p class="bet-prediction-message">
+                Choose if the next card will be higher or lower, and your bet.
+            </p>
 
             <div class="bet-prediction-prediction-selection-wrapper">
                 <button 
@@ -107,9 +107,9 @@ function validateBetPrediction() {
                 </button>
             </div>
 
-            <h2 class="bet-prediction_current-credits-message">
+            <p class="bet-prediction_current-credits-message">
                 You have {{ props.roundInfo.player.credits }} "credits".
-            </h2>
+            </p>
 
             <input class="bet-prediction_bet-input"
                 type="number" 
@@ -128,58 +128,52 @@ function validateBetPrediction() {
                 Confirm
             </button>
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>
 .bet-prediction-main {
     display: grid;
-    width: 100vw;
-    height: 100vh;
     place-items: center;
 }
 
 .bet-prediction-menu {
     display: grid;
-    grid-template-rows: [current-card-message] auto [current-card] 400px [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [bet-prediction_submit-bet-prediction-button] auto;
+    grid-template-rows: [current-card-message] auto [current-card] auto [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [bet-prediction_submit-bet-prediction-button] auto;
     place-items: center;
 }
 
 .bet-prediction_current-card-message {
     grid-row: current-card-message;
-    white-space: pre-wrap;
     text-align: center;
     font-size: 1.5em;
     color: white;
-    line-height: 1.5em;
-    margin: 0 0 20px 0;
 }
 
 .bet-prediction_current-card {
-    width: 300px;
-    height: 400px;
-    scale: 90%;
+    width: 270px;
+    height: 360px;
     grid-row: current-card;
-    margin: 0 0 20px 0;
+    margin: 20px 0;
 }
 
 .bet-prediction-message {
     grid-row: bet-prediction-message;
-    white-space: pre-wrap;
     text-align: center;
     font-size: 1.5em;
     color: white;
     line-height: 1.5em;
-    margin: 0 0 50px 0;
 }
 
 .bet-prediction-prediction-selection-wrapper {
     grid-row: prediction-buttons;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
     gap: 50px;
-    margin: 0 0 50px 0;
+    margin: 20px 0;
 }
+
 
 .prediction-button {
     height: 50px;
@@ -204,6 +198,13 @@ function validateBetPrediction() {
     background-color: rgba(38, 38, 38);
 }
 
+.bet-prediction_current-credits-message {
+    grid-row: bet-label;
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
+}
+
 .bet-prediction_bet-input {
     height: 50px;
     width: 80%;
@@ -213,7 +214,7 @@ function validateBetPrediction() {
     color: white;
     text-align: left;
     font-weight: 300;
-    margin: 0 0 25px 0;
+    margin: 10px 0;
     padding: 0px 0px 0px 20px;
     background: rgba(3, 3, 3);
 }
@@ -252,7 +253,42 @@ input[type=number] {
     font-size: 1.5em;
     color: white;
     box-shadow: 3px 3px 5px black;
-    margin: 25px 0 0 0;
+    margin: 25px 0;
     background-color: rgba(0, 48, 0);
 }
+
+
+@media only screen and (max-width: 600px) {
+.bet-prediction_current-card-message {
+    font-size: 1.2em;
+}
+.bet-prediction_current-card {
+    width: 210px;
+    height: 280px;
+}
+
+.bet-prediction-message {
+    font-size: 1.2em;
+}
+
+.bet-prediction-prediction-selection-wrapper {
+    gap: 20px;
+}
+
+.bet-prediction_current-credits-message {
+    font-size: 1.2em;
+}
+
+
+.prediction-button {
+    width: 150px;
+    font-size: 1.2em;
+}
+
+.bet-prediction_submit-bet-prediction-button { 
+    font-size: 1.2em;
+}
+}
+
+
 </style>

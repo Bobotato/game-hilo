@@ -21,8 +21,8 @@ function returnToLogin() {
     <div class="error-overlay-component" v-if="props.errorString != ''">
         <div class="error-overlay-wrapper">
             <img class="error-icon" src="@/assets/images/errorIcon.svg">
-            <h2 class="message">An error has occured: <br> {{ props.errorString }}</h2>
-            <button class="button" @click.once="returnToLogin">Return to Login</button>
+            <h2 class="error-message">An error has occured: <br> {{ props.errorString }}</h2>
+            <button class="return-to-login-button" @click.once="returnToLogin">Return to Login</button>
         </div>
     </div>
 </template>
@@ -52,14 +52,14 @@ function returnToLogin() {
     height: 50px;
 }
 
-.message {
+.error-message {
     grid-row: message;
     text-align: center;
     font-size: 1.5em;
     line-height: 2em;
 }
 
-.button {
+.return-to-login-button {
     height: 50px;
     width: 250px;
     border: none;
@@ -81,5 +81,14 @@ function returnToLogin() {
 .button:active {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
     transform: translateY(4px);
+}
+
+@media only screen and (max-width: 600px) {
+  .error-message {
+    font-size: 1.2em;
+  }
+  .return-to-login-button {
+    font-size: 1.2em;
+  }
 }
 </style>

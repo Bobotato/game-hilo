@@ -33,4 +33,10 @@
         clip-path: inset(0 -0.63ch 0 0)
     }
 }
+
+@media only screen and (max-width: 600px) {
+.loading-message {
+    font-size: 1.2em;
+}
+} 
 </style>

@@ -117,4 +117,21 @@ function emitChangeGameState() {
         background-color: #08000062;
     }
 }
+
+@media only screen and (max-width: 600px) {
+.welcome-message {
+    width: 90%;
+    font-size: 1.2em;
+}
+
+.take-credit-button {
+    height: 150px;
+    width: 200px;
+}
+
+.shadow {
+    height: 25px;
+    width: 200px;
+}
+}
 </style>
