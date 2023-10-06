@@ -189,7 +189,6 @@ startRound()
         </GameOverPage>
     </div>
 
-
     <button class="game-logout-button" @click.once=logOutFromGame>Log Out</button>
 </template>
 
@@ -200,7 +199,7 @@ startRound()
 }
 
 .game-logout-button {
-    position: absolute;
+    position: fixed;
     left: 3%;
     bottom: 4%;
     height: 50px;

@@ -23,7 +23,7 @@ function toggleMute() {
 
 <style>
 .togglemute-button {
-    position: absolute;
+    position: fixed;
     right: 1vw;
     bottom: 1vh;
     z-index: 999;
