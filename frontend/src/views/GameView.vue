@@ -15,13 +15,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="game-main">
+    <main class="hilogame-main">
         <HiloGame @play-audio="$emit('playAudio', $event)"></HiloGame>
-    </div>
+    </main>
 </template>
 
 <style scoped>
-.game-main {
+.hilogame-main {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    background-attachment: scroll;
     background-image: url("@/assets/images/GameScreen.jpg");
     background-repeat: no-repeat;
     background-size: cover;

@@ -196,8 +196,6 @@ startRound()
 <style scoped>
 .game-main {
     display: grid;
-    width: 100%;
-    height: 100vh;
     place-items: center;
 }
 
