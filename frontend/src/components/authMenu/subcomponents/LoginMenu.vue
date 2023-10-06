@@ -64,7 +64,7 @@ function toggleShowPassword() {
 
     <div class="login-menu-main">
         <div class="login-instructions">
-            Welcome to Alex's hi-lo game.
+            Welcome to Alex's hi-lo game. <br>
             Please log-in or register.
         </div>
 
@@ -77,7 +77,7 @@ function toggleShowPassword() {
                 required
             >
 
-            <div class="password-input-wrapper">
+            <div class="login-form-input_password-input-wrapper">
                 
                 <input class="login-form-input login-form-input_password-input"
                     v-if="showPassword"
@@ -127,7 +127,7 @@ function toggleShowPassword() {
 
 .login-instructions {
     grid-row: login-instructions;
-    width: 50%;
+    width: 90%;
     line-height: 150%;
     font-size: 1.5em;
     text-align: center;
@@ -167,7 +167,7 @@ function toggleShowPassword() {
     width: 400px;
 }
 
-.password-input-wrapper {
+.login-form-input_password-input-wrapper {
     grid-row: password-input;
     display: grid;
     grid-template-columns: [password-input] 370px [password-view-toggle-button] 50px;
@@ -177,12 +177,8 @@ function toggleShowPassword() {
     margin-bottom: 20px;
 }
 
-input[type="password"] {
-    font-size: 1em;
-}
-
 input[type="password"]::placeholder {
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 .toggle-password-button {
@@ -221,5 +217,33 @@ input[type="password"]::placeholder {
 
 .login-submit-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+@media only screen and (max-width: 600px) {    
+.login-instructions {
+    line-height: 150%;
+    font-size: 1.2em;
+}
+
+.login-form-input {
+    font-size: 1.2em;
+}
+
+.login-form-input::placeholder {
+    font-size: 1em;
+}
+
+
+.login-form-input_username-input {
+    width: 300px;
+}
+
+.login-form-input_password-input-wrapper {
+    grid-template-columns: [password-input] 270px [password-view-toggle-button] 50px;
+}
+
+.login-submit-button {
+    font-size: 1.2em;
+}
 }
 </style>

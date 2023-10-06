@@ -176,12 +176,8 @@ function toggleShowPassword() {
     margin-bottom: 20px;
 }
 
-input[type="password"] {
-    font-size: 1em;
-}
-
 input[type="password"]::placeholder {
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 .toggle-password-button {
@@ -227,5 +223,32 @@ input[type="password"]::placeholder {
 .register-submit-button {
     grid-row: register-button;
     background-color: rgba(48, 0, 0);
+}
+
+@media only screen and (max-width: 600px) {    
+.register-instructions {
+    line-height: 150%;
+    font-size: 1.2em;
+}
+
+.register-form-input {
+    font-size: 1.2em;
+}
+
+.register-form-input::placeholder {
+    font-size: 1em;
+}
+
+.register-form-input_username-input {
+    width: 300px;
+}
+
+.register-form-input_password-input-wrapper {
+    grid-template-columns: [password-input] 270px [password-view-toggle-button] 50px;
+}
+
+.register-submit-button {
+    font-size: 1.2em;
+}
 }
 </style>

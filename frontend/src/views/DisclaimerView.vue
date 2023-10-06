@@ -5,7 +5,7 @@ const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
 }>()
 
-let descriptionText = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n Use the mute icon on the bottom right to disable sounds."
+let descriptionText = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n\n Use the mute icon on the bottom right to disable sounds."
 
 onUnmounted(() => {
     emit('playAudio', 'enterConfirmSfx')
@@ -42,10 +42,10 @@ onUnmounted(() => {
     align-items: center;
     text-align: center;
     grid-template-rows: [description-text] auto [continue-button] auto;
+    margin: 0 50px;
 }
 
 .description-text {
-    line-height: 200%;
     font-size: 1.5em;
     white-space: pre-wrap;
     text-align: center;
@@ -69,5 +69,15 @@ onUnmounted(() => {
 
 .description-continue-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+@media only screen and (max-width: 600px) {    
+.description-text {
+    line-height: 150%;
+    font-size: 1.2em;
+}
+.description-continue-button {
+    font-size: 1.2em;
+}
 }
 </style>

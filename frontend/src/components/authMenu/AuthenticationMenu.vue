@@ -88,4 +88,10 @@ function toggleShowRegisterPage() {
     grid-row: toggle-button;
     background-color: rgba(0, 48, 0);
 }
+
+@media only screen and (max-width: 600px) {    
+.auth-menu-button {
+    font-size: 1.2em;
+}
+}
 </style>
