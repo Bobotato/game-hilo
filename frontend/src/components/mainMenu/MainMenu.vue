@@ -14,7 +14,7 @@ const emit = defineEmits<{
 
 let ruleSet = ref({
     isShowing: false,
-    text: 'The game uses a standard 52 card deck. \n\n 1 card is dealt face up, and another face down. \n\n You need to guess if the face down card is of a higher or lower value than the face up card. \n\n A right answer doubles your bet, and a wrong answer forfeits your bet. Happy playing.'
+    text: 'A card is dealt face-up. \n\n You must predict if the next card will be higher or lower.'
 })
 
 let errorOverlay = ref({
@@ -55,7 +55,7 @@ function logOutFromMainMenu() {
 </script>
 
 <template>
-    <div class="main-menu-main">
+    <main class="main-menu-main">
         <ErrorOverlay 
             v-if="errorOverlay.isShowing"
             :errorString=errorOverlay.errorString
@@ -89,7 +89,7 @@ function logOutFromMainMenu() {
                 </button>
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>

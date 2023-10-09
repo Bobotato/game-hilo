@@ -1,13 +1,20 @@
 <script lang="ts" setup>
-import { onUnmounted } from 'vue';
+import { onUnmounted, Ref } from 'vue';
 import HiloGame from '@/components/game/HiloGame.vue';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
     (e: 'stopAudio'): void
+    (e: 'toggleMuteAudio'): void
 }>()
 
 emit("playAudio", "gameThemeSfx")
+
+interface Props {
+    isMuted: Ref<boolean>
+}
+
+const props = defineProps<Props>()
 
 onUnmounted(() => {
     emit("stopAudio")
@@ -16,7 +23,10 @@ onUnmounted(() => {
 
 <template>
     <main class="hilogame-main">
-        <HiloGame @play-audio="$emit('playAudio', $event)"></HiloGame>
+        <HiloGame @play-audio="$emit('playAudio', $event)"
+                  @toggle-mute-audio="$emit('toggleMuteAudio')"
+                  :isMuted="props.isMuted">
+        </HiloGame>
     </main>
 </template>
 

@@ -1,3 +1,5 @@
+import { ref, Ref } from 'vue'
+
 import menuSelect from '@/assets/sounds/foleyAudio/menuSelect.mp3'
 import errorBuzzer from '@/assets/sounds/foleyAudio/errorBuzzer.mp3'
 import menuTheme from '@/assets/sounds/bgmAudio/menuTheme.mp3'
@@ -12,9 +14,9 @@ export class AudioPlayer {
     bgmAudio: any
     foleyAudio: any
     volume: number
-    isMuted: boolean
+    isMuted: Ref<boolean>
 
-    constructor(bgmAudio: any = null, foleyAudio: any = null, volume: number = 0.1, isMuted: boolean = false) {
+    constructor(bgmAudio: any = null, foleyAudio: any = null, volume: number = 0.1, isMuted: Ref<boolean> = ref(false)) {
         this.bgmAudio = bgmAudio
         this.foleyAudio = foleyAudio
         this.volume = volume
@@ -57,7 +59,7 @@ export class AudioPlayer {
         if (sound) {
             this.bgmAudio = new Audio(sound);
             this.bgmAudio.volume = this.volume;
-            this.bgmAudio.muted = this.isMuted;
+            this.bgmAudio.muted = this.isMuted.value;
             this.bgmAudio.loop = true
             this.bgmAudio.play();
         }
@@ -67,13 +69,13 @@ export class AudioPlayer {
         if (sound) {
             this.foleyAudio = new Audio(sound);
             this.foleyAudio.volume = this.volume;
-            this.foleyAudio.muted = this.isMuted;
+            this.foleyAudio.muted = this.isMuted.value;
             this.foleyAudio.play();
         }
     }
 
     toggleMuteAudio() {
-        this.isMuted = !this.isMuted
+        this.isMuted.value = !this.isMuted.value
         this.updateMute()
     }
 
@@ -85,10 +87,10 @@ export class AudioPlayer {
 
     updateMute() {
         if (this.bgmAudio !== null) {
-            this.bgmAudio.muted = this.isMuted;
+            this.bgmAudio.muted = this.isMuted.value;
         }
         if (this.foleyAudio !== null) {
-            this.foleyAudio.muted = this.isMuted;
+            this.foleyAudio.muted = this.isMuted.value;
         }
     }
 }

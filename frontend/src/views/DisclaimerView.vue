@@ -1,9 +1,18 @@
 <script lang="ts" setup>
-import { onUnmounted } from 'vue';
+import { Ref, onUnmounted } from 'vue';
+
+import AudioController from '@/components/audioController/AudioController.vue';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
+    (e: 'toggleMuteAudio'): void
 }>()
+
+interface Props {
+    isMuted: Ref<boolean>
+}
+
+const props = defineProps<Props>()
 
 let descriptionText = "This game might be slightly spooky, with spooky sounds and dismembered bits. \n\n Use the mute icon on the bottom right to disable sounds."
 
@@ -13,7 +22,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="disclaimer-main">
+    <main class="disclaimer-main">
         <div class="description-wrapper">
             <h2 class="description-text">{{ descriptionText }}</h2>
 
@@ -24,7 +33,12 @@ onUnmounted(() => {
                 </button>
             </RouterLink>
         </div>
-    </div>
+
+        <AudioController class="disclaimer-audio-controller"
+            @toggle-mute="$emit('toggleMuteAudio')"
+            :isMuted="props.isMuted">
+        </AudioController>
+    </main>
 </template>
 
 <style scoped>
@@ -69,6 +83,12 @@ onUnmounted(() => {
 
 .description-continue-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+}
+
+.disclaimer-audio-controller {
+    position: absolute;
+    bottom: 2vh;
+    right: 2vw;
 }
 
 @media only screen and (max-width: 600px) {    

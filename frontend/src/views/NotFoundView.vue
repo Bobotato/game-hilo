@@ -12,7 +12,7 @@ function returnToMain() {
 </script>
 
 <template>
-    <div class="not-found-main">
+    <main class="not-found-main">
         <div class="not-found-wrapper">
             <h2 class="not-found-message">There is nothing here. <br> Use this to go back to the front page.</h2>
             
@@ -21,7 +21,7 @@ function returnToMain() {
                 Back to Start
             </button>
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>
