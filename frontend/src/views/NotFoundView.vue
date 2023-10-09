@@ -65,4 +65,16 @@ function returnToMain() {
 .not-found-return-button:hover {
     box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
 }
+
+@media only screen and (max-width: 600px) {    
+.not-found-message {
+    line-height: 150%;
+    font-size: 1.2em;
+}
+
+.not-found-return-button {
+    width: 250px;
+    font-size: 1.2em;
+}
+}
 </style>
