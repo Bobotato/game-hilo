@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { router } from '@/router/index'
 
 import LoginMenu from "@/components/authMenu/subcomponents/LoginMenu.vue"
 import RegisterMenu from "@/components/authMenu/subcomponents/RegisterMenu.vue"
+
+import { verifyJWT } from '@/services/apiService/user/user';
 
 const emit = defineEmits<{
     (e: 'playAudio', sound: string): void
@@ -11,10 +14,23 @@ const emit = defineEmits<{
 
 let isShowingRegisterPage = ref(false)
 
+async function checkIsLoggedIn() {
+    try {
+        await verifyJWT()
+        router.push('/mainmenu')
+    } catch (error: any) {
+        return
+    }
+}
+
 function toggleShowRegisterPage() {
     emit("playAudio", "menuReturnSfx")
     isShowingRegisterPage.value = !isShowingRegisterPage.value
 }
+
+onMounted (() => {
+    checkIsLoggedIn()
+})
 </script>
 
 <template>

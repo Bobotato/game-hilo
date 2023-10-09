@@ -35,8 +35,8 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const publicPages = ['/', '/login', '/notfound'];
-  const loginRequired = !publicPages.includes(to.path);
+  const privatePages = ['/mainmenu', '/game']
+  const loginRequired = privatePages.includes(to.path);
 
   if (loginRequired) {
     try {

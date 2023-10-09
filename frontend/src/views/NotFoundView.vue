@@ -6,7 +6,7 @@ const emit = defineEmits<{
 }>()
 
 function returnToMain() {
-    router.push({ path: '/' })
+    router.push({ path: '/mainmenu' })
     emit('playAudio', 'menuSelectSfx')
 }
 </script>

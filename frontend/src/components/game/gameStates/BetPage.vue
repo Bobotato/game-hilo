@@ -77,7 +77,7 @@ function validateBetPrediction() {
         <div class="bet-prediction-menu">
 
             <p class="bet-prediction_current-card-message">
-                Your current card is the {{ CardRanks[props.roundInfo.current_card.rank] }} of
+                Your current card is the <br> {{ CardRanks[props.roundInfo.current_card.rank] }} of
                 {{ CardSuits[props.roundInfo.current_card.suit] }}.
             </p>
 
@@ -148,6 +148,7 @@ function validateBetPrediction() {
     text-align: center;
     font-size: 1.5em;
     color: white;
+    line-height: 1.5em;
 }
 
 .bet-prediction_current-card {
