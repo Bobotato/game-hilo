@@ -5,8 +5,8 @@ import { AxiosError } from 'axios';
 import LoadingPage from '@/components/loading/LoadingPage.vue';
 import WelcomePage from '@/components/game/gameStates/WelcomePage.vue'
 import DrawDeckPage from '@/components/game/gameStates/DrawDeckPage.vue'
-import BetPage from '@/components/game/gameStates/BetPage.vue';
-import ResultPage from '@/components/game/gameStates/ResultPage.vue';
+import BetPage from '@/components/game/BetPage.vue';
+import ResultPage from '@/components/game/ResultPage.vue';
 import GameOverPage from '@/components/game/gameStates/GameOverPage.vue';
 
 import AudioController from '@/components/audioController/AudioController.vue';
@@ -17,7 +17,7 @@ import { APIServerDownError, UnauthorisedError } from '@/services/apiService/err
 import { resetGame } from '@/services/apiService/game/game';
 import { logOut } from '@/utils/logOut'
 import { GameStates } from '@/models/gameStates';
-import { BetPrediction } from '@/components/game/gameStates/BetPage';
+import { BetPrediction } from '@/components/game/BetPage.vue';
 
 let { roundInfo, updateRoundInfo, roundResult, updateRoundResult } = useGame()
 

@@ -1,9 +1,7 @@
 <script lang='ts' setup>
-import PokerCard from '@/components/game/gameElements/PokerCard.vue';
+import PokerCard from '@/components/game/PokerCard.vue';
 
 import { RoundResult } from '@/types/gameElements/gameElementTypes';
-import { CardRanks, CardSuits } from '@/models/pokerCard';
-
 
 interface Props {
     roundResult: RoundResult

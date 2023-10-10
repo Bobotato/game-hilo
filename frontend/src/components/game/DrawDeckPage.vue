@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-import PokerCard from '@/components/game/gameElements/PokerCard.vue';
+import PokerCard from '@/components/game/PokerCard.vue';
 
 import { Card } from '@/types/gameElements/gameElementTypes';
 import { CardRanks, CardSuits } from '@/models/pokerCard'

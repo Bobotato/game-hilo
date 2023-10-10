@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, Ref } from 'vue'
 
-import PokerCard from '@/components/game/gameElements/PokerCard.vue';
+import PokerCard from '@/components/game/PokerCard.vue';
 import ErrorWarning from '@/components/errorWarning/ErrorWarning.vue';
 
 import { BetPredictionError } from '@/errors/gameErrors'
