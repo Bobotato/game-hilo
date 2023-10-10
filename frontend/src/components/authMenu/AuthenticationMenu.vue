@@ -2,8 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { router } from '@/router/index'
 
-import LoginMenu from "@/components/authMenu/subcomponents/LoginMenu.vue"
-import RegisterMenu from "@/components/authMenu/subcomponents/RegisterMenu.vue"
+import LoginMenu from "@/components/authMenu/LoginMenu.vue"
+import RegisterMenu from "@/components/authMenu/RegisterMenu.vue"
 
 import { verifyJWT } from '@/services/apiService/user/user';
 
