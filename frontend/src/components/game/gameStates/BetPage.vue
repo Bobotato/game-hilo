@@ -58,11 +58,12 @@ function validateBetPrediction() {
         errorString.value = "You cannot bet more than you have."
         throw new BetPredictionError("BetExceedsCreditsError")
 
-    } else if (!betPrediction.value.bet || betPrediction.value.bet === 0) {
+    } else if (betPrediction.value.bet === 0) {
+        console.log(betPrediction.value.bet)
         errorString.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
 
-    } else if (betPrediction.value.bet && typeof betPrediction.value.bet !== 'number') {
+    } else if (!betPrediction.value.bet || typeof betPrediction.value.bet !== 'number') {
         errorString.value = "You cannot bet a non-number."
         throw new BetPredictionError("NilBetError")
 
@@ -118,7 +119,7 @@ function validateBetPrediction() {
                 v-model="betPrediction.bet" 
                 required />
 
-            <ErrorWarning class="error-warning" 
+            <ErrorWarning class="bet-prediction_error-warning" 
                 v-if="errorString !== ''" 
                 :errorString="errorString">
             </ErrorWarning>
@@ -139,7 +140,7 @@ function validateBetPrediction() {
 
 .bet-prediction-menu {
     display: grid;
-    grid-template-rows: [current-card-message] auto [current-card] auto [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet] auto [error-dialogue] auto [bet-prediction_submit-bet-prediction-button] auto;
+    grid-template-rows: [current-card-message] auto [current-card] auto [bet-prediction-message] auto [prediction-buttons] auto [bet-label] auto [bet-input] auto [error-warning] auto [bet-prediction_submit-bet-prediction-button] auto;
     place-items: center;
 }
 
@@ -207,6 +208,7 @@ function validateBetPrediction() {
 }
 
 .bet-prediction_bet-input {
+    grid-row: bet-input;
     height: 50px;
     width: 80%;
     border: none;
@@ -218,6 +220,7 @@ function validateBetPrediction() {
     margin: 10px 0;
     padding: 0px 0px 0px 20px;
     background: rgba(3, 3, 3);
+    border: 1px solid white;
 }
 
 .bet-prediction_bet-input::placeholder {
@@ -241,6 +244,13 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+.bet-prediction_error-warning {
+    grid-row: error-warning;
+    display: grid;
+    place-items: center;
+    margin: 20px 0;
 }
 
 .bet-prediction_submit-bet-prediction-button {
@@ -279,7 +289,6 @@ input[type=number] {
 .bet-prediction_current-credits-message {
     font-size: 1.2em;
 }
-
 
 .prediction-button {
     width: 150px;

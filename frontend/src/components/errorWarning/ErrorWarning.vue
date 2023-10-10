@@ -27,10 +27,10 @@ const props = defineProps<Props>()
 
 .error {
   display: grid;
-  grid-template-columns: [error-icon] 10% [error-text] auto;
+  align-items: center;
+  grid-template-columns: [error-icon] auto [error-text] auto;
   border-radius: 5px;
-  margin-top: 20px;
-  width: 80%;
+  margin: 20px 0 0 0;
 }
 
 .error-icon-wrapper {
@@ -47,8 +47,9 @@ const props = defineProps<Props>()
 
 .error-text {
   color: red;
+  font-size: 1.5em;
   font-weight: 500;
-  margin-left: 10px;
+  margin: 0 0 0 20px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -58,6 +59,7 @@ const props = defineProps<Props>()
   }
   .error-text {
     font-size: 1.2em;
+    margin: 0 0 0 10px;
   }
 }
 </style>
