@@ -9,7 +9,7 @@ import {
     NoSuchGameError
 } from '@/services/apiService/errors'
 import { InfoResponseSchema, ResultResponseSchema } from '@/schemas/schemas'
-import { BetPrediction } from '@/components/game/gameStates/BetPage';
+import { BetPrediction } from '@/components/game/BetPage.vue';
 import { Card, Player } from "@/types/gameElements/gameElementTypes"
 
 export const gameErrorCodes: { [key: number]: Error } = { 

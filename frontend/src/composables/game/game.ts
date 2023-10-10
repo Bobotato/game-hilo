@@ -3,7 +3,7 @@ import { ref, Ref } from 'vue'
 import { getInfo, getResult } from "@/services/apiService/game/game";
 
 import { RoundInfo, RoundResult } from "@/types/gameElements/gameElementTypes";
-import { BetPrediction } from '@/components/game/gameStates/BetPage';
+import { BetPrediction } from '@/components/game/BetPage';
 
 export function useGame() {
     const roundInfo: Ref<RoundInfo> = ref({} as RoundInfo)

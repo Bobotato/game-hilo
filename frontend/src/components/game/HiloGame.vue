@@ -3,11 +3,11 @@ import { ref, Ref, onMounted } from 'vue'
 import { AxiosError } from 'axios';
 
 import LoadingPage from '@/components/loading/LoadingPage.vue';
-import WelcomePage from '@/components/game/gameStates/WelcomePage.vue'
-import DrawDeckPage from '@/components/game/gameStates/DrawDeckPage.vue'
+import WelcomePage from '@/components/game/WelcomePage.vue'
+import DrawDeckPage from '@/components/game/DrawDeckPage.vue'
 import BetPage from '@/components/game/BetPage.vue';
 import ResultPage from '@/components/game/ResultPage.vue';
-import GameOverPage from '@/components/game/gameStates/GameOverPage.vue';
+import GameOverPage from '@/components/game/GameOverPage.vue';
 
 import AudioController from '@/components/audioController/AudioController.vue';
 import ErrorOverlay from '@/components/errorWarning/ErrorOverlay.vue';
