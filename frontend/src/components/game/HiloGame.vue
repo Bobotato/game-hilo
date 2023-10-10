@@ -214,14 +214,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.game-main {
-    display: grid;
-    place-items: center;
-}
-
 .game-error-overlay {
     position: absolute;
     z-index: 1000;
+}
+
+.game-main {
+    margin: 50px 0 0 0;
 }
 
 .game-footer {
