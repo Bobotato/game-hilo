@@ -62,7 +62,7 @@ function toggleShowPassword() {
 <template>
     <LoadingPage v-if=isLoading></LoadingPage>
 
-    <div class="login-menu-main">
+    <main class="login-menu-main">
         <div class="login-instructions">
             Welcome to Alex's hi-lo game. <br>
             Please log-in or register.
@@ -113,8 +113,7 @@ function toggleShowPassword() {
                 Log In
             </button>
         </form>
-
-    </div>
+    </main>
 </template>
 
 <style scoped>

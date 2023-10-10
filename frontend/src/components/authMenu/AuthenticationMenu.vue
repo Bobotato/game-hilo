@@ -34,7 +34,7 @@ onMounted (() => {
 </script>
 
 <template>
-    <div class="auth-menu-main">
+    <main class="auth-menu-main">
         <div class="auth-menu-wrapper">
             <RegisterMenu
                 v-if="isShowingRegisterPage"
@@ -59,7 +59,7 @@ onMounted (() => {
             </button>
 
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>

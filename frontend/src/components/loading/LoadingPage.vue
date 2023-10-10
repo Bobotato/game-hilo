@@ -2,9 +2,9 @@
 </script>
 
 <template>
-    <div class="loading-main">
+    <main class="loading-main">
         <p class="loading-message">Loading...</p>
-    </div>
+    </main>
 </template>
 
 <style>

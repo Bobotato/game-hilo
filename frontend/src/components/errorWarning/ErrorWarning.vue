@@ -7,17 +7,16 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <div class="error-main">
+  <main class="error-main">
     <div class="error">
       <div class="error-icon-wrapper">
         <img class="error-icon"
-          src="@/assets/images/errorIcon.svg"
-        />
+          src="@/assets/images/errorIcon.svg"/>
       </div>
 
       <p class="error-text">{{ props.errorString }}</p>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>

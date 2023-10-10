@@ -18,13 +18,13 @@ function returnToLogin() {
 </script>
 
 <template>
-    <div class="error-overlay-component" v-if="props.errorString != ''">
+    <main class="error-overlay-main" v-if="props.errorString != ''">
         <div class="error-overlay-wrapper">
             <img class="error-icon" src="@/assets/images/errorIcon.svg">
             <h2 class="error-message">An error has occured: <br> {{ props.errorString }}</h2>
             <button class="return-to-login-button" @click.once="returnToLogin">Return to Login</button>
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>

@@ -62,7 +62,7 @@ function toggleShowPassword() {
 <template>
     <LoadingPage v-if=isLoading></LoadingPage>
     
-    <div class="register-menu-main">
+    <main class="register-menu-main">
         <div class="register-instructions">
             Please register your details.
         </div>
@@ -112,8 +112,7 @@ function toggleShowPassword() {
                 Register
             </button>
         </form>
-
-    </div>
+    </main>
 </template>
 
 <style scoped>

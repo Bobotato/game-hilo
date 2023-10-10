@@ -24,13 +24,14 @@ function toggleMute() {
 </script>
 
 <template>
-    <div class=togglemute-main>
+    <main class=togglemute-main>
         <button :class="{ 'togglemute-button togglemute-button_audio-muted': isAudioMuted, 'togglemute-button togglemute-button_audio-unmuted': !isAudioMuted }"
-            @click="toggleMute"></button>
-    </div>
+            @click="toggleMute">
+        </button>
+    </main>
 </template>
 
-<style>
+<style scoped>
 .togglemute-button {
     width: 80px;
     height: 80px;
