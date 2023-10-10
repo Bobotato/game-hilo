@@ -299,6 +299,4 @@ input[type=number] {
     font-size: 1.2em;
 }
 }
-
-
 </style>

@@ -155,36 +155,57 @@ onMounted(() => {
 </script>
 
 <template>
-    <main class=game-main>
-        <ErrorOverlay :errorString=errorOverlay.errorString @play-audio="$emit('playAudio', $event)">
-        </ErrorOverlay>
+    <ErrorOverlay
+        class="game-error-overlay"
+        :errorString=errorOverlay.errorString
+        @play-audio="$emit('playAudio', $event)">
+    </ErrorOverlay>
 
-        <LoadingPage v-if="activeGameState === GameStates.loading">
+
+    <main class=game-main>
+        <LoadingPage 
+            v-if="activeGameState === GameStates.loading">
         </LoadingPage>
 
-        <WelcomePage v-if="activeGameState === GameStates.welcome" :roundInfo=roundInfo
-            @change-active-game-state="changeActiveGameState($event)" @play-audio="$emit('playAudio', $event)">
+        <WelcomePage 
+            v-if="activeGameState === GameStates.welcome" 
+            :roundInfo=roundInfo
+            @change-active-game-state="changeActiveGameState($event)"
+            @play-audio="$emit('playAudio', $event)">
         </WelcomePage>
 
-        <DrawDeckPage v-if="activeGameState === GameStates.deck" :currentCard=roundInfo.current_card
-            @play-audio="$emit('playAudio', $event)" @change-active-game-state="activeGameState = GameStates.betPrediction">
+        <DrawDeckPage 
+            v-if="activeGameState === GameStates.deck"
+            :currentCard=roundInfo.current_card
+            @play-audio="$emit('playAudio', $event)"
+            @change-active-game-state="activeGameState = GameStates.betPrediction">
         </DrawDeckPage>
 
-        <BetPage v-else-if="activeGameState === GameStates.betPrediction" :roundInfo=roundInfo
-            @submit-bet-prediction="handleGetRoundResult($event)" @play-audio=" $emit('playAudio', $event)">
+        <BetPage 
+            v-else-if="activeGameState === GameStates.betPrediction"
+            :roundInfo=roundInfo
+            @submit-bet-prediction="handleGetRoundResult($event)"
+            @play-audio=" $emit('playAudio', $event)">
         </BetPage>
 
-        <ResultPage v-else-if="activeGameState === GameStates.result" :roundResult=roundResult @endRound="endRound($event)"
+        <ResultPage
+            v-else-if="activeGameState === GameStates.result"
+            :roundResult=roundResult @endRound="endRound($event)"
             @play-audio=" $emit('playAudio', $event)">
         </ResultPage>
 
-        <GameOverPage v-else-if="activeGameState === GameStates.gameOver" @is-retrying="restartGame()"
+        <GameOverPage
+            v-else-if="activeGameState === GameStates.gameOver"
+            @is-retrying="restartGame()"
             @play-audio="$emit('playAudio', $event)">
         </GameOverPage>
     </main>
 
     <footer class="game-footer">
-        <button class="game-logout-button" @click.once=logOutFromGame>Log Out</button>
+        <button class="game-logout-button" @click.once=logOutFromGame>
+            Log Out
+        </button>
+
         <AudioController class="game-audio-controller"
             @toggle-mute="$emit('toggleMuteAudio')"
             :isMuted="props.isMuted">
@@ -196,6 +217,11 @@ onMounted(() => {
 .game-main {
     display: grid;
     place-items: center;
+}
+
+.game-error-overlay {
+    position: absolute;
+    z-index: 1000;
 }
 
 .game-footer {

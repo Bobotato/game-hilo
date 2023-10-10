@@ -28,13 +28,11 @@ function returnToLogin() {
 </template>
 
 <style scoped>
-.error-overlay-component {
+.error-overlay-main {
     backdrop-filter: blur(10px) grayscale(50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
     width: 100%;
-    height: 100%;
-    z-index: 1000;
+    padding: 100% 0;
     display: grid;
     place-items: center;
 }
