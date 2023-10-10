@@ -108,8 +108,7 @@ function toggleShowPassword() {
 
             <button class="login-submit-button"
                 type="submit"
-                :disabled=isLoading
-            >
+                :disabled=isLoading>
                 Log In
             </button>
         </form>
@@ -148,9 +147,10 @@ function toggleShowPassword() {
     color: white;
     text-align: left;
     font-weight: 300;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
     padding: 0px 0px 0px 20px;
     background: rgba(3, 3, 3);
+    border: 1px solid white;
 }
 
 .login-form-input::placeholder {
@@ -173,7 +173,8 @@ function toggleShowPassword() {
 }
 
 .login-form-input_password-input {
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+    border-style: solid none solid solid;
 }
 
 input[type="password"]::placeholder {
@@ -181,13 +182,19 @@ input[type="password"]::placeholder {
 }
 
 .toggle-password-button {
-    height: 50px;
+    height: 52px;
     width: 50px;
+    padding: 0px;
     background-color: rgba(3, 3, 3);
     background-repeat: no-repeat;
     background-size: 60%;
     background-position: center;
-    border: none;
+    border: 1px solid rgb(255, 255, 255);
+    border-style: solid solid solid none;
+}
+
+.toggle-password-button:active {
+    transform: none;
 }
 
 .toggle-password-button_password-shown {
