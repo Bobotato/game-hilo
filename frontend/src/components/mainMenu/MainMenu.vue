@@ -31,23 +31,20 @@ function logOutFromMainMenu() {
     emit('playAudio', 'menuSelectSfx')
     try {
         logOut()
+        
     } catch (error: any) {
-        console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
                 errorOverlay.value.isShowing = true
-                console.error(error.message)
                 break
             case APIServerDownError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
                 errorOverlay.value.isShowing = true
-                console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
                 errorOverlay.value.isShowing = true
-                console.error(error.message)
                 break
     }
 }

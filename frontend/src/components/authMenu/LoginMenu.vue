@@ -30,23 +30,20 @@ async function handleLogin() {
         isLoading.value = true
         errorString.value = ""
 
-        const loginResponse = await loginAccount(getCredentialsForm.value)
-        console.log(loginResponse)
+        await loginAccount(getCredentialsForm.value)
 
         router.push({ path: '/mainmenu' })
+        
     } catch (error: any) {
         switch (error.constructor) {
             case InvalidCredentialsError:
                 errorString.value = 'The credentials provided were invalid. Please try again.'
-                console.log(error.message)
                 break
             case APIServerDownError:
                 errorString.value = 'The auth server is down, please try again later.'
-                console.log(error.message)
                 break
             default:
                 errorString.value = `Something went wrong, please try again later. The error is: ${error}`
-                console.log(error.message)
                 break
         }
     } finally {

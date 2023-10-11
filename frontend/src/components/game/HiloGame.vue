@@ -41,16 +41,14 @@ let activeGameState: Ref<GameStates> = ref(GameStates.loading)
 async function handleGetRoundInfo() {
     try {
         await updateRoundInfo()
+
     } catch (error: any) {
-        console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                console.error(error.message)
                 break
         }
     }
@@ -60,45 +58,36 @@ async function handleGetRoundResult(betPrediction: BetPrediction) {
     try {
         await updateRoundResult(betPrediction)
         changeActiveGameState(GameStates.result)
+
     } catch (error: any) {
-        console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                console.error(error.message)
                 break
         }
     }
 }
 
 async function startRound() {
-    try {
-        await handleGetRoundInfo()
-        if (roundInfo.value.player.credits === 0) {
-            changeActiveGameState(GameStates.gameOver)
-        } else {
-            changeActiveGameState(GameStates.welcome)
-        }
-    } catch (error) {
-        console.error(error)
+    await handleGetRoundInfo()
+
+    if (roundInfo.value.player.credits === 0) {
+        changeActiveGameState(GameStates.gameOver)
+    } else {
+        changeActiveGameState(GameStates.welcome)
     }
 }
 
 async function endRound(isGameOver: boolean) {
-    try {
-        if (isGameOver) {
-            changeActiveGameState(GameStates.gameOver)
-        }
-        else {
-            await handleGetRoundInfo()
-            changeActiveGameState(GameStates.betPrediction)
-        }
-    } catch (error) {
-        console.error(error)
+    if (isGameOver) {
+        changeActiveGameState(GameStates.gameOver)
+    }
+    else {
+        await handleGetRoundInfo()
+        changeActiveGameState(GameStates.betPrediction)
     }
 }
 
@@ -111,16 +100,14 @@ function restartGame() {
         resetGame()
         handleGetRoundInfo()
         changeActiveGameState(GameStates.welcome)
+
     } catch (error: any) {
-        console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                console.error(error.message)
                 break
         }
     }
@@ -130,20 +117,17 @@ function logOutFromGame() {
     emit('playAudio', 'menuSelectSfx')
     try {
         logOut()
+
     } catch (error: any) {
-        console.error(error)
         switch (error.constructor) {
             case UnauthorisedError:
                 errorOverlay.value.errorString = 'There is an issue with the login token. Please login again.'
-                console.error(error.message)
                 break
             case APIServerDownError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                console.error(error.message)
                 break
             case AxiosError:
                 errorOverlay.value.errorString = 'There is an issue with the game server. Please try again later.'
-                console.error(error.message)
                 break
         }
     }

@@ -31,16 +31,18 @@ let errorString: Ref<string> = ref("")
 
 function selectPredictionButton(choice: Prediction) {
     emit('playAudio', 'choiceSelectSfx')
+
     betPrediction.value.prediction = choice
 }
 
 function submitBetPrediction() {
     try {
         validateBetPrediction()
+
         emit('playAudio', 'menuSelectSfx')
         emit('submitBetPrediction', betPrediction.value)
+
     } catch (error) {
-        console.error(error)
         emit('playAudio', 'errorBuzzer')
     }
 }
@@ -59,7 +61,6 @@ function validateBetPrediction() {
         throw new BetPredictionError("BetExceedsCreditsError")
 
     } else if (betPrediction.value.bet === 0) {
-        console.log(betPrediction.value.bet)
         errorString.value = "You cannot bet nothing."
         throw new BetPredictionError("NilBetError")
 

@@ -10,23 +10,14 @@ export function useGame() {
     const roundResult: Ref<RoundResult> = ref({} as RoundResult)
 
     async function updateRoundInfo() {
-        try {
-            roundInfo.value = await getInfo()
-            return roundInfo
-        } catch (error: any) {
-            console.log(`RoundInfo retrieval failed with error ${error}`)
-            throw error
-        }
+        roundInfo.value = await getInfo()
+        return roundInfo
+
     }
 
     async function updateRoundResult(betPrediction: BetPrediction) {
-        try {
-            roundResult.value = await getResult(betPrediction)
-            return roundResult
-        } catch (error: any) {
-            console.log(`RoundInfo retrieval failed with error ${error}`)
-            throw error
-        }
+        roundResult.value = await getResult(betPrediction)
+        return roundResult
     }
 
     return { roundInfo, roundResult, updateRoundInfo, updateRoundResult }
