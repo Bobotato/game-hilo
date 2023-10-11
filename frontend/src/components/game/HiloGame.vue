@@ -168,14 +168,14 @@ onMounted(() => {
         </LoadingPage>
 
         <WelcomePage 
-            v-if="activeGameState === GameStates.welcome" 
+            v-else-if="activeGameState === GameStates.welcome" 
             :roundInfo=roundInfo
             @change-active-game-state="changeActiveGameState($event)"
             @play-audio="$emit('playAudio', $event)">
         </WelcomePage>
 
         <DrawDeckPage 
-            v-if="activeGameState === GameStates.deck"
+            v-else-if="activeGameState === GameStates.deck"
             :currentCard=roundInfo.current_card
             @play-audio="$emit('playAudio', $event)"
             @change-active-game-state="activeGameState = GameStates.betPrediction">
