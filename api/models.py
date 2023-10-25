@@ -6,6 +6,7 @@ from api.database import Base
 
 class UserDetail(Base):
     __tablename__ = "user_details"
+
     username = Column(String, primary_key=True, index=True)
     password_hash = Column(String, index=True)
 

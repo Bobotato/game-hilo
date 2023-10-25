@@ -18,7 +18,7 @@ resource "digitalocean_droplet" "hilo-game" {
   }
 
     provisioner "local-exec" {
-                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && ansible-playbook -u root -i '${self.ipv4_address},' --private-key ${var.pvt_key} -e @/home/alex/Desktop/game-hilo/terraform/dockerhub_login.yml -e @/home/alex/Desktop/game-hilo/terraform/database_details.yml /home/alex/Desktop/game-hilo/playbook.yml"
+                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && ansible-playbook -u root -i '${self.ipv4_address},' --private-key ${var.pvt_key} -e @/home/alex/Desktop/project-hilo/terraform/dockerhub_login.yml -e @/home/alex/Desktop/project-hilo/terraform/database_details.yml /home/alex/Desktop/project-hilo/playbook.yml"
 
     }
 }
@@ -28,4 +28,4 @@ output "drop_ip_addresses" {
         for droplet in digitalocean_droplet.hilo-game:
         droplet.name => droplet.ipv4_address
     }
-    }
+}

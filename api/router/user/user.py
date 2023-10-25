@@ -137,3 +137,8 @@ def verifyJWT(
                 "detail": "The given token is invalid.",
             },
         )
+
+
+@router.get("/get")
+def get():
+    return "Gotten"

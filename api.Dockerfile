@@ -21,7 +21,7 @@ RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
 
 FROM base as deploy
 
-EXPOSE 1337
+EXPOSE 80
 
 ENV PATH="/venv/bin:${PATH}"
 ENV VIRTUAL_ENV="/venv"
@@ -31,4 +31,4 @@ RUN apt-get update
 COPY --from=build /venv /venv
 COPY . /app
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "1337"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "80"]

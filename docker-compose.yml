@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
 
   database:
@@ -18,17 +19,19 @@ services:
 
   backend:
     container_name: hilogameapi
-    image: valenciaga/test
-    env_file: .env
+    image: valenciaga/hilogame_api
+    env_file: api.env
     depends_on:
       database:
         condition: service_healthy
-    ports:
-        - 1337:1337
     volumes:
         - ./.env:/app/.env:ro
-  
+
   frontend:
     container_name: hilogamefrontend
-    image: node:16-alpine
+    image: valenciaga/hilogame_frontend
+    ports:
+        - 80:80
+    depends_on:
+      - backend
 
