@@ -1,8 +1,12 @@
-.cache
 .env
+.env.example
+.cache
 .gitignore
 .pre-commit-config.yaml
 
 /.git
 /.github
 /tests
+/frontend
+/hilo-db
+/terraform

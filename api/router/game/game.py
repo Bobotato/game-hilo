@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, Header, status
+from fastapi import APIRouter, Cookie, Depends, status
 from fastapi.responses import JSONResponse
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.orm import Session
@@ -9,7 +7,7 @@ from api.database import get_db
 from api.repository.errors import NoSuchGameException
 from api.router import error_codes
 from api.router.game import schemas
-from api.services.game.game import get_info, get_result
+from api.services.game.game import get_info, get_result, reset_game
 
 router = APIRouter()
 
@@ -21,10 +19,20 @@ router = APIRouter()
     response_model=schemas.InfoOut,
 )
 def info(
-    token: Annotated[schemas.InfoIn, Header()], db: Session = Depends(get_db)
+    access_token: str = Cookie(None),
+    db: Session = Depends(get_db),
 ):
     try:
-        return get_info(token=token, db=db)
+        if access_token:
+            return get_info(token=access_token, db=db)
+        else:
+            return JSONResponse(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_TOKEN,
+                    "detail": "No token was supplied. Please supply an access token.",
+                },
+            )
 
     except ExpiredSignatureError:
         return JSONResponse(
@@ -52,13 +60,22 @@ def info(
     response_model=schemas.ResultOut,
 )
 def result(
-    token: Annotated[schemas.ResultIn, Header()],
     bet: int,
     prediction: int,
+    access_token: str = Cookie(None),
     db: Session = Depends(get_db),
 ):
     try:
-        return get_result(bet=bet, prediction=prediction, token=token, db=db)
+        if access_token:
+            return get_result(bet=bet, prediction=prediction, token=access_token, db=db)
+        else:
+            return JSONResponse(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_TOKEN,
+                    "detail": "No token was supplied. Please supply an access token.",
+                },
+            )
 
     except ExpiredSignatureError:
         return JSONResponse(
@@ -84,5 +101,29 @@ def result(
             content={
                 "error_code": error_codes.NO_SUCH_GAME,
                 "detail": "There is no game associated with this user.",
+            },
+        )
+
+
+@router.post("/game/reset", summary="Resets a player's game.", tags=["Game Operations"])
+def reset(access_token: str = Cookie(None), db: Session = Depends(get_db)):
+    try:
+        reset_game(token=access_token, db=db)
+
+    except ExpiredSignatureError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.EXPIRED_TOKEN,
+                "detail": "The token has expired. Please login again.",
+            },
+        )
+
+    except JWTError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.INVALID_TOKEN,
+                "detail": "The given token is invalid.",
             },
         )

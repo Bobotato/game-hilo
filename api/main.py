@@ -7,7 +7,7 @@ from api.router.user import user
 
 app = FastAPI()
 
-models.Base.metadata.create_all(engine)
-
 app.include_router(user.router)
 app.include_router(game.router)
+
+models.Base.metadata.create_all(engine)

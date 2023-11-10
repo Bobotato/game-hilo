@@ -13,6 +13,14 @@ class AuthenticateOut(BaseModel):
         orm_mode = True
 
 
+class RefreshAccessTokenIn(BaseModel):
+    access_token: str
+
+
+class RefreshAccessTokenOut(BaseModel):
+    access_token: str
+
+
 class RegisterIn(BaseModel):
     username: str
     password: str

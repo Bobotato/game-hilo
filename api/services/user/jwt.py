@@ -4,27 +4,35 @@ from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from jose import ExpiredSignatureError, JWTError, jwt
 
+from api.services.user.errors import JWTEnvNotFoundException
+
 load_dotenv()
-ACCESS_TOKEN_EXPIRE_MINUTES = 20
 
 
-def generate_token(data: dict) -> str:
-    encode = data.copy()
-    expiry = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    encode.update({"exp": expiry})
-    return jwt.encode(
-        encode,
-        os.getenv("JWT_SECRET_KEY"),
-        algorithm=os.getenv("JWT_ALGORITHM"),
-    )
+def generate_access_token(data: dict) -> str:
+    try:
+        encode = data.copy()
+        expiry = datetime.utcnow() + timedelta(
+            minutes=float(os.environ["ACCESS_TOKEN_EXPIRE_MINUTES"])
+        )
+        encode.update({"exp": expiry})
+
+        return jwt.encode(
+            encode,
+            os.environ["JWT_SECRET_KEY"],
+            algorithm=os.environ["JWT_ALGORITHM"],
+        )
+
+    except KeyError:
+        raise JWTEnvNotFoundException
 
 
-def decode_token(token: str) -> dict:
+def decode_access_token(access_token: str) -> dict:
     try:
         decoded_jwt = jwt.decode(
-            token,
-            os.getenv("JWT_SECRET_KEY"),
-            algorithms=[os.getenv("JWT_ALGORITHM")],
+            access_token,
+            os.environ["JWT_SECRET_KEY"],
+            algorithms=[os.environ["JWT_ALGORITHM"]],
         )
         return decoded_jwt
 
@@ -32,4 +40,7 @@ def decode_token(token: str) -> dict:
         raise ExpiredSignatureError
 
     except JWTError:
+        raise JWTError
+
+    except AttributeError:
         raise JWTError

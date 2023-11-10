@@ -3,8 +3,7 @@ from sqlalchemy.orm import Session
 from api.models import GameState
 from api.repository.errors import NoSuchGameException
 from api.repository.game.game import GameRepository
-from api.router.game import schemas
-from api.services.user.jwt import decode_token
+from api.services.user.jwt import decode_access_token
 from hilo.game import Game, Prediction
 from hilo.models.roundresult import RoundResult
 
@@ -21,10 +20,10 @@ def get_game_object(username: str, repo: GameRepository) -> Game:
         raise NoSuchGameException
 
 
-def get_info(token: schemas.InfoIn, db: Session):
+def get_info(token: str, db: Session):
     repo = GameRepository.create(db)
 
-    username = get_username_from_token(token=token)
+    username = decode_access_token(access_token=token)["username"]
 
     try:
         game = get_game_object(username=username, repo=repo)
@@ -40,13 +39,10 @@ def get_info(token: schemas.InfoIn, db: Session):
     return round_info
 
 
-def get_result(
-    bet: int, prediction: int, token: schemas.ResultIn, db: Session
-) -> RoundResult:
-
+def get_result(bet: int, prediction: int, token: str, db: Session) -> RoundResult:
     repo = GameRepository.create(db)
 
-    username = get_username_from_token(token=token)
+    username = decode_access_token(access_token=token)["username"]
 
     try:
         game = get_game_object(username=username, repo=repo)
@@ -54,17 +50,17 @@ def get_result(
     except NoSuchGameException:
         raise NoSuchGameException
 
-    round_result = game.compute_round_result(
-        bet=bet, prediction=Prediction(int(prediction))
-    )
+    round_result = game.compute_round_result(bet=bet, prediction=Prediction(int(prediction)))
 
     update_game(username=username, game=game, repo=repo)
 
     return round_result
 
 
-def get_username_from_token(token: schemas.InfoIn | schemas.ResultIn) -> str:
-    return decode_token(token=token.access_token)["sub"]
+def reset_game(token: str, db: Session) -> None:
+    repo = GameRepository.create(db)
+    username = decode_access_token(access_token=token)["username"]
+    update_game(username=username, game=Game(name=username), repo=repo)
 
 
 def update_game(username: str, game: Game, repo: GameRepository) -> None:

@@ -7,7 +7,7 @@ from api.services.game.game import (
     get_game_object,
     get_info,
     get_result,
-    get_username_from_token,
+    reset_game,
     update_game,
 )
 
@@ -78,8 +78,8 @@ def mock_get_game_object_raise_NoSuchGameException(**_):
     raise NoSuchGameException
 
 
-def mock_get_username_from_token(**_):
-    return "test"
+def mock_decode_access_token(**_):
+    return {"username": "test"}
 
 
 def mock_session():
@@ -99,6 +99,10 @@ def mock_token():
 
 def mock_update_game(**_):
     return
+
+
+def mock_update_game_raise_SuccessfullyPatchedException(**_):
+    raise SuccessfullyPatchedException
 
 
 def test_create_game_state():
@@ -127,12 +131,10 @@ def test_get_info_with_existing_game(monkeypatch):
         MockGameRepositorywithCreateClassMethod,
     )
     monkeypatch.setattr(
-        "api.services.game.game.get_username_from_token",
-        mock_get_username_from_token,
+        "api.services.game.game.decode_access_token",
+        mock_decode_access_token,
     )
-    monkeypatch.setattr(
-        "api.services.game.game.get_game_object", mock_get_game_object
-    )
+    monkeypatch.setattr("api.services.game.game.get_game_object", mock_get_game_object)
     monkeypatch.setattr("api.services.game.game.update_game", mock_update_game)
 
     assert get_info(token=mock_token(), db=mock_session()) == "Started"
@@ -144,23 +146,19 @@ def test_get_info_without_existing_game(monkeypatch):
         MockGameRepositorywithCreateClassMethod,
     )
     monkeypatch.setattr(
-        "api.services.game.game.get_username_from_token",
-        mock_get_username_from_token,
+        "api.services.game.game.decode_access_token",
+        mock_decode_access_token,
     )
+
     monkeypatch.setattr(
         "api.services.game.game.get_game_object",
         mock_get_game_object_raise_NoSuchGameException,
     )
-    monkeypatch.setattr(
-        "api.services.game.game.create_game_state", mock_create_game_state
-    )
+    monkeypatch.setattr("api.services.game.game.create_game_state", mock_create_game_state)
     monkeypatch.setattr("api.services.game.game.Game", mock_game)
     monkeypatch.setattr("api.services.game.game.update_game", mock_update_game)
 
-    assert (
-        get_info(token=mock_token(), db=mock_session())
-        == "Started without pre-existing game"
-    )
+    assert get_info(token=mock_token(), db=mock_session()) == "Started without pre-existing game"
 
 
 @freeze_time("2000-01-01")
@@ -169,15 +167,14 @@ def test_get_result(monkeypatch):
         "api.services.game.game.GameRepository",
         MockGameRepositorywithCreateClassMethod,
     )
-    monkeypatch.setattr(
-        "api.services.game.game.get_game_object", mock_get_game_object
-    )
+
+    monkeypatch.setattr("api.services.game.game.get_game_object", mock_get_game_object)
+
+    monkeypatch.setattr("api.services.game.game.decode_access_token", mock_decode_access_token)
+
     monkeypatch.setattr("api.services.game.game.update_game", mock_update_game)
 
-    assert (
-        get_result(bet=1, prediction=1, token=mock_token(), db=mock_session())
-        == "Computed"
-    )
+    assert get_result(bet=1, prediction=1, token=mock_token(), db=mock_session()) == "Computed"
 
 
 @freeze_time("2000-01-01")
@@ -186,21 +183,37 @@ def test_get_result_no_such_game_returns_NoSuchGameException(monkeypatch):
         "api.services.game.game.GameRepository",
         MockGameRepositorywithCreateClassMethod,
     )
+
+    monkeypatch.setattr("api.services.game.game.decode_access_token", mock_decode_access_token)
+
     monkeypatch.setattr(
         "api.services.game.game.get_game_object",
         mock_get_game_object_raise_NoSuchGameException,
     )
+
     with pytest.raises(NoSuchGameException):
         get_result(bet=1, prediction=1, token=mock_token(), db=mock_session())
 
 
-@freeze_time("2000-01-01")
-def test_get_username_from_token():
-    assert get_username_from_token(token=mock_token()) == "test"
+def test_reset_game(monkeypatch):
+    monkeypatch.setattr(
+        "api.services.game.game.GameRepository",
+        MockGameRepositorywithCreateClassMethod,
+    )
 
+    monkeypatch.setattr("api.services.game.game.get_game_object", mock_get_game_object)
 
-def test_update_game(monkeypatch):
+    monkeypatch.setattr("api.services.game.game.decode_access_token", mock_decode_access_token)
+
+    monkeypatch.setattr(
+        "api.services.game.game.update_game",
+        mock_update_game_raise_SuccessfullyPatchedException,
+    )
+
     with pytest.raises(SuccessfullyPatchedException):
-        update_game(
-            username="test", game=mock_game(), repo=mock_game_repository()
-        )
+        reset_game(token=mock_token(), db=mock_session())
+
+
+def test_update_game():
+    with pytest.raises(SuccessfullyPatchedException):
+        update_game(username="test", game=mock_game(), repo=mock_game_repository())

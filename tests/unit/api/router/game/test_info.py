@@ -7,18 +7,19 @@ from api.router import error_codes
 client = TestClient(app)
 
 
-def test_info(monkeypatch):
-    def mock_get_info(**_):
-        return {
-            "player": {"name": "test", "credits": 100},
-            "current_card": {"sort_index": 1, "rank": 1, "suit": 2},
-        }
+def mock_get_info(**_):
+    return {
+        "player": {"name": "test", "credits": 100},
+        "current_card": {"sort_index": 1, "rank": 1, "suit": 2},
+    }
 
+
+def test_info(monkeypatch):
     monkeypatch.setattr("api.router.game.game.get_info", mock_get_info)
 
     response = client.post(
         "/game/info",
-        json={
+        cookies={
             "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
         },
     )
@@ -28,6 +29,14 @@ def test_info(monkeypatch):
         "player": {"name": "test", "credits": 100},
         "current_card": {"sort_index": 1, "rank": 1, "suit": 2},
     }
+
+
+def test_info_no_token_returns_401(monkeypatch):
+    monkeypatch.setattr("api.router.game.game.get_info", mock_get_info)
+
+    response = client.post("/game/info")
+
+    assert response.status_code == 401
 
 
 def test_info_expired_signature_returns_401(monkeypatch):
@@ -41,7 +50,7 @@ def test_info_expired_signature_returns_401(monkeypatch):
 
     response = client.post(
         "/game/info",
-        json={
+        cookies={
             "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
         },
     )
@@ -64,7 +73,7 @@ def test_info_JWT_error_returns_401(monkeypatch):
 
     response = client.post(
         "/game/info",
-        json={
+        cookies={
             "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
         },
     )

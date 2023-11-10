@@ -24,9 +24,7 @@ def test_result(monkeypatch):
 
     response = client.post(
         "game/result?bet=50&prediction=1",
-        json={
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
-        },
+        cookies={"access_token": "test"},
     )
 
     assert response.status_code == 200
@@ -49,7 +47,7 @@ def test_result_expired_token_return_401(monkeypatch):
 
     response = client.post(
         "/game/result?bet=50&prediction=1",
-        json={
+        cookies={
             "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
         },
     )
@@ -72,9 +70,7 @@ def test_result_invalid_token_return_401(monkeypatch):
 
     response = client.post(
         "/game/result?bet=50&prediction=1",
-        json={
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
-        },
+        cookies={"access_token": "bad_token"},
     )
 
     assert response.status_code == 401
@@ -95,9 +91,7 @@ def test_result_no_such_game_returns_404(monkeypatch):
 
     response = client.post(
         "/game/result?bet=50&prediction=1",
-        json={
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
-        },
+        cookies={"access_token": "test"},
     )
 
     assert response.status_code == 404

@@ -6,6 +6,7 @@ from api.database import Base
 
 class UserDetail(Base):
     __tablename__ = "user_details"
+
     username = Column(String, primary_key=True, index=True)
     password_hash = Column(String, index=True)
 
@@ -21,6 +22,4 @@ class GameState(Base):
     game = Column(String, index=True)
 
     user = relationship("UserDetail", back_populates="games")
-    username = Column(
-        String, ForeignKey("user_details.username"), nullable=False
-    )
+    username = Column(String, ForeignKey("user_details.username"), nullable=False)

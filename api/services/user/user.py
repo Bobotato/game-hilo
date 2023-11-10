@@ -6,15 +6,15 @@ from api.models import UserDetail
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.repository.user.user import UserRepository
 from api.router.user import schemas
-from api.services.user.jwt import generate_token
+from api.services.user.jwt import generate_access_token
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def create_token(
+def create_access_token(
     credentials: schemas.AuthenticateIn | schemas.RegisterIn,
 ) -> str:
-    return generate_token(data={"sub": credentials.username})
+    return generate_access_token(data={"username": credentials.username})
 
 
 def register_user(credentials: schemas.RegisterIn, db: Session) -> None:
@@ -39,9 +39,7 @@ def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
     try:
         return password_context.verify(
             credentials.password,
-            repo.get(
-                target=UserDetail.password_hash, username=credentials.username
-            ).password_hash,
+            repo.get(target=UserDetail.password_hash, username=credentials.username).password_hash,
         )
 
     except InvalidRequestError:

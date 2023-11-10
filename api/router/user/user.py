@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Cookie, Depends, Response, status
 from fastapi.responses import JSONResponse
+from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import Session
 
@@ -7,7 +8,8 @@ from api.database import get_db
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router import error_codes
 from api.router.user import schemas
-from api.services.user.user import create_token, register_user, verify_password
+from api.services.user.jwt import decode_access_token
+from api.services.user.user import create_access_token, register_user, verify_password
 
 router = APIRouter()
 
@@ -18,7 +20,9 @@ router = APIRouter()
     response_model=schemas.AuthenticateOut,
 )
 def authenticate(
-    credentials: schemas.AuthenticateIn, db: Session = Depends(get_db)
+    response: Response,
+    credentials: schemas.AuthenticateIn,
+    db: Session = Depends(get_db),
 ):
     try:
         if not verify_password(credentials=credentials, db=db):
@@ -48,7 +52,11 @@ def authenticate(
             },
         )
 
-    return {"access_token": create_token(credentials=credentials)}
+    access_token = create_access_token(credentials=credentials)
+
+    response.set_cookie("access_token", access_token)
+
+    return {"access_token": access_token}
 
 
 @router.post(
@@ -56,7 +64,11 @@ def authenticate(
     tags=["User Operations"],
     response_model=schemas.RegisterOut,
 )
-def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
+def register(
+    response: Response,
+    credentials: schemas.RegisterIn,
+    db: Session = Depends(get_db),
+):
     try:
         register_user(
             credentials=credentials,
@@ -72,4 +84,57 @@ def register(credentials: schemas.RegisterIn, db: Session = Depends(get_db)):
             },
         )
 
-    return {"access_token": create_token(credentials=credentials)}
+    access_token = create_access_token(credentials=credentials)
+
+    response.set_cookie("access_token", access_token)
+
+    return {"access_token": access_token}
+
+
+@router.post("/user/logout", tags=["User Operations"])
+def logout(
+    response: Response,
+    access_token: str = Cookie(None),
+):
+    if access_token:
+        response.delete_cookie("access_token")
+
+
+@router.post("/user/verify-token", tags=["User Operations"])
+def verifyJWT(
+    access_token: str = Cookie(None),
+):
+    try:
+        if access_token:
+            decode_access_token(access_token=access_token)
+        else:
+            return JSONResponse(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                content={
+                    "error_code": error_codes.INVALID_TOKEN,
+                    "detail": "No token was supplied. Please supply an access token.",
+                },
+            )
+
+    except ExpiredSignatureError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.EXPIRED_TOKEN,
+                "detail": "The token has expired. Please login again.",
+            },
+        )
+
+    except JWTError:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error_code": error_codes.INVALID_TOKEN,
+                "detail": "The given token is invalid.",
+            },
+        )
+
+
+@router.get("/get")
+def get():
+    return "Gotten"
