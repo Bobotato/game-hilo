@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Cookie, Depends, status, Response
+from fastapi import APIRouter, Cookie, Depends, Response, status
 from fastapi.responses import JSONResponse
 from jose import ExpiredSignatureError, JWTError
 from sqlalchemy.exc import InvalidRequestError
@@ -9,11 +9,7 @@ from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.router import error_codes
 from api.router.user import schemas
 from api.services.user.jwt import decode_access_token
-from api.services.user.user import (
-    create_access_token,
-    register_user,
-    verify_password,
-)
+from api.services.user.user import create_access_token, register_user, verify_password
 
 router = APIRouter()
 

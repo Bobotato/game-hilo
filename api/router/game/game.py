@@ -67,9 +67,7 @@ def result(
 ):
     try:
         if access_token:
-            return get_result(
-                bet=bet, prediction=prediction, token=access_token, db=db
-            )
+            return get_result(bet=bet, prediction=prediction, token=access_token, db=db)
         else:
             return JSONResponse(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -107,9 +105,7 @@ def result(
         )
 
 
-@router.post(
-    "/game/reset", summary="Resets a player's game.", tags=["Game Operations"]
-)
+@router.post("/game/reset", summary="Resets a player's game.", tags=["Game Operations"])
 def reset(access_token: str = Cookie(None), db: Session = Depends(get_db)):
     try:
         reset_game(token=access_token, db=db)

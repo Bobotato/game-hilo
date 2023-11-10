@@ -22,6 +22,4 @@ class GameState(Base):
     game = Column(String, index=True)
 
     user = relationship("UserDetail", back_populates="games")
-    username = Column(
-        String, ForeignKey("user_details.username"), nullable=False
-    )
+    username = Column(String, ForeignKey("user_details.username"), nullable=False)

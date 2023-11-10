@@ -43,9 +43,7 @@ def test_UserRepository_get_raises_InvalidRequestError():
 
         return MockSessionRaiseInvalidRequestError()
 
-    repo = UserRepository.create(
-        session=mock_session_raise_InvalidRequestError()
-    )
+    repo = UserRepository.create(session=mock_session_raise_InvalidRequestError())
 
     with pytest.raises(InvalidRequestError):
         repo.get(target="test")
@@ -59,9 +57,7 @@ def test_UserRepository_get_raises_NoSuchUserException():
 
         return MockSessionRaiseNoSuchUserException()
 
-    repo = UserRepository.create(
-        session=mock_session_raise_NoSuchUserException()
-    )
+    repo = UserRepository.create(session=mock_session_raise_NoSuchUserException())
 
     with pytest.raises(NoSuchUserException):
         repo.get(target="test")

@@ -1,6 +1,5 @@
 import psycopg2
 import pytest
-
 from database.connection import DatabaseConnection
 
 
@@ -33,12 +32,8 @@ def test_DatabaseConnection_init(monkeypatch):
 
 def test_bind_connection(monkeypatch):
     monkeypatch.setattr(DatabaseConnection, "connect_db", lambda *_: None)
-    monkeypatch.setattr(
-        DatabaseConnection, "create_cursor", lambda *_: "cursor"
-    )
-    monkeypatch.setattr(
-        DatabaseConnection, "close_connection", lambda *_: None
-    )
+    monkeypatch.setattr(DatabaseConnection, "create_cursor", lambda *_: "cursor")
+    monkeypatch.setattr(DatabaseConnection, "close_connection", lambda *_: None)
 
     @DatabaseConnection.bind_connection
     def test_function(cursor=None, *_):

@@ -14,9 +14,7 @@ def test_can_play_single_round():
     seed(1)
     game = Game("test")
     game.start_round()
-    round_result = game.compute_round_result(
-        prediction=Prediction.HIGHER, bet=50
-    )
+    round_result = game.compute_round_result(prediction=Prediction.HIGHER, bet=50)
     assert round_result == RoundResult(
         drawn_card=Card.create(Ranks.J, Suits.H),
         win=True,
@@ -30,14 +28,10 @@ def test_can_play_multiple_rounds():
     seed(1)
     game = Game("test")
     game.start_round()
-    round_result = game.compute_round_result(
-        prediction=Prediction.HIGHER, bet=50
-    )
+    round_result = game.compute_round_result(prediction=Prediction.HIGHER, bet=50)
 
     game.start_round()
-    round_result = game.compute_round_result(
-        prediction=Prediction.LOWER, bet=50
-    )
+    round_result = game.compute_round_result(prediction=Prediction.LOWER, bet=50)
     assert round_result == RoundResult(
         drawn_card=Card.create(Ranks.TEN, Suits.S),
         win=True,
@@ -51,12 +45,8 @@ def test_can_play_subsequent_rounds_without_explicitly_starting_round():
     seed(1)
     game = Game("test")
     game.start_round()
-    round_result = game.compute_round_result(
-        prediction=Prediction.LOWER, bet=10
-    )
-    round_result = game.compute_round_result(
-        prediction=Prediction.LOWER, bet=10
-    )
+    round_result = game.compute_round_result(prediction=Prediction.LOWER, bet=10)
+    round_result = game.compute_round_result(prediction=Prediction.LOWER, bet=10)
     assert round_result == RoundResult(
         drawn_card=Card.create(Ranks.TEN, Suits.S),
         win=True,

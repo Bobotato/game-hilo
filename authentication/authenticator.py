@@ -1,9 +1,9 @@
 import bcrypt
-
-from authentication.models.credentials import Credentials
 from repository.errors import UsernameTakenException
 from repository.models.user import User
 from repository.user import add_entry, get_entry
+
+from authentication.models.credentials import Credentials
 
 
 def register(credentials: Credentials) -> None:
@@ -26,7 +26,5 @@ def hash_password(password: str) -> str:
 def authenticate(credentials: Credentials) -> bool:
     return bcrypt.checkpw(
         credentials.password.encode(),
-        get_entry(username=credentials.username).password_hash.encode(
-            "latin-1"
-        ),
+        get_entry(username=credentials.username).password_hash.encode("latin-1"),
     )

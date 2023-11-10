@@ -13,13 +13,9 @@ def test_register(monkeypatch):
     def mock_register_user(**_):
         return 1
 
-    monkeypatch.setattr(
-        "api.router.user.user.register_user", mock_register_user
-    )
+    monkeypatch.setattr("api.router.user.user.register_user", mock_register_user)
 
-    response = client.post(
-        "/user/register", json={"username": "test", "password": "test"}
-    )
+    response = client.post("/user/register", json={"username": "test", "password": "test"})
 
     assert response.status_code == 200
     assert response.json() == {
@@ -36,9 +32,7 @@ def test_register_username_taken_return_409(monkeypatch):
         mock_get_user_by_username_raise_UsernameTakenException,
     )
 
-    response = client.post(
-        "/user/register", json={"username": "test", "password": "test"}
-    )
+    response = client.post("/user/register", json={"username": "test", "password": "test"})
 
     assert response.status_code == 409
     assert response.json() == {

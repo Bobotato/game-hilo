@@ -72,9 +72,7 @@ def test_is_win_invalid_prediction_raise_TypeError():
     game = Game("test")
     game._Game__current_card = Card.create(Ranks.FIVE, Suits.H)
     with pytest.raises(TypeError):
-        game._Game__is_win(
-            drawn_card=Card.create(Ranks.A, Suits.H), prediction="test"
-        )
+        game._Game__is_win(drawn_card=Card.create(Ranks.A, Suits.H), prediction="test")
 
 
 def test_start_round():

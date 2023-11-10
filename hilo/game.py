@@ -38,9 +38,7 @@ class Game:
         """
         self.player.credits += bet * multiplier
 
-    def compute_round_result(
-        self, bet: int, prediction: Prediction
-    ) -> RoundResult:
+    def compute_round_result(self, bet: int, prediction: Prediction) -> RoundResult:
         """
         Takes the player's bet and prediction and computes the round result.
 
@@ -87,9 +85,7 @@ class Game:
             case Prediction.LOWER:
                 return drawn_card < self.__current_card
             case _:
-                raise TypeError(
-                    "prediction must be an instance of a Prediction"
-                )
+                raise TypeError("prediction must be an instance of a Prediction")
 
     def start_round(self) -> RoundInfo:
         """Starts round, drawing current_card and returning

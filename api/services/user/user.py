@@ -6,9 +6,7 @@ from api.models import UserDetail
 from api.repository.errors import NoSuchUserException, UsernameTakenException
 from api.repository.user.user import UserRepository
 from api.router.user import schemas
-from api.services.user.jwt import (
-    generate_access_token,
-)
+from api.services.user.jwt import generate_access_token
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -41,9 +39,7 @@ def verify_password(credentials: schemas.AuthenticateIn, db: Session) -> bool:
     try:
         return password_context.verify(
             credentials.password,
-            repo.get(
-                target=UserDetail.password_hash, username=credentials.username
-            ).password_hash,
+            repo.get(target=UserDetail.password_hash, username=credentials.username).password_hash,
         )
 
     except InvalidRequestError:

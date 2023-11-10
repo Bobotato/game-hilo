@@ -51,9 +51,7 @@ def test_GameRepository_get(monkeypatch):
 
     repo = GameRepository.create(session=mock_session_return_pickled())
 
-    monkeypatch.setattr(
-        "api.repository.game.game.unpickle_object", mock_unpickle_object
-    )
+    monkeypatch.setattr("api.repository.game.game.unpickle_object", mock_unpickle_object)
 
     assert repo.get(target="test") == "Unpickled"
 
@@ -66,9 +64,7 @@ def test_GameRepository_get_raises_InvalidRequestError():
 
         return MockSessionRaiseInvalidRequestError()
 
-    repo = GameRepository.create(
-        session=mock_session_raise_InvalidRequestError()
-    )
+    repo = GameRepository.create(session=mock_session_raise_InvalidRequestError())
 
     with pytest.raises(InvalidRequestError):
         repo.get(target="test")
