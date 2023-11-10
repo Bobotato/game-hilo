@@ -1,5 +1,4 @@
 from fastapi.testclient import TestClient
-from freezegun import freeze_time
 
 from api.main import app
 from api.repository.errors import UsernameTakenException
@@ -8,19 +7,27 @@ from api.router import error_codes
 client = TestClient(app)
 
 
-@freeze_time("2000-01-01")
 def test_register(monkeypatch):
     def mock_register_user(**_):
-        return 1
+        return
 
-    monkeypatch.setattr("api.router.user.user.register_user", mock_register_user)
+    def mock_create_access_token(**_):
+        return "test_token"
 
-    response = client.post("/user/register", json={"username": "test", "password": "test"})
+    monkeypatch.setattr(
+        "api.router.user.user.register_user", mock_register_user
+    )
+
+    monkeypatch.setattr(
+        "api.router.user.user.create_access_token", mock_create_access_token
+    )
+
+    response = client.post(
+        "/user/register", json={"username": "test", "password": "test"}
+    )
 
     assert response.status_code == 200
-    assert response.json() == {
-        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjo5NDY2ODYwMDB9.CR_OzFi2WTQN7Y02eQXubB3rVRwyLv4JmxpkeV8vpas"  # noqa: E501
-    }
+    assert response.json() == {"access_token": "test_token"}
 
 
 def test_register_username_taken_return_409(monkeypatch):
@@ -32,7 +39,9 @@ def test_register_username_taken_return_409(monkeypatch):
         mock_get_user_by_username_raise_UsernameTakenException,
     )
 
-    response = client.post("/user/register", json={"username": "test", "password": "test"})
+    response = client.post(
+        "/user/register", json={"username": "test", "password": "test"}
+    )
 
     assert response.status_code == 409
     assert response.json() == {
