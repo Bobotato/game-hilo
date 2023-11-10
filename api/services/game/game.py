@@ -39,9 +39,7 @@ def get_info(token: str, db: Session):
     return round_info
 
 
-def get_result(
-    bet: int, prediction: int, token: str, db: Session
-) -> RoundResult:
+def get_result(bet: int, prediction: int, token: str, db: Session) -> RoundResult:
     repo = GameRepository.create(db)
 
     username = decode_access_token(access_token=token)["username"]
@@ -52,9 +50,7 @@ def get_result(
     except NoSuchGameException:
         raise NoSuchGameException
 
-    round_result = game.compute_round_result(
-        bet=bet, prediction=Prediction(int(prediction))
-    )
+    round_result = game.compute_round_result(bet=bet, prediction=Prediction(int(prediction)))
 
     update_game(username=username, game=game, repo=repo)
 

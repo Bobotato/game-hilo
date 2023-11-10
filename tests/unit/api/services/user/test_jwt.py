@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from freezegun import freeze_time
 from jose import ExpiredSignatureError, JWTError, jwt

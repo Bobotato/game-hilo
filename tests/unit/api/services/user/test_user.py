@@ -3,11 +3,7 @@ from freezegun import freeze_time
 from sqlalchemy.exc import InvalidRequestError
 
 from api.repository.errors import NoSuchUserException, UsernameTakenException
-from api.services.user.user import (
-    create_access_token,
-    register_user,
-    verify_password,
-)
+from api.services.user.user import create_access_token, register_user, verify_password
 
 
 class MockUserRepository:
@@ -18,7 +14,9 @@ class MockUserRepository:
     def get(self, **_):
         class PasswordHash:
             def __init__(self):
-                self.password_hash = "$2b$12$BfakHwThl4HooCXFceIbKujE7SOg.Wt1NR76tuS1jxxSKiSj/Yx2O"  # noqa: E501
+                self.password_hash = (
+                    "$2b$12$BfakHwThl4HooCXFceIbKujE7SOg.Wt1NR76tuS1jxxSKiSj/Yx2O"  # noqa: E501
+                )
 
         return PasswordHash()
 
@@ -108,14 +106,9 @@ def test_register_user_raises_username_taken_exception(
 
 
 def test_verify_password(monkeypatch):
-    monkeypatch.setattr(
-        "api.services.user.user.UserRepository", MockUserRepository
-    )
+    monkeypatch.setattr("api.services.user.user.UserRepository", MockUserRepository)
 
-    assert (
-        verify_password(credentials=mock_credentials(), db=mock_session())
-        is True
-    )
+    assert verify_password(credentials=mock_credentials(), db=mock_session()) is True
 
 
 def test_verify_password_invalid_request_raises_invalid_request_error(
