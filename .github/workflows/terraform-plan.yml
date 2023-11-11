@@ -44,29 +44,23 @@ jobs:
         id: plan
         working-directory: ./terraform
         run: terraform plan -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
-
-      - name: Add Plan Comment
-        id: comment
-        uses: actions/github-script@v6
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GH_PAT }}
-          script: |
-            const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
       
-            Show Plan
-          
-            \`\`\`${process.env.PLAN}\`\`\`
-          
-          
-          
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
+      - name: Save Artifact
+        id: save-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: .terraform/tfplan
+
+      - name: Comment Plan
+        id: comment-plan
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
+          body: |
+            Terraform Plan:
+
+            ```
+            ${{ steps.plan.outputs.plan }}
+            ```
+
+            Plan saved to GH artifacts.
