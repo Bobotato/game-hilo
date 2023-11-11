@@ -1,4 +1,4 @@
-name: Actions
+name: Linting
 
 on:
   push:
