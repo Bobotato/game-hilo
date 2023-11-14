@@ -49,8 +49,8 @@ jobs:
         id: save-artifact
         uses: actions/upload-artifact@v3
         with:
-          name: tf-plan
-          path: .terraform/tfplan
+          name: tfplan
+          path: tfplan
         
       - name: Comment plan 
         uses: actions/github-script@v6
