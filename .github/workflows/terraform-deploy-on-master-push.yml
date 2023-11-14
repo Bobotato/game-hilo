@@ -2,7 +2,6 @@ name: Terraform apply
 
 on:
   push:
-    pull_request:
       branches:
         - 'master'
 
@@ -32,9 +31,14 @@ jobs:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ secrets.DO_PAT }}
 
       - name: Terraform Init
         id: init
         working-directory: ./terraform
         run: terraform init
+
+      - name: Download tfplan
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
