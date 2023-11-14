@@ -8,18 +8,12 @@ on:
         - '!master'
 
 env:
-  TF_LOG: INFO
   TF_INPUT: false
-
 
 jobs:
 
   terraform-plan:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./terraform
 
     steps:
       - name: Checkout Repo
