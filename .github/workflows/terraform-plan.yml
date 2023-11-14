@@ -51,7 +51,12 @@ jobs:
         with:
           name: tfplan
           path: ./terraform/tfplan
-       
+      
+
+      - name: Print event
+        run: |
+          echo  ${{ github.event.pull_request.number }}
+
       - name: Comment Plan
         id: comment-plan
         uses: peter-evans/create-or-update-comment@v3
