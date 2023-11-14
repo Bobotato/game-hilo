@@ -49,18 +49,43 @@ jobs:
         id: save-artifact
         uses: actions/upload-artifact@v3
         with:
+          name: $
           path: .terraform/tfplan
-
-      - name: Comment Plan
-        id: comment-plan
-        uses: peter-evans/create-or-update-comment@v2
+        
+      - name: Comment plan 
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
-          token: ${{ secrets.GH_PAT }}
-          body: |
-            Terraform Plan:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          <details><summary>Validation Output</summary>
 
-            ```
-            ${{ steps.plan.outputs.plan }}
-            ```
+          \`\`\`\n
+          ${{ steps.validate.outputs.stdout }}
+          \`\`\`
 
-            Plan saved to GH artifacts.
+          </details>
+
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${process.env.PLAN}
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+          github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: output
+        })
