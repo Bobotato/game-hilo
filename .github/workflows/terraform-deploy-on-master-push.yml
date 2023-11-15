@@ -3,7 +3,9 @@ name: Terraform apply
 on:
   push:
       branches:
-        - 'master'
+        - 'master-test'
+
+permissions: write-all
 
 env:
   TF_LOG: INFO
@@ -39,6 +41,37 @@ jobs:
         run: terraform init
 
       - name: Download tfplan
+        id: download-plan
         uses: actions/download-artifact@v3
         with:
           name: tfplan
+
+      - name: Terraform apply
+        id: apply
+        working-directory: ./terraform
+        run: |
+          terraform apply -input=false -no-color tfplan
+
+      - name: Add Apply Comment
+        id: comment-apply
+        uses: actions/github-script@v7
+        env:
+          PLAN: "terrafrom\n${{ steps.apply.outputs.apply }}"
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const output = 
+
+            Show apply
+
+            \`\`\`${process.env.PLAN}\`\`\`
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+          })
