@@ -60,7 +60,7 @@ jobs:
         id: destroy
         if: failure()
         run: |
-          terraform destroy input=false -no-color
+          terraform destroy -input=false -no-color
 
       - name: Add Apply Comment
         id: comment-apply
