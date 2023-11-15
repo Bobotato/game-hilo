@@ -54,13 +54,14 @@ jobs:
           dockerhub_username: ${{ secrets.DH_LOGIN_USERNAME }}
           dockerhub_password: ${{ secrets.DH_LOGIN_PASSWORD }}
         run: |
-          terraform apply -input=false -no-color tfplan
+          terraform apply -input=false -no-color -vvv tfplan
+
 
       - name: Terraform destroy on failure
         id: destroy
         if: failure()
         run: |
-          terraform destroy -input=false -no-color
+         terraform destroy -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
 
       - name: Add Apply Comment
         id: comment-apply
