@@ -44,13 +44,6 @@ jobs:
         working-directory: ./terraform
         run: terraform plan -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}" -out=tfplan
       
-      - name: Save Artifact
-        id: save-artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: tfplan
-          path: ./terraform/tfplan
-
       - name: Add Plan Comment
         id: comment
         uses: actions/github-script@v7
