@@ -50,6 +50,9 @@ jobs:
       - name: Terraform apply
         id: apply
         working-directory: ./terraform
+        env:
+          dockerhub_username: ${{ secrets.DH_LOGIN_USERNAME }}
+          dockerhub_password: ${{ secrets.DH_LOGIN_PASSWORD }}
         run: |
           terraform apply -input=false -no-color tfplan
 
