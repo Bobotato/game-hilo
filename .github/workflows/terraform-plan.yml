@@ -1,0 +1,78 @@
+name: Terraform plan
+
+on:
+  pull_request:
+    branches:
+      - master-test
+
+permissions: write-all
+
+env:
+  TF_LOG: INFO
+  TF_INPUT: false
+
+jobs:
+
+  terraform-plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.3.7'
+      
+      - name: Terraform Init
+        id: init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        if: success() || failure()
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ./terraform
+        run: terraform plan -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}" -out=tfplan
+      
+      - name: Save Artifact
+        id: save-artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: ./terraform/tfplan
+
+      - name: Add Plan Comment
+        id: comment
+        uses: actions/github-script@v7
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      
+            Show Plan
+          
+            \`\`\`${process.env.PLAN}\`\`\`
+          
+          
+          
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

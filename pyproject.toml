@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "game-hilo"
+version = "0.1.0"
+description = ""
+authors = ["Bobotato <bhojwanialexander@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "3.10.4"
+psycopg2-binary = "^2.9.3"
+bcrypt = "^3.2.2"
+python-dotenv = "^0.20.0"
+typing-extensions ="^4.3.0"
+SQLAlchemy = "^1.4.45"
+pydantic = "^1.10.3"
+passlib = "^1.7.4"
+httpx = "^0.23.2"
+requests = "^2.28.1"
+fastapi = "^0.89.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+uvicorn = "^0.21.1"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.19.0"
+black = "^22.3.0"
+mypy = "^0.960"
+flake8 = "^4.0.1"
+pynvim = "^0.4.3"
+pytest = "^7.1.2"
+coverage = "^6.4.1"
+pytest-cov = "^3.0.0"
+freezegun = "^1.2.2"
+types-freezegun = "^1.1.10"
+pytest-env = "^0.8.1"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+uvicorn = "^0.21.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+markers = [
+    "integtest: marks tests as integration tests"
+]
+
+[[tool.mypy.overrides]]
+module = "freezegun"
+disallow_untyped_defs = false
+ignore_missing_imports = true

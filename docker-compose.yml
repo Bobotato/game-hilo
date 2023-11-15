@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+
+  database:
+    container_name: hilogamedb
+    env_file: db.env
+    expose: 
+        - 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    image: postgres:alpine
+    user: postgres
+    volumes:
+        - "./hilo-db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d/"
+
+  backend:
+    container_name: hilogameapi
+    image: valenciaga/hilogame_api
+    env_file: api.env
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+        - ./.env:/app/.env:ro
+
+  frontend:
+    container_name: hilogamefrontend
+    image: valenciaga/hilogame_frontend
+    ports:
+        - 80:80
+    depends_on:
+      - backend
+
