@@ -54,7 +54,7 @@ jobs:
           dockerhub_username: ${{ secrets.DH_LOGIN_USERNAME }}
           dockerhub_password: ${{ secrets.DH_LOGIN_PASSWORD }}
         run: |
-          terraform apply -input=false -no-color -vvv tfplan
+          terraform apply -auto-approve -no-color tfplan
 
 
       - name: Terraform destroy on failure
