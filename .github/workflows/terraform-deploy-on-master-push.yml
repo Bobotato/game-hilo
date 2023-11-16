@@ -63,16 +63,42 @@ jobs:
         run: |
          terraform destroy -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
 
-      - name: Add Apply Comment
-        id: comment-apply
+      # - name: Add Apply Comment
+      #   id: comment-apply
+      #   uses: actions/github-script@v7
+      #   env:
+      #     PLAN: "terraform\n${{ steps.apply.outputs.apply }}"
+      #   with:
+      #     github-token: ${{ secrets.GH_PAT }}
+      #     script: |
+      #       const output = `### Terraform Apply `${{ steps.apply.outcome }}\`
+      #       Show Apply
+          
+      #       \`\`\`${process.env.PLAN}\`\`\`
+          
+          
+          
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: output
+      #       })
+
+      - name: Add Plan Comment
+        id: comment
         uses: actions/github-script@v7
         env:
-          PLAN: "terraform\n${{ steps.apply.outputs.apply }}"
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GH_PAT }}
           script: |
-            const output = `### Terraform Apply `${{ steps.apply.outcome }}\`
-            Show Apply
+            const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+      
+            Show Plan
           
             \`\`\`${process.env.PLAN}\`\`\`
           
