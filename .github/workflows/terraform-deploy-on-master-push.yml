@@ -97,9 +97,9 @@ jobs:
       - name: Run Ansible
         id: run-ansible 
         uses: dawidd6/action-ansible-playbook@v2
-        working-directory: ./terraform
         with: 
-          playbook: ../playbook.yml
+          directory: ./
+          playbook: playbook.yml
           key: ${{ secrets.SSH_PVT_KEY }}
           options: |
             --inventory inventory
