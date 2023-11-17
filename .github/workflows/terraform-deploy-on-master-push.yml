@@ -93,10 +93,11 @@ jobs:
       - name: Run Ansible
         id: run-ansible 
         uses: dawidd6/action-ansible-playbook@v2
-        with: playbook.yml
-        directory: ../
-        key: ${{ secrets.SSH_PVT_KEY }}
-        options: |
-          --inventory inventory
+        with: 
+          playbook: playbook.yml
+          directory: ../
+          key: ${{ secrets.SSH_PVT_KEY }}
+          options: |
+            --inventory inventory
 
           
