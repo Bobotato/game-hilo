@@ -94,6 +94,9 @@ jobs:
         run: |
           pwd
 
+      - name: Copy public key to remote resource
+
+
       - name: Run Ansible
         id: run-ansible 
         uses: dawidd6/action-ansible-playbook@v2
@@ -103,5 +106,3 @@ jobs:
           key: ${{ secrets.SSH_PVT_KEY }}
           options: |
             --inventory terraform/inventory
-
-          
