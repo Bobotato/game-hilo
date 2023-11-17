@@ -18,7 +18,8 @@ resource "digitalocean_droplet" "hilo-game" {
   }
 
     provisioner "local-exec" {
-                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && export ANSIBLE_HOST_KEY_CHECKING=False"
+                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && export ANSIBLE_HOST_KEY_CHECKING=False && ansible-playbook -u root -i inventory --private-key '${var.pvt_key}' ../playbook.yml -vvvv"
+
     }
 }
 
