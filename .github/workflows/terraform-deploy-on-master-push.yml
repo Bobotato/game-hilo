@@ -102,6 +102,6 @@ jobs:
           playbook: playbook.yml
           key: ${{ secrets.SSH_PVT_KEY }}
           options: |
-            --inventory inventory
+            --inventory terraform/inventory
 
           
