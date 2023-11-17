@@ -18,9 +18,18 @@ resource "digitalocean_droplet" "hilo-game" {
   }
 
     provisioner "local-exec" {
-                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && export ANSIBLE_HOST_KEY_CHECKING=False && ansible-playbook -u root -i '${self.ipv4_address},' --private-key '${var.pvt_key}' ../playbook.yml -vvvv"
+                command = "until nc -zv '${self.ipv4_address}' 22; do sleep 1; done; echo 'SSH port open' && export ANSIBLE_HOST_KEY_CHECKING=False && ansible-playbook -u root -i inventory --private-key '${var.pvt_key}' ../playbook.yml -vvvv"
 
     }
+}
+
+resource "local_file" "ansible_inventory" {
+  content = templatefile("hosts.tftpl",
+    {
+    digitalocean_droplets = digitalocean_droplet.hilo-game.*.ipv4_address
+    }
+  )
+  filename = "./inventory"
 }
 
 output "drop_ip_addresses" {
