@@ -92,11 +92,13 @@ jobs:
             })
 
       - name: PWD
+        working-directory: ./
         run: |
           pwd
 
       - name: Create api.env
         id: create-api-env
+        working-directory: ./
         run: |
             touch api.env
             echo SQLALCHEMY_DATABASE_URL=${{ secrets.SQLALCHEMY_DATABASE_URL }} >> api.env 
@@ -106,6 +108,7 @@ jobs:
 
       - name: Create db.env
         id: create-db-env
+        working-directory: ./
         run: |
             touch db.env
             echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> db.env:
