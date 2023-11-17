@@ -104,3 +104,5 @@ jobs:
           options: |
             --inventory terraform/inventory
             --user root
+            --extra-vars dockerhub_username=${{ secrets.DH_LOGIN_USERNAME }}
+            --extra-vars dockerhub_password=${{ secrets.DH_LOGIN_PASSWORD }}
