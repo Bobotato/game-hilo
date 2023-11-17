@@ -94,6 +94,24 @@ jobs:
         run: |
           pwd
 
+      - name: Create api.env
+        id: create-api-env
+        run: |
+            touch api.env
+            echo SQLALCHEMY_DATABASE_URL=${{ secrets.SQLALCHEMY_DATABASE_URL }} >> api.env 
+            echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> api.env
+            echo JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }} >> api.env
+            echo ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }} >> api.env
+
+      - name: Create db.env
+        id: create-db-env
+        run: |
+            touch db.env
+            echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> db.env:
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> db.env:
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> db.env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> db.env
+
       - name: Run Ansible
         id: run-ansible 
         uses: dawidd6/action-ansible-playbook@v2
