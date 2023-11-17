@@ -63,6 +63,7 @@ jobs:
         if: failure()
         run: |
          terraform destroy -no-color -auto-approve -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
+         echo terraform apply failed
 
       - name: Add Apply Comment
         id: comment
@@ -124,3 +125,10 @@ jobs:
             --user root
             --extra-vars dockerhub_username=${{ secrets.DH_LOGIN_USERNAME }}
             --extra-vars dockerhub_password=${{ secrets.DH_LOGIN_PASSWORD }}
+
+      - name: Terraform destroy on failure
+        id: destroy
+        if: failure()
+        run: |
+         terraform destroy -no-color -auto-approve -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
+         echo ansible playbook failed
