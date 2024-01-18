@@ -1,11 +1,9 @@
 name: Terraform apply
 
 on:
-  pull_request:
-    types: 
-        - edited
+  push:
     branches:
-        - 'master-test'
+        - 'master'
 
     workflow_dispatch:
 
@@ -76,8 +74,6 @@ jobs:
             const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
             #### Terraform Apply 📖\`${{ steps.apply.outcome }}\`
       
-            Show Plan
-          
             \`\`\`${process.env.PLAN}\`\`\`
           
           
