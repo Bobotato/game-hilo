@@ -1,0 +1,133 @@
+name: Terraform apply
+
+on:
+  push:
+    branches:
+        - 'master'
+
+    workflow_dispatch:
+
+permissions: write-all
+
+env:
+  TF_LOG: INFO
+  TF_INPUT: false
+
+
+jobs:
+
+  terraform-apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.3.7'
+      
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_PAT }}
+
+      - name: Terraform Init
+        id: init
+        working-directory: ./terraform
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ./terraform
+        run: terraform plan -no-color -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}" -out=tfplan
+
+      - name: Terraform apply
+        id: apply
+        working-directory: ./terraform
+        env:
+          dockerhub_username: ${{ secrets.DH_LOGIN_USERNAME }}
+          dockerhub_password: ${{ secrets.DH_LOGIN_PASSWORD }}
+        run: |
+          terraform apply -auto-approve -no-color tfplan
+
+      - name: Terraform destroy on failure
+        id: destroy-terraform
+        if: failure()
+        run: |
+         terraform destroy -no-color -auto-approve -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
+         echo terraform apply failed
+
+      - name: Add Apply Comment
+        id: comment
+        uses: actions/github-script@v7
+        env:
+          PLAN: "terraform\n${{ steps.apply.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GH_PAT }}
+          script: |
+            const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Apply 📖\`${{ steps.apply.outcome }}\`
+      
+            \`\`\`${process.env.PLAN}\`\`\`
+          
+          
+          
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: PWD
+        working-directory: ./
+        run: |
+          pwd
+
+      - name: Create api.env
+        id: create-api-env
+        working-directory: ./
+        run: |
+            touch api.env
+            echo SQLALCHEMY_DATABASE_URL=${{ secrets.SQLALCHEMY_DATABASE_URL }} >> api.env 
+            echo JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} >> api.env
+            echo JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }} >> api.env
+            echo ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }} >> api.env
+
+      - name: Create db.env
+        id: create-db-env
+        working-directory: ./
+        run: |
+            touch db.env
+            echo DATABASE_PORT=${{ secrets.DATABASE_PORT }} >> db.env:
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> db.env:
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> db.env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> db.env
+
+      - name: Run Ansible
+        id: run-ansible 
+        uses: dawidd6/action-ansible-playbook@v2
+        with: 
+          directory: ./
+          playbook: playbook.yml
+          key: ${{ secrets.SSH_PVT_KEY }}
+          options: |
+            --inventory terraform/inventory
+            --user root
+            --extra-vars dockerhub_username=${{ secrets.DH_LOGIN_USERNAME }}
+            --extra-vars dockerhub_password=${{ secrets.DH_LOGIN_PASSWORD }}
+
+      - name: Terraform destroy on failure
+        id: destroy-ansible
+        if: failure()
+        run: |
+         terraform destroy -no-color -auto-approve -var "pvt_key=${{ secrets.SSH_PVT_KEY }}" -var "do_token=${{ secrets.DO_PAT }}"
+         echo ansible playbook failed
