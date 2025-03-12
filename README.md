@@ -34,5 +34,9 @@ Testing:
 ## Running the project
 The project can be run locally using Docker compose. The docker images are also conveniently uploaded to Dockerhub for use with a deployment using your preferred cloud service provider. The provided Terraform and Ansible files are for use with a DigitalOcean based deployment.
 
+## Development process
+Figma:
+- [Prototype](https://www.figma.com/proto/my4mbw3jG6wG8iquf9L32J/HiloGame?node-id=0-1&t=Eew7vX3fqpseJydg-1)
+
 ## Credits
 Many thanks to Nik for teaching me for the entirety of this project, as well as Royce and Tim for being my classmates and providing helpful advice and learning points.
